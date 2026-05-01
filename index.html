@@ -13,7 +13,6 @@ body {
   background: url('https://i.imgur.com/yW2W9SC.png') no-repeat center/cover;
 }
 
-/* overlay gelap */
 body::before {
   content:"";
   position:fixed;
@@ -22,13 +21,11 @@ body::before {
   background: rgba(0,0,0,0.7);
 }
 
-/* container utama */
 .main {
   position:relative;
   padding:20px;
 }
 
-/* JUDUL */
 .title {
   text-align:center;
   font-size:30px;
@@ -40,35 +37,30 @@ body::before {
   text-shadow:0 0 20px red;
 }
 
-/* GRID */
 .grid {
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:15px;
 }
 
-/* PANEL */
 .panel {
   border-radius:15px;
   padding:15px;
   backdrop-filter: blur(5px);
 }
 
-/* GAMEPASS MERAH */
 .red {
   background: rgba(255,0,0,0.2);
   border:1px solid red;
   box-shadow:0 0 20px red;
 }
 
-/* CASH BIRU */
 .blue {
   background: rgba(0,150,255,0.2);
   border:1px solid cyan;
   box-shadow:0 0 20px cyan;
 }
 
-/* ITEM */
 .item {
   display:flex;
   justify-content:space-between;
@@ -76,7 +68,6 @@ body::before {
   border-bottom:1px solid rgba(255,255,255,0.2);
 }
 
-/* TOMBOL */
 .btn {
   margin-top:10px;
   width:100%;
@@ -85,14 +76,29 @@ body::before {
   border-radius:10px;
   font-weight:bold;
   cursor:pointer;
+  transition:0.2s;
+}
+
+.btn:hover {
+  transform:scale(1.05);
 }
 
 .wa { background:#25D366; }
-.qris { background:#facc15; }
 
-/* HOVER */
-.btn:hover {
-  transform:scale(1.05);
+/* ADMIN BOX */
+.admin-box {
+  margin-top:20px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.admin {
+  background:#111;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid #25D366;
+  box-shadow:0 0 10px #25D366;
 }
 </style>
 </head>
@@ -105,7 +111,6 @@ body::before {
 
 <div class="grid">
 
-<!-- GAMEPASS -->
 <div class="panel red">
 <h2>🚗 GAMEPASS</h2>
 
@@ -121,10 +126,9 @@ body::before {
 <div class="item">Polisi <span>15 yebu</span></div>
 <div class="item">2x Gaji <span>45 yebu</span></div>
 
-<button class="btn wa" onclick="wa('Gamepass')">Beli Gamepass</button>
+<button class="btn wa" onclick="pilihAdmin('Gamepass')">Beli Gamepass</button>
 </div>
 
-<!-- CASH -->
 <div class="panel blue">
 <h2>💰 CASH</h2>
 
@@ -136,25 +140,47 @@ body::before {
 <div class="item">500jt <span>37 yebu</span></div>
 <div class="item">1M <span>70 yebu</span></div>
 
-<button class="btn wa" onclick="wa('Cash')">Beli Cash</button>
+<button class="btn wa" onclick="pilihAdmin('Cash')">Beli Cash</button>
 </div>
 
 </div>
 
-<div style="margin-top:20px">
-<button class="btn wa" onclick="wa('Halo saya mau beli')">💬 WhatsApp</button>
-<button class="btn qris" onclick="qris()">📷 QRIS</button>
+<!-- PILIH ADMIN -->
+<div class="admin-box">
+<div class="admin">
+<h4>Admin 1</h4>
+<button class="btn wa" onclick="wa('Alfian','628983923559')">Chat</button>
+</div>
+
+<div class="admin">
+<h4>Admin 2</h4>
+<button class="btn wa" onclick="wa('nanang','6281252425581')">Chat</button>
+</div>
+
+<div class="admin">
+<h4>Admin 2</h4>
+<button class="btn wa" onclick="wa('bos tuyul','6288989378157')">Chat</button>
+</div>
+
+<div class="admin">
+<h4>Admin 2</h4>
+<button class="btn wa" onclick="wa('vinzzz','628211549460')">Chat</button>
+</div>
 </div>
 
 </div>
 
 <script>
-function wa(item){
-  window.open("https://wa.me/6281252425581?text=Halo bang saya mau gp "+item);
+let selectedItem = "";
+
+function pilihAdmin(item){
+  selectedItem = item;
+  alert("Pilih admin di bawah untuk lanjut");
 }
 
-function qris(){
-  window.open("LINK_QRIS_KAMU");
+function wa(nama, nomor){
+  let text = "Halo "+nama+", saya mau beli "+selectedItem;
+  window.open("https://wa.me/"+nomor+"?text="+encodeURIComponent(text));
 }
 </script>
 
