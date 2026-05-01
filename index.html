@@ -20,7 +20,7 @@ body {
   color: white;
   min-height: 100vh;
   overflow-x: hidden;
-  padding-bottom: 80px;
+  padding-bottom: 140px;
 }
 
 /* BG */
@@ -31,12 +31,10 @@ body {
 }
 .road-bg::after {
   content: '';
-  position: fixed; left: 50%;
-  transform: translateX(-50%);
+  position: fixed; left: 50%; transform: translateX(-50%);
   bottom: 0; width: 6px; height: 200%;
   background: repeating-linear-gradient(180deg, var(--gold) 0px, var(--gold) 40px, transparent 40px, transparent 80px);
-  animation: roadMove 0.6s linear infinite;
-  opacity: 0.25; z-index: 0;
+  animation: roadMove 0.6s linear infinite; opacity: 0.25; z-index: 0;
 }
 @keyframes roadMove {
   from { transform: translateX(-50%) translateY(0); }
@@ -49,8 +47,7 @@ body {
   animation: twinkle var(--d) ease-in-out infinite alternate; opacity: 0.4;
 }
 @keyframes twinkle {
-  from { opacity: 0.1; transform: scale(1); }
-  to   { opacity: 0.9; transform: scale(1.8); }
+  from { opacity: 0.1; } to { opacity: 0.9; }
 }
 
 /* LAYOUT */
@@ -78,21 +75,16 @@ body {
   100% { transform: translate(-30px,-20px) scale(2); opacity: 0; }
 }
 .title {
-  font-family: 'Orbitron', monospace; font-size: 22px; font-weight: 900;
-  letter-spacing: 3px;
+  font-family: 'Orbitron', monospace; font-size: 22px; font-weight: 900; letter-spacing: 3px;
   background: linear-gradient(90deg, var(--red), var(--gold), var(--cyan));
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   animation: titleGlow 3s ease-in-out infinite alternate;
 }
 .title-flag { font-size: 26px; display: block; margin-bottom: 4px; }
 @keyframes titleGlow {
-  from { filter: brightness(1); }
-  to   { filter: brightness(1.4) drop-shadow(0 0 12px var(--gold)); }
+  from { filter: brightness(1); } to { filter: brightness(1.4); }
 }
-@keyframes fadeDown {
-  from { opacity: 0; transform: translateY(-20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+@keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 .divider {
   height: 2px;
   background: linear-gradient(90deg, transparent, var(--red), var(--gold), var(--cyan), transparent);
@@ -107,14 +99,6 @@ body {
   position: relative; overflow: hidden;
   animation: fadeUp 0.7s ease both;
 }
-.panel::after {
-  content: '';
-  position: absolute; top: -60%; left: -60%; width: 40%; height: 200%;
-  background: linear-gradient(105deg, transparent, rgba(255,255,255,0.05), transparent);
-  animation: shimmer 4s ease-in-out infinite; pointer-events: none;
-}
-@keyframes shimmer { 0% { left: -60%; } 100% { left: 140%; } }
-
 .panel-red {
   background: rgba(255,20,60,0.1);
   border: 1px solid rgba(255,34,68,0.4);
@@ -127,69 +111,141 @@ body {
 }
 .panel-title {
   font-family: 'Orbitron', monospace; font-size: 12px; font-weight: 700;
-  letter-spacing: 1.5px; margin-bottom: 10px;
-  display: flex; align-items: center; gap: 6px;
+  letter-spacing: 1.5px; margin-bottom: 6px;
+  display: flex; align-items: center; justify-content: space-between;
 }
 .panel-red .panel-title { color: var(--red); }
 .panel-blue .panel-title { color: var(--cyan); }
 
-/* ITEMS — clickable */
+/* Select-all button */
+.sel-all-btn {
+  font-family: 'Orbitron', monospace; font-size: 8px; font-weight: 700;
+  padding: 2px 7px; border-radius: 20px; cursor: pointer;
+  border: 1px solid; letter-spacing: 0.5px;
+  background: none; transition: background 0.2s;
+}
+.panel-red .sel-all-btn { color: var(--red); border-color: rgba(255,34,68,0.5); }
+.panel-red .sel-all-btn:hover { background: rgba(255,34,68,0.15); }
+.panel-blue .sel-all-btn { color: var(--cyan); border-color: rgba(0,240,255,0.5); }
+.panel-blue .sel-all-btn:hover { background: rgba(0,240,255,0.1); }
+
+/* Count badge */
+.count-badge {
+  font-family: 'Orbitron', monospace; font-size: 9px; font-weight: 900;
+  padding: 1px 6px; border-radius: 20px; margin-left: 4px;
+  display: none; vertical-align: middle;
+}
+.panel-red .count-badge { background: var(--red); color: white; }
+.panel-blue .count-badge { background: var(--cyan); color: #001820; }
+.count-badge.visible { display: inline; }
+
+/* ITEMS */
 .item {
-  display: flex; justify-content: space-between; align-items: center;
+  display: flex; align-items: center; gap: 6px;
   padding: 7px 6px; border-bottom: 1px solid rgba(255,255,255,0.07);
   font-size: 13px; border-radius: 6px; cursor: pointer;
   transition: background 0.15s, transform 0.1s;
-  user-select: none; position: relative;
+  user-select: none;
 }
 .item:hover { background: rgba(255,255,255,0.06); }
 .item:active { transform: scale(0.97); }
-.item .check { display: none; font-size: 10px; font-weight: 900; margin-right: 4px; }
-.item span.price {
+
+/* Custom checkbox */
+.cb {
+  width: 16px; height: 16px; border-radius: 4px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 900; transition: all 0.15s;
+}
+.panel-red .cb  { border: 1.5px solid rgba(255,34,68,0.4); }
+.panel-blue .cb { border: 1.5px solid rgba(0,240,255,0.4); }
+.panel-red .item.sel .cb  { background: var(--red); border-color: var(--red); box-shadow: 0 0 6px rgba(255,34,68,0.6); }
+.panel-blue .item.sel .cb { background: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 6px rgba(0,240,255,0.6); color: #001820; }
+.cb::after { content: ''; }
+.item.sel .cb::after { content: '✓'; }
+
+.item-name { flex: 1; }
+.item .price {
   font-family: 'Orbitron', monospace; font-size: 11px; font-weight: 700;
 }
-.panel-red .item span.price { color: var(--gold); }
-.panel-blue .item span.price { color: var(--green); }
+.panel-red .item .price { color: var(--gold); }
+.panel-blue .item .price { color: var(--green); }
 
-/* Selected */
-.panel-red .item.sel {
-  background: rgba(255,34,68,0.22);
-  border: 1px solid rgba(255,34,68,0.7);
-  box-shadow: 0 0 10px rgba(255,34,68,0.3);
-  border-bottom: 1px solid rgba(255,34,68,0.7);
-}
-.panel-blue .item.sel {
-  background: rgba(0,240,255,0.15);
-  border: 1px solid rgba(0,240,255,0.7);
-  box-shadow: 0 0 10px rgba(0,240,255,0.3);
-  border-bottom: 1px solid rgba(0,240,255,0.7);
-}
-.panel-red .item.sel .check { display: inline; color: var(--red); }
-.panel-blue .item.sel .check { display: inline; color: var(--cyan); }
+/* Selected item row highlight */
+.panel-red .item.sel  { background: rgba(255,34,68,0.15); }
+.panel-blue .item.sel { background: rgba(0,240,255,0.1); }
 
-/* Summary chip */
-.sel-summary {
-  margin-top: 8px; min-height: 26px;
-  display: flex; align-items: center; gap: 6px;
+/* Clear panel link */
+.clear-panel {
+  margin-top: 6px; font-family: 'Orbitron', monospace; font-size: 8px;
+  color: rgba(255,255,255,0.3); cursor: pointer; text-align: right;
+  letter-spacing: 1px; display: none; transition: color 0.2s;
 }
-.sel-tag {
+.clear-panel:hover { color: rgba(255,255,255,0.6); }
+.clear-panel.visible { display: block; }
+
+/* ── ORDER SUMMARY BAR (sticky bottom) ── */
+.order-bar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+  background: rgba(4,10,18,0.97);
+  border-top: 2px solid var(--green);
+  box-shadow: 0 -6px 30px rgba(0,230,118,0.25);
+  padding: 10px 14px 12px;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+.order-bar.visible { transform: translateY(0); }
+
+.order-top {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;
+}
+.order-label {
+  font-family: 'Orbitron', monospace; font-size: 9px;
+  letter-spacing: 2px; color: rgba(255,255,255,0.4);
+}
+.order-total {
+  font-family: 'Orbitron', monospace; font-size: 13px; font-weight: 900; color: var(--gold);
+}
+.order-clear-all {
+  font-family: 'Orbitron', monospace; font-size: 8px;
+  color: rgba(255,255,255,0.3); border: none; background: none;
+  cursor: pointer; letter-spacing: 1px;
+}
+.order-clear-all:hover { color: var(--red); }
+
+/* Scrollable chips */
+.order-chips {
+  display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px;
+  scrollbar-width: none;
+}
+.order-chips::-webkit-scrollbar { display: none; }
+.chip {
   font-family: 'Orbitron', monospace; font-size: 9px; font-weight: 700;
-  padding: 3px 8px; border-radius: 20px;
-  flex: 1; opacity: 0; transform: translateY(4px);
-  transition: opacity 0.3s, transform 0.3s;
+  padding: 3px 8px; border-radius: 20px; white-space: nowrap;
+  display: flex; align-items: center; gap: 4px; flex-shrink: 0;
+}
+.chip-gp   { background: rgba(255,34,68,0.2); color: var(--red); border: 1px solid rgba(255,34,68,0.5); }
+.chip-cash { background: rgba(0,240,255,0.15); color: var(--cyan); border: 1px solid rgba(0,240,255,0.5); }
+.chip-x { cursor: pointer; opacity: 0.7; font-size: 10px; }
+.chip-x:hover { opacity: 1; }
+
+/* Admin row below chips */
+.admin-row {
+  display: flex; gap: 8px; margin-top: 8px;
+}
+.admin-btn {
+  flex: 1; padding: 8px 4px; border: none; border-radius: 10px;
+  font-family: 'Orbitron', monospace; font-size: 9px; font-weight: 700;
+  cursor: pointer; letter-spacing: 0.5px;
+  background: linear-gradient(135deg, #00c853, #00e676);
+  color: #003311;
+  box-shadow: 0 3px 14px rgba(0,200,100,0.4);
+  transition: transform 0.15s, box-shadow 0.15s;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.sel-tag.visible { opacity: 1; transform: translateY(0); }
-.panel-red  .sel-tag { background: rgba(255,34,68,0.2); color: var(--red); border: 1px solid rgba(255,34,68,0.5); }
-.panel-blue .sel-tag { background: rgba(0,240,255,0.15); color: var(--cyan); border: 1px solid rgba(0,240,255,0.5); }
-.clear-btn {
-  font-size: 14px; background: none; border: none;
-  color: rgba(255,255,255,0.35); cursor: pointer; padding: 2px 5px;
-  display: none; transition: color 0.2s; flex-shrink: 0;
-}
-.clear-btn.visible { display: block; }
-.clear-btn:hover { color: white; }
+.admin-btn:hover { transform: scale(1.04); box-shadow: 0 5px 20px rgba(0,230,118,0.6); }
+.admin-btn:active { transform: scale(0.97); }
 
-/* ADMIN */
+/* ADMIN SECTION (top) */
 .section-label {
   font-family: 'Orbitron', monospace; font-size: 11px;
   letter-spacing: 3px; color: rgba(255,255,255,0.4);
@@ -201,93 +257,60 @@ body {
   min-height: 14px; transition: color 0.4s;
   color: rgba(255,200,0,0.65);
 }
-
 .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .admin-card {
   background: rgba(0,255,100,0.05);
   border: 1px solid rgba(0,230,118,0.25);
   border-radius: 12px; padding: 12px;
-  box-shadow: 0 0 14px rgba(0,200,80,0.1);
   animation: fadeUp 0.8s ease both;
   transition: box-shadow 0.2s, border-color 0.2s;
 }
-.admin-card:hover {
-  box-shadow: 0 0 24px rgba(0,230,118,0.35);
-  border-color: rgba(0,230,118,0.6);
-}
+.admin-card:hover { box-shadow: 0 0 24px rgba(0,230,118,0.35); border-color: rgba(0,230,118,0.6); }
 .admin-name {
   font-family: 'Orbitron', monospace; font-size: 11px; font-weight: 700;
   color: var(--green); margin-bottom: 8px;
   display: flex; align-items: center; gap: 5px;
 }
 .admin-name::before {
-  content: ''; display: inline-block;
-  width: 6px; height: 6px; border-radius: 50%;
+  content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%;
   background: var(--green); box-shadow: 0 0 6px var(--green);
   animation: pulse 1.5s ease-in-out infinite; flex-shrink: 0;
 }
-@keyframes pulse {
-  0%,100% { opacity: 1; transform: scale(1); }
-  50%      { opacity: 0.5; transform: scale(0.7); }
-}
-
-/* BUTTONS */
+@keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.5; transform:scale(0.7); } }
 .btn {
   width: 100%; padding: 9px; border: none; border-radius: 10px;
   font-family: 'Orbitron', monospace; font-size: 10px; font-weight: 700;
-  letter-spacing: 0.5px; cursor: pointer;
-  position: relative; overflow: hidden;
+  cursor: pointer; background: linear-gradient(135deg, #00c853, #00e676);
+  color: #003311; box-shadow: 0 4px 18px rgba(0,200,100,0.45);
   transition: transform 0.15s, box-shadow 0.15s;
 }
-.btn::before {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.25) 50%, transparent 70%);
-  transform: translateX(-100%); transition: transform 0.4s;
-}
-.btn:hover::before { transform: translateX(100%); }
-.btn:hover { transform: scale(1.04); }
+.btn:hover { transform: scale(1.04); box-shadow: 0 6px 28px rgba(0,230,118,0.65); }
 .btn:active { transform: scale(0.97); }
-.btn-green {
-  background: linear-gradient(135deg, #00c853, #00e676);
-  color: #003311; box-shadow: 0 4px 18px rgba(0,200,100,0.45);
-}
-.btn-green:hover { box-shadow: 0 6px 28px rgba(0,230,118,0.65); }
 
 /* TICKER */
-.ticker-wrap {
-  margin-top: 20px; overflow: hidden;
-  border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;
-}
+.ticker-wrap { margin-top: 20px; overflow: hidden; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px; }
 .ticker {
   display: flex; gap: 40px; white-space: nowrap;
   animation: ticker 12s linear infinite;
   font-size: 11px; color: rgba(255,255,255,0.3);
   font-family: 'Orbitron', monospace; letter-spacing: 2px;
 }
-@keyframes ticker {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
+@keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
 /* TOAST */
 .toast {
-  position: fixed; bottom: 20px; left: 50%;
-  transform: translateX(-50%) translateY(100px);
-  background: rgba(0,230,118,0.97); color: #003311;
-  padding: 10px 22px; border-radius: 30px;
-  font-family: 'Orbitron', monospace; font-size: 11px; font-weight: 700;
-  letter-spacing: 1px; z-index: 999;
-  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
-  box-shadow: 0 8px 30px rgba(0,200,80,0.5); pointer-events: none;
-  white-space: nowrap; max-width: 90vw;
+  position: fixed; bottom: 150px; left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: rgba(255,200,0,0.97); color: #1a0d00;
+  padding: 8px 20px; border-radius: 30px;
+  font-family: 'Orbitron', monospace; font-size: 10px; font-weight: 700;
+  z-index: 999; opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  pointer-events: none; white-space: nowrap;
 }
-.toast.warn { background: rgba(255,200,0,0.97); }
-.toast.show { transform: translateX(-50%) translateY(0); }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+@keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
 </style>
 </head>
 <body>
@@ -316,7 +339,6 @@ body {
           <circle cx="78" cy="44" r="5.5" fill="#222" stroke="#00f0ff" stroke-width="1"/>
           <circle cx="78" cy="44" r="2" fill="#00f0ff"/>
           <rect x="18" y="28" width="72" height="3" rx="1.5" fill="url(#stripeGrad)" opacity="0.7"/>
-          <ellipse cx="100" cy="31" rx="12" ry="5" fill="#00f0ff" opacity="0.12"/>
           <defs>
             <linearGradient id="bodyGrad" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stop-color="#0d3b6e"/><stop offset="100%" stop-color="#061628"/>
@@ -342,63 +364,63 @@ body {
   <div class="grid">
 
     <!-- GAMEPASS -->
-    <div class="panel panel-red" style="animation-delay:0.1s" id="panel-gp">
-      <div class="panel-title">🚗 GAMEPASS</div>
-      <div class="item" onclick="pilih(this,'red','Gamepass','Radio','4 yebu')"><span class="check">✓</span>Radio<span class="price">4 yebu</span></div>
-      <div class="item" onclick="pilih(this,'red','Gamepass','Suspensi','4 yebu')"><span class="check">✓</span>Suspensi<span class="price">4 yebu</span></div>
-      <div class="item" onclick="pilih(this,'red','Gamepass','Paint','7 yebu')"><span class="check">✓</span>Paint<span class="price">7 yebu</span></div>
-      <div class="item" onclick="pilih(this,'red','Gamepass','Aksesoris','7 yebu')"><span class="check">✓</span>Aksesoris<span class="price">7 yebu</span></div>
-      <div class="item" onclick="pilih(this,'red','Gamepass','Plat','8 yebu')"><span class="check">✓</span>Plat<span class="price">8 yebu</span></div>
-      <div class="item" onclick="pilih(this,'red','Gamepass','Velg','8 yebu')"><span class="check">✓</span>Velg<span class="price">8 yebu</span></div>
-      <div class="item" onclick="pilih(this,'red','Gamepass','Slot','9 yebu')"><span class="check">✓</span>Slot<span class="price">9 yebu</span></div>
-      <div class="item" onclick="pilih(this,'red','Gamepass','Drag','10 yebu')"><span class="check">✓</span>Drag<span class="price">10 yebu</span></div>
-      <div class="item" onclick="pilih(this,'red','Gamepass','Luxury','13 yebu')"><span class="check">✓</span>Luxury<span class="price">13 yebu</span></div>
-      <div class="item" onclick="pilih(this,'red','Gamepass','Polisi','15 yebu')"><span class="check">✓</span>Polisi<span class="price">15 yebu</span></div>
-      <div class="item" onclick="pilih(this,'red','Gamepass','2x Gaji','45 yebu')"><span class="check">✓</span>2x Gaji<span class="price">45 yebu</span></div>
-      <div class="sel-summary">
-        <span class="sel-tag" id="tag-gp"></span>
-        <button class="clear-btn" id="clear-gp" onclick="clearPilih('red')">✕</button>
+    <div class="panel panel-red" style="animation-delay:0.1s">
+      <div class="panel-title">
+        <span>🚗 GAMEPASS <span class="count-badge" id="badge-gp">0</span></span>
+        <button class="sel-all-btn" onclick="toggleAll('gp')">SEMUA</button>
       </div>
+      <div class="item" onclick="toggle(this,'gp','Radio','4 yebu')"><span class="cb"></span><span class="item-name">Radio</span><span class="price">4 yebu</span></div>
+      <div class="item" onclick="toggle(this,'gp','Suspensi','4 yebu')"><span class="cb"></span><span class="item-name">Suspensi</span><span class="price">4 yebu</span></div>
+      <div class="item" onclick="toggle(this,'gp','Paint','7 yebu')"><span class="cb"></span><span class="item-name">Paint</span><span class="price">7 yebu</span></div>
+      <div class="item" onclick="toggle(this,'gp','Aksesoris','7 yebu')"><span class="cb"></span><span class="item-name">Aksesoris</span><span class="price">7 yebu</span></div>
+      <div class="item" onclick="toggle(this,'gp','Plat','8 yebu')"><span class="cb"></span><span class="item-name">Plat</span><span class="price">8 yebu</span></div>
+      <div class="item" onclick="toggle(this,'gp','Velg','8 yebu')"><span class="cb"></span><span class="item-name">Velg</span><span class="price">8 yebu</span></div>
+      <div class="item" onclick="toggle(this,'gp','Slot','9 yebu')"><span class="cb"></span><span class="item-name">Slot</span><span class="price">9 yebu</span></div>
+      <div class="item" onclick="toggle(this,'gp','Drag','10 yebu')"><span class="cb"></span><span class="item-name">Drag</span><span class="price">10 yebu</span></div>
+      <div class="item" onclick="toggle(this,'gp','Luxury','13 yebu')"><span class="cb"></span><span class="item-name">Luxury</span><span class="price">13 yebu</span></div>
+      <div class="item" onclick="toggle(this,'gp','Polisi','15 yebu')"><span class="cb"></span><span class="item-name">Polisi</span><span class="price">15 yebu</span></div>
+      <div class="item" onclick="toggle(this,'gp','2x Gaji','45 yebu')"><span class="cb"></span><span class="item-name">2x Gaji</span><span class="price">45 yebu</span></div>
+      <div class="clear-panel" id="clearGp" onclick="clearPanel('gp')">✕ hapus semua</div>
     </div>
 
     <!-- CASH -->
-    <div class="panel panel-blue" style="animation-delay:0.2s" id="panel-cash">
-      <div class="panel-title">💰 CASH</div>
-      <div class="item" onclick="pilih(this,'blue','Cash','1jt','1 yebu')"><span class="check">✓</span>1jt<span class="price">1 yebu</span></div>
-      <div class="item" onclick="pilih(this,'blue','Cash','5jt','3 yebu')"><span class="check">✓</span>5jt<span class="price">3 yebu</span></div>
-      <div class="item" onclick="pilih(this,'blue','Cash','10jt','5 yebu')"><span class="check">✓</span>10jt<span class="price">5 yebu</span></div>
-      <div class="item" onclick="pilih(this,'blue','Cash','50jt','7 yebu')"><span class="check">✓</span>50jt<span class="price">7 yebu</span></div>
-      <div class="item" onclick="pilih(this,'blue','Cash','100jt','10 yebu')"><span class="check">✓</span>100jt<span class="price">10 yebu</span></div>
-      <div class="item" onclick="pilih(this,'blue','Cash','500jt','37 yebu')"><span class="check">✓</span>500jt<span class="price">37 yebu</span></div>
-      <div class="item" onclick="pilih(this,'blue','Cash','1M','70 yebu')"><span class="check">✓</span>1M<span class="price">70 yebu</span></div>
-      <div class="sel-summary">
-        <span class="sel-tag" id="tag-cash"></span>
-        <button class="clear-btn" id="clear-cash" onclick="clearPilih('blue')">✕</button>
+    <div class="panel panel-blue" style="animation-delay:0.2s">
+      <div class="panel-title">
+        <span>💰 CASH <span class="count-badge" id="badge-cash">0</span></span>
+        <button class="sel-all-btn" onclick="toggleAll('cash')">SEMUA</button>
       </div>
+      <div class="item" onclick="toggle(this,'cash','1jt','1 yebu')"><span class="cb"></span><span class="item-name">1jt</span><span class="price">1 yebu</span></div>
+      <div class="item" onclick="toggle(this,'cash','5jt','3 yebu')"><span class="cb"></span><span class="item-name">5jt</span><span class="price">3 yebu</span></div>
+      <div class="item" onclick="toggle(this,'cash','10jt','5 yebu')"><span class="cb"></span><span class="item-name">10jt</span><span class="price">5 yebu</span></div>
+      <div class="item" onclick="toggle(this,'cash','50jt','7 yebu')"><span class="cb"></span><span class="item-name">50jt</span><span class="price">7 yebu</span></div>
+      <div class="item" onclick="toggle(this,'cash','100jt','10 yebu')"><span class="cb"></span><span class="item-name">100jt</span><span class="price">10 yebu</span></div>
+      <div class="item" onclick="toggle(this,'cash','500jt','37 yebu')"><span class="cb"></span><span class="item-name">500jt</span><span class="price">37 yebu</span></div>
+      <div class="item" onclick="toggle(this,'cash','1M','70 yebu')"><span class="cb"></span><span class="item-name">1M</span><span class="price">70 yebu</span></div>
+      <div class="clear-panel" id="clearCash" onclick="clearPanel('cash')">✕ hapus semua</div>
     </div>
 
   </div>
 
-  <!-- ADMIN -->
+  <!-- ADMIN (static, for reference) -->
   <div class="section-label">— PILIH ADMIN —</div>
-  <div class="hint-msg" id="hintMsg">👆 Tap item dulu sebelum chat admin</div>
+  <div class="hint-msg" id="hintMsg">👆 Tap item untuk memilih (bisa lebih dari satu)</div>
 
   <div class="admin-grid">
     <div class="admin-card" style="animation-delay:0.3s">
-      <div class="admin-name">ALFIAN BAHLUL</div>
-      <button class="btn btn-green" onclick="wa('Alfian','628983923559')">💬 Chat</button>
+      <div class="admin-name">Alfian</div>
+      <button class="btn" onclick="wa('Alfian','628983923559')">💬 Chat</button>
     </div>
     <div class="admin-card" style="animation-delay:0.35s">
-      <div class="admin-name">NANANG DLOGOK</div>
-      <button class="btn btn-green" onclick="wa('nanang','6281252425581')">💬 Chat</button>
+      <div class="admin-name">nanang dlogok</div>
+      <button class="btn" onclick="wa('nanang','6281252425581')">💬 Chat</button>
     </div>
     <div class="admin-card" style="animation-delay:0.4s">
-      <div class="admin-name">BOSS TUYUL</div>
-      <button class="btn btn-green" onclick="wa('bos tuyul','6288989378157')">💬 Chat</button>
+      <div class="admin-name">boss tuyul</div>
+      <button class="btn" onclick="wa('bos tuyul','6288989378157')">💬 Chat</button>
     </div>
     <div class="admin-card" style="animation-delay:0.45s">
-      <div class="admin-name">VINZZZ PLENGER</div>
-      <button class="btn btn-green" onclick="wa('vinzzz','628211549460')">💬 Chat</button>
+      <div class="admin-name">Vinzzz</div>
+      <button class="btn" onclick="wa('vinzzz','628211549460')">💬 Chat</button>
     </div>
   </div>
 
@@ -406,7 +428,7 @@ body {
     <div class="ticker">
       <span>🏁 DRAG DRIVE STORE</span>
       <span>⚡ FAST &amp; TRUSTED</span>
-      <span>🚗 PROSES CEPAT</span>
+      <span>🚗 ROSES CEPAT</span>
       <span>💰 HARGA TERJANGKAU</span>
       <span>🏁 DRAG DRIVE STORE</span>
       <span>⚡ FAST &amp; TRUSTED</span>
@@ -414,7 +436,24 @@ body {
       <span>💰 HARGA TERJANGKAU</span>
     </div>
   </div>
+</div>
 
+<!-- STICKY ORDER BAR -->
+<div class="order-bar" id="orderBar">
+  <div class="order-top">
+    <div>
+      <div class="order-label">PESANAN KAMU</div>
+      <div class="order-total" id="orderTotal"></div>
+    </div>
+    <button class="order-clear-all" onclick="clearAll()">✕ RESET</button>
+  </div>
+  <div class="order-chips" id="orderChips"></div>
+  <div class="admin-row" id="adminRow">
+    <button class="admin-btn" onclick="wa('ALFIAN BAHLUL','628983923559')">Alfian</button>
+    <button class="admin-btn" onclick="wa('NANANG DLOGOK','6281252425581')">nanang</button>
+    <button class="admin-btn" onclick="wa('BOSS TUYULl','6288989378157')">boss tuyul</button>
+    <button class="admin-btn" onclick="wa('VINZZZ PLENGER','628211549460')">Vinzzz</button>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -429,74 +468,144 @@ for (let i = 0; i < 60; i++) {
   starsEl.appendChild(s);
 }
 
-// State
-const state = { red: null, blue: null };
+// State: map of id -> {panel, nama, harga}
+// id = panel + ':' + nama
+const selected = new Map();
 
-function pilih(el, warna, kategori, nama, harga) {
-  // Hapus sel dari semua item dalam panel yang sama
-  el.closest('.panel').querySelectorAll('.item').forEach(i => i.classList.remove('sel'));
-  el.classList.add('sel');
-
-  state[warna] = { kategori, nama, harga };
-
-  // Update chip
-  const tagId   = warna === 'red' ? 'tag-gp' : 'tag-cash';
-  const clearId = warna === 'red' ? 'clear-gp' : 'clear-cash';
-  const tag = document.getElementById(tagId);
-  tag.textContent = `✓ ${nama} — ${harga}`;
-  tag.classList.add('visible');
-  document.getElementById(clearId).classList.add('visible');
-
-  updateHint();
-  showToast(`✅ ${kategori}: ${nama} dipilih!`);
+function toggle(el, panel, nama, harga) {
+  const id = panel + ':' + nama;
+  if (selected.has(id)) {
+    selected.delete(id);
+    el.classList.remove('sel');
+  } else {
+    selected.set(id, { panel, nama, harga });
+    el.classList.add('sel');
+  }
+  updateUI();
 }
 
-function clearPilih(warna) {
-  state[warna] = null;
-  const panelId = warna === 'red' ? 'panel-gp' : 'panel-cash';
-  document.getElementById(panelId).querySelectorAll('.item').forEach(i => i.classList.remove('sel'));
-  const tagId   = warna === 'red' ? 'tag-gp' : 'tag-cash';
-  const clearId = warna === 'red' ? 'clear-gp' : 'clear-cash';
-  document.getElementById(tagId).classList.remove('visible');
-  document.getElementById(clearId).classList.remove('visible');
-  updateHint();
+function toggleAll(panel) {
+  const panelEl = document.querySelector(`.panel-${panel === 'gp' ? 'red' : 'blue'}`);
+  const items = panelEl.querySelectorAll('.item');
+  // check if all selected
+  let allSel = true;
+  items.forEach(item => { if (!item.classList.contains('sel')) allSel = false; });
+
+  if (allSel) {
+    // deselect all
+    items.forEach(item => {
+      item.classList.remove('sel');
+      const nama = item.querySelector('.item-name').textContent;
+      selected.delete(panel + ':' + nama);
+    });
+  } else {
+    // select all
+    items.forEach(item => {
+      item.classList.add('sel');
+      const nama = item.querySelector('.item-name').textContent;
+      const harga = item.querySelector('.price').textContent;
+      selected.set(panel + ':' + nama, { panel, nama, harga });
+    });
+  }
+  updateUI();
 }
 
-function updateHint() {
+function clearPanel(panel) {
+  const panelEl = document.querySelector(`.panel-${panel === 'gp' ? 'red' : 'blue'}`);
+  panelEl.querySelectorAll('.item').forEach(i => i.classList.remove('sel'));
+  for (const key of [...selected.keys()]) {
+    if (key.startsWith(panel + ':')) selected.delete(key);
+  }
+  updateUI();
+}
+
+function clearAll() {
+  selected.clear();
+  document.querySelectorAll('.item').forEach(i => i.classList.remove('sel'));
+  updateUI();
+}
+
+function updateUI() {
+  const total = selected.size;
+  const gpItems   = [...selected.values()].filter(v => v.panel === 'gp');
+  const cashItems = [...selected.values()].filter(v => v.panel === 'cash');
+
+  // badges
+  const badgeGp   = document.getElementById('badge-gp');
+  const badgeCash = document.getElementById('badge-cash');
+  badgeGp.textContent   = gpItems.length;
+  badgeCash.textContent = cashItems.length;
+  badgeGp.classList.toggle('visible', gpItems.length > 0);
+  badgeCash.classList.toggle('visible', cashItems.length > 0);
+
+  // clear panel links
+  document.getElementById('clearGp').classList.toggle('visible', gpItems.length > 0);
+  document.getElementById('clearCash').classList.toggle('visible', cashItems.length > 0);
+
+  // hint
   const hint = document.getElementById('hintMsg');
-  const parts = [];
-  if (state.red)  parts.push(`🚗 ${state.red.nama}`);
-  if (state.blue) parts.push(`💰 ${state.blue.nama}`);
-
-  if (parts.length) {
-    hint.textContent = '🛒 ' + parts.join(' + ') + ' — pilih admin!';
+  if (total > 0) {
+    hint.textContent = `🛒 ${total} item dipilih — pilih admin di bawah!`;
     hint.style.color = '#00e676';
   } else {
-    hint.textContent = '👆 Tap item dulu sebelum chat admin';
+    hint.textContent = '👆 Tap item untuk memilih (bisa lebih dari satu)';
     hint.style.color = 'rgba(255,200,0,0.65)';
   }
+
+  // order bar
+  const bar = document.getElementById('orderBar');
+  bar.classList.toggle('visible', total > 0);
+
+  // chips
+  const chipsEl = document.getElementById('orderChips');
+  chipsEl.innerHTML = '';
+  selected.forEach(({ panel, nama, harga }, id) => {
+    const isGp = panel === 'gp';
+    const chip = document.createElement('div');
+    chip.className = 'chip ' + (isGp ? 'chip-gp' : 'chip-cash');
+    chip.innerHTML = `${isGp ? '🚗' : '💰'} ${nama} <span class="chip-x" onclick="removeItem('${id}')">✕</span>`;
+    chipsEl.appendChild(chip);
+  });
+
+  // total label
+  document.getElementById('orderTotal').textContent =
+    total + ' item' + (gpItems.length && cashItems.length
+      ? ` (${gpItems.length} GP + ${cashItems.length} Cash)`
+      : gpItems.length ? ` Gamepass` : ` Cash`);
+}
+
+function removeItem(id) {
+  // deselect the DOM item
+  const [panel, nama] = id.split(':');
+  const panelEl = document.querySelector(`.panel-${panel === 'gp' ? 'red' : 'blue'}`);
+  panelEl.querySelectorAll('.item').forEach(item => {
+    if (item.querySelector('.item-name').textContent === nama) item.classList.remove('sel');
+  });
+  selected.delete(id);
+  updateUI();
 }
 
 function wa(nama, nomor) {
-  if (!state.red && !state.blue) {
-    showToast('⚠️ Pilih item dulu!', true);
-    return;
-  }
-  const parts = [];
-  if (state.red)  parts.push(`Gamepass ${state.red.nama} (${state.red.harga})`);
-  if (state.blue) parts.push(`Cash ${state.blue.nama} (${state.blue.harga})`);
+  if (selected.size === 0) { showToast('⚠️ Pilih item dulu!'); return; }
 
-  const text = `Halo ${nama}, saya mau beli ${parts.join(' + ')}`;
+  const gpList   = [...selected.values()].filter(v => v.panel === 'gp').map(v => `${v.nama} (${v.harga})`);
+  const cashList = [...selected.values()].filter(v => v.panel === 'cash').map(v => `${v.nama} (${v.harga})`);
+
+  let daftar = '';
+  if (gpList.length)   daftar += `Gamepass: ${gpList.join(', ')}`;
+  if (gpList.length && cashList.length) daftar += ' | ';
+  if (cashList.length) daftar += `Cash: ${cashList.join(', ')}`;
+
+  const text = `Halo ${nama}, saya mau beli ${daftar}`;
   window.open('https://wa.me/' + nomor + '?text=' + encodeURIComponent(text));
 }
 
-let toastTimer;
-function showToast(msg, warn = false) {
+let toastT;
+function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast' + (warn ? ' warn' : '') + ' show';
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(() => t.classList.remove('show'), 2200);
 }
 </script>
 </body>
