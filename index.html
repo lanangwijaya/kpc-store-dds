@@ -3,181 +3,158 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DRAG DRIVE STORE</title>
+<title>Drag Drive Store</title>
 
 <style>
 body {
-  margin: 0;
+  margin:0;
   font-family: Arial;
-  background: linear-gradient(135deg,#020617,#0f172a);
-  color: white;
-  text-align: center;
-  overflow-x: hidden;
+  color:white;
+  background: url('https://i.imgur.com/yW2W9SC.png') no-repeat center/cover;
 }
 
-/* BACKGROUND ANIMASI */
+/* overlay gelap */
 body::before {
-  content: "";
-  position: fixed;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, #0ea5e9 1px, transparent 1px);
-  background-size: 40px 40px;
-  animation: moveBg 20s linear infinite;
-  opacity: 0.1;
+  content:"";
+  position:fixed;
+  width:100%;
+  height:100%;
+  background: rgba(0,0,0,0.7);
 }
-@keyframes moveBg {
-  from { transform: translate(0,0); }
-  to { transform: translate(-200px,-200px); }
+
+/* container utama */
+.main {
+  position:relative;
+  padding:20px;
 }
 
 /* JUDUL */
-h1 {
-  margin: 20px;
-  font-size: 30px;
-  background: linear-gradient(90deg,#38bdf8,#22c55e);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: glow 2s infinite alternate;
+.title {
+  text-align:center;
+  font-size:30px;
+  font-weight:bold;
+  margin-bottom:20px;
+  background: linear-gradient(90deg,orange,red);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  text-shadow:0 0 20px red;
 }
 
-@keyframes glow {
-  from { text-shadow: 0 0 5px #38bdf8; }
-  to { text-shadow: 0 0 20px #22c55e; }
+/* GRID */
+.grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
 }
 
-.section {
-  font-size: 22px;
-  margin-top: 20px;
+/* PANEL */
+.panel {
+  border-radius:15px;
+  padding:15px;
+  backdrop-filter: blur(5px);
 }
 
-.container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
-  gap: 15px;
-  padding: 15px;
+/* GAMEPASS MERAH */
+.red {
+  background: rgba(255,0,0,0.2);
+  border:1px solid red;
+  box-shadow:0 0 20px red;
 }
 
-.card {
-  background: #1e293b;
-  padding: 15px;
-  border-radius: 12px;
-  transition: 0.3s;
-  box-shadow: 0 0 10px rgba(0,255,255,0.1);
+/* CASH BIRU */
+.blue {
+  background: rgba(0,150,255,0.2);
+  border:1px solid cyan;
+  box-shadow:0 0 20px cyan;
 }
 
-.card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 20px cyan;
-}
-
-/* GAMBAR */
-.card img {
-  width: 100%;
-  border-radius: 10px;
-  margin-bottom: 10px;
+/* ITEM */
+.item {
+  display:flex;
+  justify-content:space-between;
+  padding:8px;
+  border-bottom:1px solid rgba(255,255,255,0.2);
 }
 
 /* TOMBOL */
-button {
-  width: 100%;
-  margin-top: 6px;
-  padding: 10px;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.2s;
+.btn {
+  margin-top:10px;
+  width:100%;
+  padding:10px;
+  border:none;
+  border-radius:10px;
+  font-weight:bold;
+  cursor:pointer;
 }
 
-button:hover {
-  transform: scale(1.05);
-}
+.wa { background:#25D366; }
+.qris { background:#facc15; }
 
-.buy { background: #22c55e; }
-.wa { background: #25D366; }
-.qris { background: #facc15; }
+/* HOVER */
+.btn:hover {
+  transform:scale(1.05);
+}
 </style>
 </head>
 
 <body>
 
-<h1>🏁 DRAG DRIVE STORE</h1>
+<div class="main">
 
-<div class="section">🚗 GAMEPASS</div>
-<div class="container">
+<div class="title">🏁 DRAG DRIVE STORE</div>
 
-<div class="card">
-<img src="https://i.imgur.com/8Km9tLL.png">
-<h3>Radio</h3><p>4 yebu</p>
-<button class="buy" onclick="beli('LINK_RADIO')">Beli</button>
-<button class="wa" onclick="wa('Radio - 4 yebu')">WA</button>
+<div class="grid">
+
+<!-- GAMEPASS -->
+<div class="panel red">
+<h2>🚗 GAMEPASS</h2>
+
+<div class="item">Radio <span>4 yebu</span></div>
+<div class="item">Suspensi <span>4 yebu</span></div>
+<div class="item">Paint <span>7 yebu</span></div>
+<div class="item">Aksesoris <span>7 yebu</span></div>
+<div class="item">Plat <span>8 yebu</span></div>
+<div class="item">Velg <span>8 yebu</span></div>
+<div class="item">Slot <span>9 yebu</span></div>
+<div class="item">Drag <span>10 yebu</span></div>
+<div class="item">Luxury <span>13 yebu</span></div>
+<div class="item">Polisi <span>15 yebu</span></div>
+<div class="item">2x Gaji <span>45 yebu</span></div>
+
+<button class="btn wa" onclick="wa('Gamepass')">Beli Gamepass</button>
 </div>
 
-<div class="card">
-<img src="https://i.imgur.com/Z6X6K0f.png">
-<h3>Suspensi</h3><p>4 yebu</p>
-<button class="buy" onclick="beli('LINK_SUSPENSI')">Beli</button>
-<button class="wa" onclick="wa('Suspensi - 4 yebu')">WA</button>
-</div>
+<!-- CASH -->
+<div class="panel blue">
+<h2>💰 CASH</h2>
 
-<div class="card">
-<img src="https://i.imgur.com/2DhmtJ4.png">
-<h3>Paint</h3><p>7 yebu</p>
-<button class="buy" onclick="beli('LINK_PAINT')">Beli</button>
-<button class="wa" onclick="wa('Paint - 7 yebu')">WA</button>
-</div>
+<div class="item">1jt <span>1 yebu</span></div>
+<div class="item">5jt <span>3 yebu</span></div>
+<div class="item">10jt <span>5 yebu</span></div>
+<div class="item">50jt <span>7 yebu</span></div>
+<div class="item">100jt <span>10 yebu</span></div>
+<div class="item">500jt <span>37 yebu</span></div>
+<div class="item">1M <span>70 yebu</span></div>
 
-<div class="card">
-<img src="https://i.imgur.com/U3vTGjX.png">
-<h3>Luxury</h3><p>13 yebu</p>
-<button class="buy" onclick="beli('LINK_LUXURY')">Beli</button>
-<button class="wa" onclick="wa('Luxury - 13 yebu')">WA</button>
-</div>
-
-<div class="card">
-<img src="https://i.imgur.com/yW2W9SC.png">
-<h3>Polisi</h3><p>15 yebu</p>
-<button class="buy" onclick="beli('LINK_POLISI')">Beli</button>
-<button class="wa" onclick="wa('Polisi - 15 yebu')">WA</button>
-</div>
-
-</div>
-
-<div class="section">💰 CASH</div>
-<div class="container">
-
-<div class="card">
-<img src="https://i.imgur.com/Q9Z6yXG.png">
-<h3>1jt</h3><p>1 yebu</p>
-<button class="wa" onclick="wa('Cash 1jt - 1 yebu')">Beli</button>
-</div>
-
-<div class="card">
-<img src="https://i.imgur.com/Q9Z6yXG.png">
-<h3>5jt</h3><p>3 yebu</p>
-<button class="wa" onclick="wa('Cash 5jt - 3 yebu')">Beli</button>
+<button class="btn wa" onclick="wa('Cash')">Beli Cash</button>
 </div>
 
 </div>
 
-<div style="padding:20px">
-<h2>💳 PEMBAYARAN</h2>
-<button class="wa" onclick="wa('Halo saya mau bayar')">💬 WhatsApp</button>
-<button class="qris" onclick="qris()">📷 QRIS</button>
+<div style="margin-top:20px">
+<button class="btn wa" onclick="wa('Halo saya mau beli')">💬 WhatsApp</button>
+<button class="btn qris" onclick="qris()">📷 QRIS</button>
+</div>
+
 </div>
 
 <script>
-function beli(link){
-  window.open(link, "_blank");
-}
-
 function wa(item){
-  window.open("https://wa.me/628XXXXXXXXXX?text=Halo saya mau beli "+item, "_blank");
+  window.open("https://wa.me/628XXXXXXXXXX?text=Halo saya mau beli "+item);
 }
 
 function qris(){
-  window.open("LINK_QRIS_KAMU", "_blank");
+  window.open("LINK_QRIS_KAMU");
 }
 </script>
 
