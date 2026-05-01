@@ -607,6 +607,160 @@ function showToast(msg) {
   clearTimeout(toastT);
   toastT = setTimeout(() => t.classList.remove('show'), 2200);
 }
+<script>
+let selected = {
+  gp: [],
+  cash: []
+};
+
+function parsePrice(p){
+  return parseInt(p.replace(" yebu",""));
+}
+
+function toggle(el,type,name,price){
+  el.classList.toggle("sel");
+
+  let arr = selected[type];
+  let i = arr.findIndex(x=>x.name===name);
+
+  if(i>=0){
+    arr.splice(i,1);
+  } else {
+    arr.push({name,price,type});
+  }
+
+  updateAll();
+}
+
+function toggleAll(type){
+  let items = document.querySelectorAll(
+    type === 'gp' ? '.panel-red .item' : '.panel-blue .item'
+  );
+
+  let allSelected = [...items].every(i=>i.classList.contains("sel"));
+
+  items.forEach(el=>{
+    let name = el.children[1].innerText;
+    let price = el.children[2].innerText;
+
+    if(allSelected){
+      el.classList.remove("sel");
+      selected[type]=[];
+    } else {
+      if(!el.classList.contains("sel")){
+        el.classList.add("sel");
+        selected[type].push({name,price,type});
+      }
+    }
+  });
+
+  updateAll();
+}
+
+function updateAll(){
+  updateTotal();
+  updateChips();
+  updateBadge();
+  updateClearBtn();
+}
+
+function updateTotal(){
+  let total=0;
+
+  [...selected.gp,...selected.cash].forEach(i=>{
+    total+=parsePrice(i.price);
+  });
+
+  document.getElementById("orderTotal").innerText = total+" YEBU";
+
+  document.getElementById("orderBar")
+    .classList.toggle("visible", total>0);
+}
+
+function updateChips(){
+  let wrap = document.getElementById("orderChips");
+  wrap.innerHTML="";
+
+  [...selected.gp,...selected.cash].forEach((i,index)=>{
+    let div=document.createElement("div");
+    div.className="chip "+(i.type==='gp'?'chip-gp':'chip-cash');
+
+    div.innerHTML = `
+      ${i.name}
+      <span class="chip-x" onclick="removeItem(${index})">✕</span>
+    `;
+
+    wrap.appendChild(div);
+  });
+}
+
+function removeItem(index){
+  let all=[...selected.gp,...selected.cash];
+  let item=all[index];
+
+  selected[item.type] = selected[item.type].filter(i=>i.name!==item.name);
+
+  document.querySelectorAll(".item").forEach(el=>{
+    if(el.children[1].innerText===item.name){
+      el.classList.remove("sel");
+    }
+  });
+
+  updateAll();
+}
+
+function updateBadge(){
+  let gp = selected.gp.length;
+  let cash = selected.cash.length;
+
+  let b1=document.getElementById("badge-gp");
+  let b2=document.getElementById("badge-cash");
+
+  b1.innerText=gp;
+  b2.innerText=cash;
+
+  b1.classList.toggle("visible",gp>0);
+  b2.classList.toggle("visible",cash>0);
+}
+
+function updateClearBtn(){
+  document.getElementById("clearGp")
+    .classList.toggle("visible",selected.gp.length>0);
+
+  document.getElementById("clearCash")
+    .classList.toggle("visible",selected.cash.length>0);
+}
+
+function clearPanel(type){
+  selected[type]=[];
+
+  document.querySelectorAll(
+    type==='gp'?'.panel-red .item':'.panel-blue .item'
+  ).forEach(i=>i.classList.remove("sel"));
+
+  updateAll();
+}
+
+function clearAll(){
+  selected={gp:[],cash:[]};
+  document.querySelectorAll(".item").forEach(i=>i.classList.remove("sel"));
+  updateAll();
+}
+
+function wa(admin,nomor){
+  let total=document.getElementById("orderTotal").innerText;
+
+  let items=[...selected.gp,...selected.cash]
+    .map(i=>"- "+i.name+" ("+i.price+")")
+    .join("%0A");
+
+  let text=`Halo ${admin}%0A
+Saya ingin membeli:%0A${items}%0A
+Total: ${total}%0A
+Mohon diproses`;
+
+  window.open(`https://wa.me/${nomor}?text=${text}`);
+}
 </script>
 </body>
 </html>
