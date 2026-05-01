@@ -407,19 +407,19 @@ body {
 
   <div class="admin-grid">
     <div class="admin-card" style="animation-delay:0.3s">
-      <div class="admin-name">ALFIAN BAHLUL</div>
+      <div class="admin-name">Alfian</div>
       <button class="btn" onclick="wa('Alfian','628983923559')">💬 Chat</button>
     </div>
     <div class="admin-card" style="animation-delay:0.35s">
-      <div class="admin-name">NANANG DLOGOK</div>
+      <div class="admin-name">nanang dlogok</div>
       <button class="btn" onclick="wa('nanang','6281252425581')">💬 Chat</button>
     </div>
     <div class="admin-card" style="animation-delay:0.4s">
-      <div class="admin-name">BOSS TUYUL</div>
+      <div class="admin-name">boss tuyul</div>
       <button class="btn" onclick="wa('bos tuyul','6288989378157')">💬 Chat</button>
     </div>
     <div class="admin-card" style="animation-delay:0.45s">
-      <div class="admin-name">VINZZZ PLENGER</div>
+      <div class="admin-name">Vinzzz</div>
       <button class="btn" onclick="wa('vinzzz','628211549460')">💬 Chat</button>
     </div>
   </div>
@@ -428,11 +428,11 @@ body {
     <div class="ticker">
       <span>🏁 DRAG DRIVE STORE</span>
       <span>⚡ FAST &amp; TRUSTED</span>
-      <span>🚗 ROSES CEPAT</span>
+      <span>🚗 TOP UP CEPAT</span>
       <span>💰 HARGA TERJANGKAU</span>
       <span>🏁 DRAG DRIVE STORE</span>
       <span>⚡ FAST &amp; TRUSTED</span>
-      <span>🚗 PROSES CEPAT</span>
+      <span>🚗 TOP UP CEPAT</span>
       <span>💰 HARGA TERJANGKAU</span>
     </div>
   </div>
@@ -447,4 +447,166 @@ body {
     </div>
     <button class="order-clear-all" onclick="clearAll()">✕ RESET</button>
   </div>
-  <div class="order-chips" id="
+  <div class="order-chips" id="orderChips"></div>
+  <div class="admin-row" id="adminRow">
+    <button class="admin-btn" onclick="wa('Alfian','628983923559')">ALFIAN BAHLUL</button>
+    <button class="admin-btn" onclick="wa('nanang','6281252425581')">NANANG DLOGOK</button>
+    <button class="admin-btn" onclick="wa('bos tuyul','6288989378157')">BOSS TUYUL</button>
+    <button class="admin-btn" onclick="wa('vinzzz','628211549460')">VINZZZ PLENGER</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// Stars
+const starsEl = document.getElementById('stars');
+for (let i = 0; i < 60; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${(Math.random()*3+1.5).toFixed(1)}s;animation-delay:${(Math.random()*3).toFixed(1)}s;`;
+  starsEl.appendChild(s);
+}
+
+// State: map of id -> {panel, nama, harga}
+// id = panel + ':' + nama
+const selected = new Map();
+
+function toggle(el, panel, nama, harga) {
+  const id = panel + ':' + nama;
+  if (selected.has(id)) {
+    selected.delete(id);
+    el.classList.remove('sel');
+  } else {
+    selected.set(id, { panel, nama, harga });
+    el.classList.add('sel');
+  }
+  updateUI();
+}
+
+function toggleAll(panel) {
+  const panelEl = document.querySelector(`.panel-${panel === 'gp' ? 'red' : 'blue'}`);
+  const items = panelEl.querySelectorAll('.item');
+  // check if all selected
+  let allSel = true;
+  items.forEach(item => { if (!item.classList.contains('sel')) allSel = false; });
+
+  if (allSel) {
+    // deselect all
+    items.forEach(item => {
+      item.classList.remove('sel');
+      const nama = item.querySelector('.item-name').textContent;
+      selected.delete(panel + ':' + nama);
+    });
+  } else {
+    // select all
+    items.forEach(item => {
+      item.classList.add('sel');
+      const nama = item.querySelector('.item-name').textContent;
+      const harga = item.querySelector('.price').textContent;
+      selected.set(panel + ':' + nama, { panel, nama, harga });
+    });
+  }
+  updateUI();
+}
+
+function clearPanel(panel) {
+  const panelEl = document.querySelector(`.panel-${panel === 'gp' ? 'red' : 'blue'}`);
+  panelEl.querySelectorAll('.item').forEach(i => i.classList.remove('sel'));
+  for (const key of [...selected.keys()]) {
+    if (key.startsWith(panel + ':')) selected.delete(key);
+  }
+  updateUI();
+}
+
+function clearAll() {
+  selected.clear();
+  document.querySelectorAll('.item').forEach(i => i.classList.remove('sel'));
+  updateUI();
+}
+
+function updateUI() {
+  const total = selected.size;
+  const gpItems   = [...selected.values()].filter(v => v.panel === 'gp');
+  const cashItems = [...selected.values()].filter(v => v.panel === 'cash');
+
+  // badges
+  const badgeGp   = document.getElementById('badge-gp');
+  const badgeCash = document.getElementById('badge-cash');
+  badgeGp.textContent   = gpItems.length;
+  badgeCash.textContent = cashItems.length;
+  badgeGp.classList.toggle('visible', gpItems.length > 0);
+  badgeCash.classList.toggle('visible', cashItems.length > 0);
+
+  // clear panel links
+  document.getElementById('clearGp').classList.toggle('visible', gpItems.length > 0);
+  document.getElementById('clearCash').classList.toggle('visible', cashItems.length > 0);
+
+  // hint
+  const hint = document.getElementById('hintMsg');
+  if (total > 0) {
+    hint.textContent = `🛒 ${total} item dipilih — pilih admin di bawah!`;
+    hint.style.color = '#00e676';
+  } else {
+    hint.textContent = '👆 Tap item untuk memilih (bisa lebih dari satu)';
+    hint.style.color = 'rgba(255,200,0,0.65)';
+  }
+
+  // order bar
+  const bar = document.getElementById('orderBar');
+  bar.classList.toggle('visible', total > 0);
+
+  // chips
+  const chipsEl = document.getElementById('orderChips');
+  chipsEl.innerHTML = '';
+  selected.forEach(({ panel, nama, harga }, id) => {
+    const isGp = panel === 'gp';
+    const chip = document.createElement('div');
+    chip.className = 'chip ' + (isGp ? 'chip-gp' : 'chip-cash');
+    chip.innerHTML = `${isGp ? '🚗' : '💰'} ${nama} <span class="chip-x" onclick="removeItem('${id}')">✕</span>`;
+    chipsEl.appendChild(chip);
+  });
+
+  // total label
+  document.getElementById('orderTotal').textContent =
+    total + ' item' + (gpItems.length && cashItems.length
+      ? ` (${gpItems.length} GP + ${cashItems.length} Cash)`
+      : gpItems.length ? ` Gamepass` : ` Cash`);
+}
+
+function removeItem(id) {
+  // deselect the DOM item
+  const [panel, nama] = id.split(':');
+  const panelEl = document.querySelector(`.panel-${panel === 'gp' ? 'red' : 'blue'}`);
+  panelEl.querySelectorAll('.item').forEach(item => {
+    if (item.querySelector('.item-name').textContent === nama) item.classList.remove('sel');
+  });
+  selected.delete(id);
+  updateUI();
+}
+
+function wa(nama, nomor) {
+  if (selected.size === 0) { showToast('⚠️ Pilih item dulu!'); return; }
+
+  const gpList   = [...selected.values()].filter(v => v.panel === 'gp').map(v => `${v.nama} (${v.harga})`);
+  const cashList = [...selected.values()].filter(v => v.panel === 'cash').map(v => `${v.nama} (${v.harga})`);
+
+  let daftar = '';
+  if (gpList.length)   daftar += `Gamepass: ${gpList.join(', ')}`;
+  if (gpList.length && cashList.length) daftar += ' | ';
+  if (cashList.length) daftar += `Cash: ${cashList.join(', ')}`;
+
+  const text = `Halo ${nama}, saya mau beli ${daftar}`;
+  window.open('https://wa.me/' + nomor + '?text=' + encodeURIComponent(text));
+}
+
+let toastT;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(() => t.classList.remove('show'), 2200);
+}
+</script>
+</body>
+</html>
