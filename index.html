@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Drag Drive Store</title>
+<title>KPC Store</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -18,26 +18,32 @@ body{
   padding-bottom:210px;
 }
 
-/* ══ BG ══ */
+/* ══ BG — KPC LOGO ══ */
 .bg{position:fixed;inset:0;z-index:0;overflow:hidden;}
-.bg-grad{
+.bg-logo{
+  position:absolute;inset:0;
+  background:url('data:image/jpeg;base64,__LOGO__') center/cover no-repeat;
+  opacity:0.13;
+  filter:grayscale(40%) contrast(1.2);
+}
+.bg-overlay{
   position:absolute;inset:0;
   background:
-    radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,100,255,.18),transparent 70%),
-    radial-gradient(ellipse 60% 40% at 20% 80%,rgba(255,34,68,.12),transparent 60%),
-    radial-gradient(ellipse 60% 40% at 80% 70%,rgba(0,240,255,.1),transparent 60%),
-    linear-gradient(180deg,#03070d 0%,#060f18 50%,#050d0a 100%);
+    radial-gradient(ellipse 100% 60% at 50% 0%,rgba(0,0,10,.82),transparent 80%),
+    radial-gradient(ellipse 100% 60% at 50% 100%,rgba(0,5,3,.92),transparent 80%),
+    linear-gradient(180deg,rgba(3,7,13,.88) 0%,rgba(3,7,13,.7) 40%,rgba(3,7,13,.88) 100%);
 }
+/* neon road line */
 .road-line{
   position:absolute;left:50%;transform:translateX(-50%);
-  bottom:0;width:4px;height:200%;
-  background:repeating-linear-gradient(180deg,#ffd600 0,#ffd600 36px,transparent 36px,transparent 72px);
-  animation:road .5s linear infinite;opacity:.18;
+  bottom:0;width:3px;height:200%;
+  background:repeating-linear-gradient(180deg,#ffd600 0,#ffd600 32px,transparent 32px,transparent 64px);
+  animation:road .5s linear infinite;opacity:.15;
 }
-@keyframes road{to{transform:translateX(-50%) translateY(72px);}}
+@keyframes road{to{transform:translateX(-50%) translateY(64px);}}
 .pts{position:absolute;inset:0;pointer-events:none;}
 .p{position:absolute;border-radius:50%;animation:pfloat var(--d) ease-in-out infinite alternate;}
-@keyframes pfloat{from{transform:translateY(0);opacity:.5;}to{transform:translateY(-28px);opacity:.1;}}
+@keyframes pfloat{from{transform:translateY(0);opacity:.5;}to{transform:translateY(-28px);opacity:.08;}}
 
 /* ══ GRADIENT TEXT ══ */
 .gtext{
@@ -64,32 +70,101 @@ body{
 .main{position:relative;z-index:1;padding:14px;max-width:480px;margin:0 auto;}
 
 /* ══ HEADER ══ */
-.header{text-align:center;padding-top:8px;margin-bottom:16px;animation:fadeDown .8s ease both;}
+.header{text-align:center;padding-top:6px;margin-bottom:14px;animation:fadeDown .8s ease both;}
 @keyframes fadeDown{from{opacity:0;transform:translateY(-20px);}to{opacity:1;transform:translateY(0);}}
-.car-scene{position:relative;display:inline-block;margin-bottom:4px;}
-.car-svg{animation:carBounce 1.8s ease-in-out infinite;filter:drop-shadow(0 0 20px #00f0ff);}
-@keyframes carBounce{0%,100%{transform:translateY(0) rotate(-1deg);}50%{transform:translateY(-10px) rotate(1deg);}}
-.smoke{position:absolute;bottom:10px;left:-8px;width:8px;height:8px;border-radius:50%;background:rgba(200,200,200,.5);animation:smokeUp 1.2s ease-out infinite;}
-.smoke:nth-child(2){animation-delay:.4s;}.smoke:nth-child(3){animation-delay:.8s;}
-@keyframes smokeUp{0%{transform:translate(0,0) scale(.5);opacity:.7;}100%{transform:translate(-28px,-22px) scale(2.2);opacity:0;}}
-.car-glow{
-  position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);
-  width:100px;height:14px;border-radius:50%;
-  background:radial-gradient(ellipse,rgba(0,240,255,.35),transparent 70%);
-  animation:glowPulse 1.8s ease-in-out infinite;
+
+/* KPC LOGO in header */
+.logo-wrap{
+  position:relative;display:inline-block;margin-bottom:8px;
 }
-@keyframes glowPulse{0%,100%{opacity:.5;transform:translateX(-50%) scaleX(1);}50%{opacity:1;transform:translateX(-50%) scaleX(1.2);}}
-.store-title{font-family:'Orbitron',monospace;font-size:24px;font-weight:900;letter-spacing:4px;line-height:1.1;display:block;}
-.title-sub{font-family:'Orbitron',monospace;font-size:9px;letter-spacing:5px;color:rgba(255,255,255,.32);margin-top:2px;display:block;}
+.kpc-logo{
+  width:110px;height:auto;
+  filter:drop-shadow(0 0 16px rgba(0,240,255,.7)) drop-shadow(0 0 32px rgba(255,34,68,.4));
+  animation:logoPulse 3s ease-in-out infinite;
+}
+@keyframes logoPulse{
+  0%,100%{filter:drop-shadow(0 0 14px rgba(0,240,255,.6)) drop-shadow(0 0 28px rgba(255,34,68,.35));}
+  50%{filter:drop-shadow(0 0 26px rgba(0,240,255,1)) drop-shadow(0 0 52px rgba(255,34,68,.7)) brightness(1.2);}
+}
+
+/* Rotating neon ring around logo */
+.logo-ring{
+  position:absolute;
+  inset:-14px;
+  border-radius:50%;
+  border:2px solid transparent;
+  background:
+    conic-gradient(from 0deg,
+      transparent 0%,
+      #ff2244 10%,#ffd600 25%,#00e676 40%,#00f0ff 55%,#bf5fff 70%,
+      transparent 80%,
+      transparent 100%)
+    border-box;
+  -webkit-mask:linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite:destination-out;
+  mask-composite:exclude;
+  animation:ringRotate 3s linear infinite;
+  opacity:.85;
+}
+@keyframes ringRotate{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+
+/* outer ring slower reverse */
+.logo-ring2{
+  position:absolute;
+  inset:-26px;
+  border-radius:50%;
+  border:1.5px solid transparent;
+  background:
+    conic-gradient(from 180deg,
+      transparent 0%,
+      #00f0ff 15%,#bf5fff 35%,#ffd600 55%,#ff2244 75%,
+      transparent 85%,transparent 100%)
+    border-box;
+  -webkit-mask:linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite:destination-out;
+  mask-composite:exclude;
+  animation:ringRotate 5s linear infinite reverse;
+  opacity:.5;
+}
+
+/* drag bike SVG area */
+.bike-scene{
+  position:relative;display:inline-block;margin-bottom:6px;
+}
+.bike-svg{
+  animation:bikeBounce 1.6s ease-in-out infinite;
+  filter:drop-shadow(0 0 14px #ff2244) drop-shadow(0 0 6px #ffd600);
+}
+@keyframes bikeBounce{
+  0%,100%{transform:translateX(0) rotate(-.5deg);}
+  50%{transform:translateX(6px) rotate(.5deg);}
+}
+/* exhaust fire */
+.exhaust-fire{
+  position:absolute;left:-14px;top:50%;transform:translateY(-40%);
+  display:flex;flex-direction:row-reverse;gap:2px;
+}
+.flame{
+  width:7px;border-radius:50% 50% 30% 30%;
+  animation:flameUp 0.25s ease-in-out infinite alternate;
+  transform-origin:bottom;
+}
+.flame:nth-child(1){height:14px;background:linear-gradient(#fff,#ffd600);animation-delay:0s;}
+.flame:nth-child(2){height:10px;background:linear-gradient(#ffd600,#ff6b00);animation-delay:.05s;}
+.flame:nth-child(3){height:7px;background:linear-gradient(#ff6b00,#ff2244);animation-delay:.1s;}
+@keyframes flameUp{from{transform:scaleY(1) skewX(-5deg);}to{transform:scaleY(1.4) skewX(5deg);}}
+
+.store-title{font-family:'Orbitron',monospace;font-size:22px;font-weight:900;letter-spacing:3px;line-height:1.1;display:block;}
+.title-sub{font-family:'Orbitron',monospace;font-size:9px;letter-spacing:5px;color:rgba(255,255,255,.3);margin-top:2px;display:block;}
 .divider{
-  height:1px;margin:10px 0 14px;
-  background:linear-gradient(90deg,transparent,rgba(255,34,68,.4),rgba(255,214,0,.6),rgba(0,240,255,.4),transparent);
+  height:1px;margin:10px 0 12px;
+  background:linear-gradient(90deg,transparent,rgba(255,34,68,.5),rgba(255,214,0,.7),rgba(0,240,255,.5),transparent);
   position:relative;
 }
 .divider::after{
   content:'';position:absolute;left:50%;top:-3px;transform:translateX(-50%);
   width:60px;height:7px;border-radius:50%;
-  background:radial-gradient(ellipse,rgba(255,214,0,.8),transparent);
+  background:radial-gradient(ellipse,rgba(255,214,0,.9),transparent);
   animation:divGlow 2s ease-in-out infinite alternate;
 }
 @keyframes divGlow{from{opacity:.4;width:40px;}to{opacity:1;width:80px;}}
@@ -97,12 +172,12 @@ body{
 /* PROMO */
 .promo-bar{
   display:flex;align-items:center;justify-content:center;gap:8px;
-  background:linear-gradient(135deg,rgba(255,34,68,.12),rgba(255,107,0,.12));
-  border:1px solid rgba(255,107,0,.35);border-radius:30px;
+  background:linear-gradient(135deg,rgba(255,34,68,.1),rgba(255,107,0,.1));
+  border:1px solid rgba(255,107,0,.3);border-radius:30px;
   padding:5px 14px;margin-bottom:14px;
   animation:promoPulse 2s ease-in-out infinite alternate;
 }
-@keyframes promoPulse{from{box-shadow:0 0 8px rgba(255,107,0,.2);}to{box-shadow:0 0 20px rgba(255,107,0,.5);}}
+@keyframes promoPulse{from{box-shadow:0 0 8px rgba(255,107,0,.18);}to{box-shadow:0 0 22px rgba(255,107,0,.55);}}
 .promo-icon{font-size:14px;animation:shake .6s ease-in-out infinite alternate;}
 @keyframes shake{from{transform:rotate(-8deg);}to{transform:rotate(8deg);}}
 .promo-text{font-family:'Orbitron',monospace;font-size:9px;font-weight:700;letter-spacing:1.5px;}
@@ -113,21 +188,22 @@ body{
   border-radius:18px;padding:14px;backdrop-filter:blur(14px);
   position:relative;overflow:hidden;animation:fadeUp .7s ease both;
 }
+/* animated conic border */
 .panel::before{
   content:'';position:absolute;inset:-1px;border-radius:18px;z-index:-1;
-  background:conic-gradient(from var(--angle),transparent 70%,var(--glow-c) 80%,transparent 90%);
-  animation:borderSpin 4s linear infinite;
+  background:conic-gradient(from var(--angle),transparent 75%,var(--gc) 82%,var(--gc2) 86%,transparent 92%);
+  animation:borderSpin 3s linear infinite;
 }
 @keyframes borderSpin{to{--angle:360deg;}}
 @property --angle{syntax:'<angle>';initial-value:0deg;inherits:false;}
 .panel::after{
   content:'';position:absolute;top:-80%;left:-80%;width:50%;height:250%;
-  background:linear-gradient(105deg,transparent,rgba(255,255,255,.05),transparent);
+  background:linear-gradient(105deg,transparent,rgba(255,255,255,.04),transparent);
   animation:shimmer 5s ease-in-out infinite;pointer-events:none;
 }
 @keyframes shimmer{0%{left:-80%;}100%{left:160%;}}
-.panel-red{--glow-c:#ff2244;background:rgba(255,20,60,.1);border:1px solid rgba(255,34,68,.3);box-shadow:0 0 28px rgba(255,20,60,.22);}
-.panel-blue{--glow-c:#00f0ff;background:rgba(0,180,255,.07);border:1px solid rgba(0,240,255,.25);box-shadow:0 0 28px rgba(0,200,255,.18);}
+.panel-red{--gc:#ff2244;--gc2:#ffd600;background:rgba(255,20,60,.1);border:1px solid rgba(255,34,68,.25);box-shadow:0 0 30px rgba(255,20,60,.2);}
+.panel-blue{--gc:#00f0ff;--gc2:#bf5fff;background:rgba(0,180,255,.07);border:1px solid rgba(0,240,255,.22);box-shadow:0 0 30px rgba(0,200,255,.18);}
 
 .panel-title{
   font-family:'Orbitron',monospace;font-size:11px;font-weight:900;letter-spacing:2px;
@@ -151,20 +227,14 @@ body{
 .panel-blue .sel-all-btn{color:var(--cyan);border-color:rgba(0,240,255,.5);}
 .panel-blue .sel-all-btn:hover{background:rgba(0,240,255,.1);}
 
-/* ══ ITEM ROW ══ */
+/* ══ ITEMS ══ */
 .item{
   display:flex;align-items:center;gap:5px;
-  padding:5px 4px;border-bottom:1px solid rgba(255,255,255,.06);
-  border-radius:7px;transition:background .15s;
-  font-size:12px;
+  padding:5px 4px;border-bottom:1px solid rgba(255,255,255,.05);
+  border-radius:7px;transition:background .15s;font-size:12px;
 }
 .item:last-of-type{border-bottom:none;}
-
-/* checkbox area — tap to toggle */
-.cb-wrap{
-  width:17px;height:17px;flex-shrink:0;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-}
+.cb-wrap{width:17px;height:17px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 .cb{
   width:17px;height:17px;border-radius:5px;
   display:flex;align-items:center;justify-content:center;
@@ -176,7 +246,6 @@ body{
 .panel-blue .item.sel .cb{background:var(--cyan);border-color:var(--cyan);box-shadow:0 0 8px rgba(0,240,255,.6);color:#001820;}
 .cb::after{content:'';}
 .item.sel .cb::after{content:'✓';}
-
 .item-name{flex:1;font-size:12px;cursor:pointer;}
 .price{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;white-space:nowrap;}
 .panel-red .price{color:var(--gold);}
@@ -184,72 +253,40 @@ body{
 .panel-red .item.sel{background:rgba(255,34,68,.13);}
 .panel-blue .item.sel{background:rgba(0,240,255,.09);}
 
-/* ══ QTY STEPPER ══ */
-.qty-wrap{
-  display:flex;align-items:center;gap:0;
-  opacity:0;pointer-events:none;
-  transform:scale(.7);
-  transition:opacity .2s,transform .2s;
-  flex-shrink:0;
-}
+/* qty */
+.qty-wrap{display:flex;align-items:center;gap:0;opacity:0;pointer-events:none;transform:scale(.7);transition:opacity .2s,transform .2s;flex-shrink:0;}
 .item.sel .qty-wrap{opacity:1;pointer-events:all;transform:scale(1);}
 .qty-btn{
   width:22px;height:22px;border:none;border-radius:6px;
   font-size:14px;font-weight:900;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
-  transition:background .15s,transform .1s;line-height:1;
-  flex-shrink:0;
+  transition:background .15s,transform .1s;line-height:1;flex-shrink:0;
 }
 .qty-btn:active{transform:scale(.88);}
 .panel-red .qty-btn{background:rgba(255,34,68,.25);color:#fff;}
 .panel-red .qty-btn:hover{background:rgba(255,34,68,.45);}
 .panel-blue .qty-btn{background:rgba(0,240,255,.2);color:#fff;}
 .panel-blue .qty-btn:hover{background:rgba(0,240,255,.4);}
-.qty-num{
-  font-family:'Orbitron',monospace;font-size:12px;font-weight:900;
-  width:24px;text-align:center;
-  animation:qtyPop .2s cubic-bezier(.34,1.56,.64,1);
-}
+.qty-num{font-family:'Orbitron',monospace;font-size:12px;font-weight:900;width:24px;text-align:center;animation:qtyPop .2s cubic-bezier(.34,1.56,.64,1);}
 @keyframes qtyPop{from{transform:scale(.5);}to{transform:scale(1);}}
 .panel-red .qty-num{color:var(--red);}
 .panel-blue .qty-num{color:var(--cyan);}
-
-.clear-panel{
-  margin-top:5px;font-family:'Orbitron',monospace;font-size:8px;
-  color:rgba(255,255,255,.28);cursor:pointer;text-align:right;
-  letter-spacing:1px;display:none;transition:color .2s;
-}
-.clear-panel:hover{color:rgba(255,255,255,.6);}
+.clear-panel{margin-top:5px;font-family:'Orbitron',monospace;font-size:8px;color:rgba(255,255,255,.25);cursor:pointer;text-align:right;letter-spacing:1px;display:none;transition:color .2s;}
+.clear-panel:hover{color:rgba(255,255,255,.55);}
 .clear-panel.on{display:block;}
 
 /* ══ ADMIN ══ */
-.section-label{
-  font-family:'Orbitron',monospace;font-size:10px;
-  letter-spacing:3px;color:rgba(255,255,255,.32);
-  text-align:center;margin:4px 0 6px;
-}
-.hint-msg{
-  text-align:center;font-family:'Orbitron',monospace;
-  font-size:9px;letter-spacing:1px;margin-bottom:10px;
-  min-height:14px;transition:color .4s;color:rgba(255,200,0,.65);
-}
+.section-label{font-family:'Orbitron',monospace;font-size:10px;letter-spacing:3px;color:rgba(255,255,255,.3);text-align:center;margin:4px 0 6px;}
+.hint-msg{text-align:center;font-family:'Orbitron',monospace;font-size:9px;letter-spacing:1px;margin-bottom:10px;min-height:14px;transition:color .4s;color:rgba(255,200,0,.6);}
 .admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .admin-card{
-  background:rgba(0,255,100,.05);border:1px solid rgba(0,230,118,.2);
+  background:rgba(0,255,100,.04);border:1px solid rgba(0,230,118,.18);
   border-radius:13px;padding:12px;animation:fadeUp .8s ease both;
   transition:box-shadow .2s,border-color .2s;
 }
 .admin-card:hover{box-shadow:0 0 22px rgba(0,230,118,.28);border-color:rgba(0,230,118,.5);}
-.admin-name{
-  font-family:'Orbitron',monospace;font-size:10px;font-weight:700;
-  color:var(--green);margin-bottom:8px;
-  display:flex;align-items:center;gap:5px;
-}
-.admin-name::before{
-  content:'';display:inline-block;width:6px;height:6px;border-radius:50%;
-  background:var(--green);box-shadow:0 0 6px var(--green);
-  animation:pulse 1.5s ease-in-out infinite;flex-shrink:0;
-}
+.admin-name{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:var(--green);margin-bottom:8px;display:flex;align-items:center;gap:5px;}
+.admin-name::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:pulse 1.5s ease-in-out infinite;flex-shrink:0;}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.7);}}
 .btn{
   width:100%;padding:9px;border:none;border-radius:10px;
@@ -263,9 +300,9 @@ body{
 .btn:hover{transform:scale(1.04);box-shadow:0 6px 24px rgba(0,230,118,.6);}
 .btn:active{transform:scale(.97);}
 
-/* ══ TICKER ══ */
-.ticker-wrap{margin-top:18px;overflow:hidden;border-top:1px solid rgba(255,255,255,.07);padding-top:7px;}
-.ticker{display:flex;gap:36px;white-space:nowrap;animation:ticker 12s linear infinite;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:2px;color:rgba(255,255,255,.26);}
+/* TICKER */
+.ticker-wrap{margin-top:18px;overflow:hidden;border-top:1px solid rgba(255,255,255,.06);padding-top:7px;}
+.ticker{display:flex;gap:36px;white-space:nowrap;animation:ticker 14s linear infinite;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:2px;color:rgba(255,255,255,.25);}
 @keyframes ticker{from{transform:translateX(0);}to{transform:translateX(-50%);}}
 
 /* ══ ORDER BAR ══ */
@@ -275,7 +312,7 @@ body{
   padding:10px 14px 14px;
   transform:translateY(110%);
   transition:transform .45s cubic-bezier(.34,1.56,.64,1);
-  box-shadow:0 -4px 30px rgba(0,230,118,.18);
+  box-shadow:0 -4px 30px rgba(0,230,118,.15);
 }
 .order-bar::before{
   content:'';position:absolute;top:0;left:0;right:0;height:2px;
@@ -283,38 +320,22 @@ body{
   background-size:300% 100%;animation:gshift 3s linear infinite;
 }
 .order-bar.on{transform:translateY(0);}
-
 .order-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:7px;}
-.order-lbl{font-family:'Orbitron',monospace;font-size:8px;letter-spacing:2px;color:rgba(255,255,255,.32);}
+.order-lbl{font-family:'Orbitron',monospace;font-size:8px;letter-spacing:2px;color:rgba(255,255,255,.3);}
 .calc-total{font-family:'Orbitron',monospace;font-size:22px;font-weight:900;line-height:1;margin-top:2px;}
-.calc-total .curr{font-size:11px;vertical-align:super;margin-right:1px;color:rgba(255,255,255,.45);}
-.order-count{font-family:'Orbitron',monospace;font-size:9px;color:rgba(255,255,255,.35);margin-top:2px;}
-.reset-btn{font-family:'Orbitron',monospace;font-size:8px;letter-spacing:1px;color:rgba(255,255,255,.28);border:1px solid rgba(255,255,255,.1);background:none;border-radius:6px;padding:4px 8px;cursor:pointer;transition:color .2s,border-color .2s;}
+.calc-total .curr{font-size:11px;vertical-align:super;margin-right:1px;color:rgba(255,255,255,.4);}
+.order-count{font-family:'Orbitron',monospace;font-size:9px;color:rgba(255,255,255,.32);margin-top:2px;}
+.reset-btn{font-family:'Orbitron',monospace;font-size:8px;letter-spacing:1px;color:rgba(255,255,255,.25);border:1px solid rgba(255,255,255,.1);background:none;border-radius:6px;padding:4px 8px;cursor:pointer;transition:color .2s,border-color .2s;}
 .reset-btn:hover{color:var(--red);border-color:var(--red);}
-
-/* chips */
 .chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;margin-bottom:8px;flex-wrap:wrap;}
 .chips::-webkit-scrollbar{display:none;}
-.chip{
-  font-family:'Orbitron',monospace;font-size:9px;font-weight:700;
-  padding:3px 9px;border-radius:20px;white-space:nowrap;
-  display:flex;align-items:center;gap:4px;flex-shrink:0;
-  animation:chipPop .25s cubic-bezier(.34,1.56,.64,1) both;
-}
+.chip{font-family:'Orbitron',monospace;font-size:9px;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap;display:flex;align-items:center;gap:4px;flex-shrink:0;animation:chipPop .25s cubic-bezier(.34,1.56,.64,1) both;}
 @keyframes chipPop{from{opacity:0;transform:scale(.6);}to{opacity:1;transform:scale(1);}}
 .chip-gp{background:rgba(255,34,68,.2);color:var(--red);border:1px solid rgba(255,34,68,.5);}
 .chip-cash{background:rgba(0,240,255,.15);color:var(--cyan);border:1px solid rgba(0,240,255,.5);}
-.chip-qty{
-  background:rgba(255,255,255,.15);color:#fff;
-  font-size:10px;font-weight:900;
-  width:18px;height:18px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;
-}
+.chip-qty{background:rgba(255,255,255,.15);color:#fff;font-size:10px;font-weight:900;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .chip-x{cursor:pointer;opacity:.6;transition:opacity .15s;font-size:11px;}
 .chip-x:hover{opacity:1;}
-
-/* admin row in bar */
 .admin-row{display:flex;gap:7px;}
 .wa-btn{
   flex:1;padding:9px 4px;border:none;border-radius:10px;
@@ -322,8 +343,7 @@ body{
   cursor:pointer;background:linear-gradient(135deg,#00c853,#00e676);
   color:#003311;box-shadow:0 3px 14px rgba(0,200,100,.4);
   transition:transform .15s,box-shadow .15s;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  position:relative;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;position:relative;
 }
 .wa-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.28) 50%,transparent 70%);transform:translateX(-100%);transition:transform .4s;}
 .wa-btn:hover::before{transform:translateX(100%);}
@@ -349,45 +369,100 @@ body{
 <body>
 
 <div class="bg">
-  <div class="bg-grad"></div>
+  <div class="bg-logo"></div>
+  <div class="bg-overlay"></div>
   <div class="road-line"></div>
   <div class="pts" id="pts"></div>
 </div>
 
 <div class="main">
-
   <!-- HEADER -->
   <div class="header">
-    <div class="car-scene">
-      <div class="smoke"></div><div class="smoke"></div><div class="smoke"></div>
-      <svg class="car-svg" width="120" height="58" viewBox="0 0 120 58" fill="none">
-        <ellipse cx="60" cy="55" rx="46" ry="4" fill="rgba(0,0,0,.5)"/>
-        <rect x="8" y="24" width="100" height="24" rx="7" fill="url(#b1)"/>
-        <path d="M28 24 L40 8 L80 8 L92 24 Z" fill="url(#r1)" opacity=".95"/>
-        <path d="M82 23 L91 10 L79 10 L68 23 Z" fill="rgba(0,240,255,.28)" stroke="rgba(0,240,255,.5)" stroke-width=".6"/>
-        <path d="M38 23 L29 10 L41 10 L52 23 Z" fill="rgba(0,240,255,.2)" stroke="rgba(0,240,255,.4)" stroke-width=".6"/>
-        <ellipse cx="107" cy="33" rx="6" ry="4.5" fill="#00f0ff" opacity=".95"/>
-        <ellipse cx="107" cy="33" rx="3.5" ry="2.8" fill="white"/>
-        <ellipse cx="114" cy="33" rx="8" ry="4" fill="#00f0ff" opacity=".12"/>
-        <rect x="9" y="29" width="7" height="10" rx="2.5" fill="#ff2244" opacity=".9"/>
-        <rect x="18" y="30" width="86" height="4" rx="2" fill="url(#s1)" opacity=".75"/>
-        <circle cx="32" cy="47" r="10" fill="#0d0d0d" stroke="#222" stroke-width="1.5"/>
-        <circle cx="32" cy="47" r="6.5" fill="#181818" stroke="#00f0ff" stroke-width="1.2"/>
-        <circle cx="32" cy="47" r="2.5" fill="#00f0ff"/>
-        <circle cx="86" cy="47" r="10" fill="#0d0d0d" stroke="#222" stroke-width="1.5"/>
-        <circle cx="86" cy="47" r="6.5" fill="#181818" stroke="#00f0ff" stroke-width="1.2"/>
-        <circle cx="86" cy="47" r="2.5" fill="#00f0ff"/>
+    <!-- KPC Logo with rings -->
+    <div class="logo-wrap">
+      <div class="logo-ring"></div>
+      <div class="logo-ring2"></div>
+      <img class="kpc-logo" src="data:image/jpeg;base64,__LOGO__" alt="KPC">
+    </div>
+
+    <!-- Drag Bike SVG -->
+    <div class="bike-scene">
+      <div class="exhaust-fire">
+        <div class="flame"></div>
+        <div class="flame"></div>
+        <div class="flame"></div>
+      </div>
+      <svg class="bike-svg" width="130" height="60" viewBox="0 0 130 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- rear wheel -->
+        <circle cx="22" cy="44" r="13" fill="#111" stroke="#333" stroke-width="2"/>
+        <circle cx="22" cy="44" r="8" fill="#1a1a1a" stroke="#ff2244" stroke-width="1.5"/>
+        <circle cx="22" cy="44" r="3" fill="#ff2244"/>
+        <!-- spokes rear -->
+        <line x1="22" y1="31" x2="22" y2="57" stroke="#333" stroke-width="1"/>
+        <line x1="9" y1="44" x2="35" y2="44" stroke="#333" stroke-width="1"/>
+        <line x1="13" y1="35" x2="31" y2="53" stroke="#333" stroke-width="1"/>
+        <line x1="31" y1="35" x2="13" y2="53" stroke="#333" stroke-width="1"/>
+        <!-- chain -->
+        <rect x="24" y="41" width="48" height="4" rx="2" fill="#333" stroke="#444" stroke-width=".5"/>
+        <!-- swingarm -->
+        <path d="M22 40 L68 34" stroke="#555" stroke-width="3" stroke-linecap="round"/>
+        <!-- frame -->
+        <path d="M22 38 L55 22 L90 20 L105 28" stroke="#666" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M55 22 L68 34 L90 32 L105 28" stroke="#555" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- engine -->
+        <rect x="54" y="28" width="22" height="14" rx="3" fill="#222" stroke="#444" stroke-width="1"/>
+        <rect x="57" y="30" width="7" height="4" rx="1" fill="#ff6b00" opacity=".6"/>
+        <rect x="66" y="30" width="7" height="4" rx="1" fill="#ff6b00" opacity=".6"/>
+        <!-- fuel tank / fairing -->
+        <path d="M68 14 Q90 10 108 18 L105 28 L68 28 Z" fill="url(#tankGrad)"/>
+        <path d="M68 14 Q90 10 108 18" stroke="#ff2244" stroke-width="1.5" fill="none"/>
+        <!-- headlight fairing -->
+        <path d="M100 16 Q115 18 120 28 L105 28 L100 16 Z" fill="url(#fairGrad)"/>
+        <ellipse cx="116" cy="25" rx="5" ry="4" fill="#ffd600" opacity=".9"/>
+        <ellipse cx="116" cy="25" rx="3" ry="2.5" fill="white"/>
+        <!-- front fork -->
+        <line x1="105" y1="28" x2="108" y2="44" stroke="#666" stroke-width="3" stroke-linecap="round"/>
+        <line x1="100" y1="28" x2="103" y2="44" stroke="#555" stroke-width="2" stroke-linecap="round"/>
+        <!-- front wheel -->
+        <circle cx="105" cy="44" r="13" fill="#111" stroke="#333" stroke-width="2"/>
+        <circle cx="105" cy="44" r="8" fill="#1a1a1a" stroke="#00f0ff" stroke-width="1.5"/>
+        <circle cx="105" cy="44" r="3" fill="#00f0ff"/>
+        <line x1="105" y1="31" x2="105" y2="57" stroke="#333" stroke-width="1"/>
+        <line x1="92" y1="44" x2="118" y2="44" stroke="#333" stroke-width="1"/>
+        <line x1="96" y1="35" x2="114" y2="53" stroke="#333" stroke-width="1"/>
+        <line x1="114" y1="35" x2="96" y2="53" stroke="#333" stroke-width="1"/>
+        <!-- rider (silhouette) -->
+        <ellipse cx="80" cy="15" rx="6" ry="7" fill="#1a1a2e" stroke="#333" stroke-width="1"/>
+        <path d="M75 19 Q68 22 68 28 L82 28 L85 22 Z" fill="#1a1a2e" stroke="#333" stroke-width=".8"/>
+        <!-- exhaust pipe -->
+        <path d="M58 38 Q50 42 30 40 Q20 39 12 42" stroke="#888" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <!-- racing stripe -->
+        <path d="M68 28 L105 28" stroke="url(#stripeGrad)" stroke-width="2" opacity=".8"/>
+        <!-- speed lines -->
+        <line x1="0" y1="30" x2="20" y2="30" stroke="#ff2244" stroke-width="1.5" opacity=".6"/>
+        <line x1="0" y1="36" x2="16" y2="36" stroke="#ffd600" stroke-width="1" opacity=".4"/>
+        <line x1="0" y1="42" x2="10" y2="42" stroke="#ff2244" stroke-width="1" opacity=".3"/>
         <defs>
-          <linearGradient id="b1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0e4080"/><stop offset="100%" stop-color="#061525"/></linearGradient>
-          <linearGradient id="r1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a4a70"/><stop offset="100%" stop-color="#0a1e30"/></linearGradient>
-          <linearGradient id="s1" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#ff2244"/><stop offset="40%" stop-color="#ffd600"/><stop offset="100%" stop-color="#00f0ff"/></linearGradient>
+          <linearGradient id="tankGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#1a2a4a"/>
+            <stop offset="100%" stop-color="#0a1020"/>
+          </linearGradient>
+          <linearGradient id="fairGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#1a2a4a"/>
+            <stop offset="100%" stop-color="#0d1828"/>
+          </linearGradient>
+          <linearGradient id="stripeGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#ff2244"/>
+            <stop offset="50%" stop-color="#ffd600"/>
+            <stop offset="100%" stop-color="#00f0ff"/>
+          </linearGradient>
         </defs>
       </svg>
-      <div class="car-glow"></div>
     </div>
+
     <div>
-      <span class="store-title gtext">DRAG DRIVE STORE</span>
-      <span class="title-sub">PROSES CEPAT • TERPERCAYA • 24 JAM</span>
+      <span class="store-title gtext">KPC STORE</span>
+      <span class="title-sub">DRAG DRIVE • PROSES CEPAT • 24 JAM</span>
     </div>
     <div class="divider"></div>
   </div>
@@ -401,18 +476,13 @@ body{
 
   <!-- PANELS -->
   <div class="grid">
-
-    <!-- GAMEPASS -->
     <div class="panel panel-red" style="animation-delay:.1s" id="pgp">
       <div class="panel-title">
         <span class="gtext-red">🚗 GP <span class="count-badge" id="bgp">0</span></span>
         <button class="sel-all-btn" onclick="toggleAll('gp')">SEMUA</button>
       </div>
-      <!-- items injected by JS -->
       <div class="clear-panel" id="clgp" onclick="clearPanel('gp')">✕ hapus semua</div>
     </div>
-
-    <!-- CASH -->
     <div class="panel panel-blue" style="animation-delay:.2s" id="pcash">
       <div class="panel-title">
         <span class="gtext-blue">💰 CASH <span class="count-badge" id="bcash">0</span></span>
@@ -420,7 +490,6 @@ body{
       </div>
       <div class="clear-panel" id="clcash" onclick="clearPanel('cash')">✕ hapus semua</div>
     </div>
-
   </div>
 
   <!-- ADMIN -->
@@ -447,11 +516,12 @@ body{
 
   <div class="ticker-wrap">
     <div class="ticker">
-      <span>🏁 DRAG DRIVE STORE</span><span>⚡ PROSES CEPAT</span>
-      <span>🚗 GAMEPASS MURAH</span><span>💰 CASH TERJANGKAU</span>
-      <span>✅ TRUSTED SELLER</span><span>🏁 DRAG DRIVE STORE</span>
-      <span>⚡ PROSES CEPAT</span><span>🚗 GAMEPASS MURAH</span>
-      <span>💰 CASH TERJANGKAU</span><span>✅ TRUSTED SELLER</span>
+      <span>🏁 KPC STORE</span><span>⚡ PROSES CEPAT</span>
+      <span>🏍️ DRAG DRIVE</span><span>💰 HARGA TERJANGKAU</span>
+      <span>✅ TRUSTED SELLER</span><span>🔥 KPC FAMILY</span>
+      <span>🏁 KPC STORE</span><span>⚡ PROSES CEPAT</span>
+      <span>🏍️ DRAG DRIVE</span><span>💰 HARGA TERJANGKAU</span>
+      <span>✅ TRUSTED SELLER</span><span>🔥 KPC FAMILY</span>
     </div>
   </div>
 </div>
@@ -478,7 +548,7 @@ body{
 <div class="toast" id="toast"></div>
 
 <script>
-/* ── BG PARTICLES ── */
+/* PARTICLES */
 const ptsEl=document.getElementById('pts');
 const pColors=['#ff2244','#00f0ff','#ffd600','#00e676','#bf5fff'];
 for(let i=0;i<40;i++){
@@ -488,36 +558,22 @@ for(let i=0;i<40;i++){
   ptsEl.appendChild(p);
 }
 
-/* ── CATALOG DATA ── */
-const CATALOG = {
-  gp: [
-    {nama:'Radio',   harga:4},
-    {nama:'Suspensi',harga:4},
-    {nama:'Paint',   harga:7},
-    {nama:'Aksesoris',harga:7},
-    {nama:'Plat',    harga:8},
-    {nama:'Velg',    harga:8},
-    {nama:'Slot',    harga:9},
-    {nama:'Drag',    harga:10},
-    {nama:'Luxury',  harga:13},
-    {nama:'Polisi',  harga:15},
-    {nama:'2x Gaji', harga:45},
+/* CATALOG */
+const CATALOG={
+  gp:[
+    {nama:'Radio',harga:4},{nama:'Suspensi',harga:4},{nama:'Paint',harga:7},
+    {nama:'Aksesoris',harga:7},{nama:'Plat',harga:8},{nama:'Velg',harga:8},
+    {nama:'Slot',harga:9},{nama:'Drag',harga:10},{nama:'Luxury',harga:13},
+    {nama:'Polisi',harga:15},{nama:'2x Gaji',harga:45},
   ],
-  cash: [
-    {nama:'1jt',  harga:1},
-    {nama:'5jt',  harga:3},
-    {nama:'10jt', harga:5},
-    {nama:'50jt', harga:7},
-    {nama:'100jt',harga:10},
-    {nama:'500jt',harga:37},
-    {nama:'1M',   harga:70},
+  cash:[
+    {nama:'1jt',harga:1},{nama:'5jt',harga:3},{nama:'10jt',harga:5},
+    {nama:'50jt',harga:7},{nama:'100jt',harga:10},{nama:'500jt',harga:37},{nama:'1M',harga:70},
   ]
 };
 
-/* ── STATE: Map<id, {panel,nama,harga,qty}> ── */
-const sel = new Map();
+const sel=new Map();
 
-/* ── BUILD ITEMS ── */
 function buildItems(){
   ['gp','cash'].forEach(panel=>{
     const panelEl=document.getElementById('p'+panel);
@@ -525,12 +581,9 @@ function buildItems(){
     CATALOG[panel].forEach(({nama,harga})=>{
       const id=panel+':'+nama;
       const row=document.createElement('div');
-      row.className='item';
-      row.id='item-'+id;
+      row.className='item';row.id='item-'+id;
       row.innerHTML=`
-        <div class="cb-wrap" onclick="toggleItem('${id}','${panel}','${nama}',${harga})">
-          <div class="cb"></div>
-        </div>
+        <div class="cb-wrap" onclick="toggleItem('${id}','${panel}','${nama}',${harga})"><div class="cb"></div></div>
         <span class="item-name" onclick="toggleItem('${id}','${panel}','${nama}',${harga})">${nama}</span>
         <span class="price">${harga} rb</span>
         <div class="qty-wrap" id="qty-${id}">
@@ -538,33 +591,24 @@ function buildItems(){
           <span class="qty-num" id="qn-${id}">1</span>
           <button class="qty-btn" onclick="changeQty('${id}',+1)">+</button>
         </div>`;
-      panelEl.insertBefore(row, clearEl);
+      panelEl.insertBefore(row,clearEl);
     });
   });
 }
 
-function toggleItem(id, panel, nama, harga){
-  if(sel.has(id)){
-    sel.delete(id);
-    document.getElementById('item-'+id).classList.remove('sel');
-    document.getElementById('qn-'+id).textContent='1';
-  } else {
-    sel.set(id,{panel,nama,harga,qty:1});
-    document.getElementById('item-'+id).classList.add('sel');
-  }
+function toggleItem(id,panel,nama,harga){
+  if(sel.has(id)){sel.delete(id);document.getElementById('item-'+id).classList.remove('sel');document.getElementById('qn-'+id).textContent='1';}
+  else{sel.set(id,{panel,nama,harga,qty:1});document.getElementById('item-'+id).classList.add('sel');}
   render();
 }
 
-function changeQty(id, delta){
-  if(!sel.has(id)) return;
+function changeQty(id,delta){
+  if(!sel.has(id))return;
   const item=sel.get(id);
-  item.qty=Math.max(1, Math.min(99, item.qty+delta));
-  // animate the number
+  item.qty=Math.max(1,Math.min(99,item.qty+delta));
   const qn=document.getElementById('qn-'+id);
   qn.textContent=item.qty;
-  qn.style.animation='none';
-  qn.offsetWidth; // reflow
-  qn.style.animation='qtyPop .2s cubic-bezier(.34,1.56,.64,1)';
+  qn.style.animation='none';qn.offsetWidth;qn.style.animation='qtyPop .2s cubic-bezier(.34,1.56,.64,1)';
   render();
 }
 
@@ -574,13 +618,8 @@ function toggleAll(panel){
   items.forEach(({nama,harga})=>{
     const id=panel+':'+nama;
     const rowEl=document.getElementById('item-'+id);
-    if(allOn){
-      sel.delete(id); rowEl.classList.remove('sel');
-      document.getElementById('qn-'+id).textContent='1';
-    } else {
-      if(!sel.has(id)) sel.set(id,{panel,nama,harga,qty:1});
-      rowEl.classList.add('sel');
-    }
+    if(allOn){sel.delete(id);rowEl.classList.remove('sel');document.getElementById('qn-'+id).textContent='1';}
+    else{if(!sel.has(id))sel.set(id,{panel,nama,harga,qty:1});rowEl.classList.add('sel');}
   });
   render();
 }
@@ -596,126 +635,88 @@ function clearPanel(panel){
 }
 
 function clearAll(){
-  sel.forEach((_,id)=>{
-    document.getElementById('item-'+id).classList.remove('sel');
-    document.getElementById('qn-'+id).textContent='1';
-  });
-  sel.clear();
-  render();
+  sel.forEach((_,id)=>{document.getElementById('item-'+id).classList.remove('sel');document.getElementById('qn-'+id).textContent='1';});
+  sel.clear();render();
 }
 
 function removeChip(id){
-  if(!sel.has(id)) return;
+  if(!sel.has(id))return;
   document.getElementById('item-'+id).classList.remove('sel');
   document.getElementById('qn-'+id).textContent='1';
-  sel.delete(id);
-  render();
+  sel.delete(id);render();
 }
 
-/* ── RENDER ── */
 function fmt(n){return n.toLocaleString('id-ID');}
 
 function render(){
   const gpArr=[...sel.values()].filter(v=>v.panel==='gp');
   const cashArr=[...sel.values()].filter(v=>v.panel==='cash');
-  const totalItems=sel.size;
-  const totalQty=[...sel.values()].reduce((a,v)=>a+v.qty,0);
   const totalRb=[...sel.values()].reduce((a,v)=>a+v.harga*v.qty,0);
+  const totalItems=sel.size;
 
-  // badges (unique items)
-  const bg=document.getElementById('bgp');
-  const bc=document.getElementById('bcash');
-  bg.textContent=gpArr.length; bg.classList.toggle('on',gpArr.length>0);
-  bc.textContent=cashArr.length; bc.classList.toggle('on',cashArr.length>0);
-
-  // clear links
+  const bg=document.getElementById('bgp');const bc=document.getElementById('bcash');
+  bg.textContent=gpArr.length;bg.classList.toggle('on',gpArr.length>0);
+  bc.textContent=cashArr.length;bc.classList.toggle('on',cashArr.length>0);
   document.getElementById('clgp').classList.toggle('on',gpArr.length>0);
   document.getElementById('clcash').classList.toggle('on',cashArr.length>0);
 
-  // hint
   const hint=document.getElementById('hint');
-  if(totalItems>0){
-    hint.textContent=`🛒 ${totalQty} item • Total: Rp ${fmt(totalRb)}.000`;
-    hint.style.color='#00e676';
-  } else {
-    hint.textContent='👆 Tap item pilih — tap +/− untuk atur jumlah';
-    hint.style.color='rgba(255,200,0,.65)';
-  }
+  if(totalItems>0){hint.textContent=`🛒 ${[...sel.values()].reduce((a,v)=>a+v.qty,0)} item • Total: Rp ${fmt(totalRb)}.000`;hint.style.color='#00e676';}
+  else{hint.textContent='👆 Tap item pilih — tap +/− untuk atur jumlah';hint.style.color='rgba(255,200,0,.6)';}
 
-  // order bar
   document.getElementById('orderBar').classList.toggle('on',totalItems>0);
-
-  // animated total
   animateTotal(totalRb);
 
-  // count label
   const parts=[];
-  if(gpArr.length){
-    const qGp=gpArr.reduce((a,v)=>a+v.qty,0);
-    parts.push(`${qGp} Gamepass`);
-  }
-  if(cashArr.length){
-    const qCash=cashArr.reduce((a,v)=>a+v.qty,0);
-    parts.push(`${qCash} Cash`);
-  }
+  if(gpArr.length)parts.push(`${gpArr.reduce((a,v)=>a+v.qty,0)} GP`);
+  if(cashArr.length)parts.push(`${cashArr.reduce((a,v)=>a+v.qty,0)} Cash`);
   document.getElementById('orderCount').textContent=parts.join(' + ');
 
-  // chips
   const chipsEl=document.getElementById('chips');
   chipsEl.innerHTML='';
   sel.forEach(({panel,nama,harga,qty},id)=>{
     const isGp=panel==='gp';
     const chip=document.createElement('div');
     chip.className='chip '+(isGp?'chip-gp':'chip-cash');
-    chip.innerHTML=`
-      ${isGp?'🚗':'💰'} ${nama}
-      <span class="chip-qty">${qty}</span>
-      <span style="font-size:9px;opacity:.5">${harga*qty}rb</span>
-      <span class="chip-x" onclick="removeChip('${id}')">✕</span>`;
+    chip.innerHTML=`${isGp?'🚗':'💰'} ${nama}<span class="chip-qty">${qty}</span><span style="font-size:9px;opacity:.5">${harga*qty}rb</span><span class="chip-x" onclick="removeChip('${id}')">✕</span>`;
     chipsEl.appendChild(chip);
   });
 }
 
-/* animated counter */
-let curTotal=0, rafId=null;
+let curTotal=0,rafId=null;
 function animateTotal(target){
-  if(rafId) cancelAnimationFrame(rafId);
-  const start=curTotal, diff=target-start, dur=350, t0=performance.now();
+  if(rafId)cancelAnimationFrame(rafId);
+  const start=curTotal,diff=target-start,dur=350,t0=performance.now();
   function step(now){
     const pct=Math.min((now-t0)/dur,1);
     const ease=1-Math.pow(1-pct,3);
     curTotal=Math.round(start+diff*ease);
     document.getElementById('totalAmt').textContent=curTotal>0?fmt(curTotal)+'.000':'0';
-    if(pct<1) rafId=requestAnimationFrame(step);
+    if(pct<1)rafId=requestAnimationFrame(step);
   }
   rafId=requestAnimationFrame(step);
 }
 
-/* ── WA ── */
-function wa(nama, nomor){
+function wa(nama,nomor){
   if(sel.size===0){toast('⚠️ Pilih item dulu!','warn');return;}
   const gpArr=[...sel.values()].filter(v=>v.panel==='gp');
   const cashArr=[...sel.values()].filter(v=>v.panel==='cash');
   const totalRb=[...sel.values()].reduce((a,v)=>a+v.harga*v.qty,0);
-
   let lines=[];
-  if(gpArr.length) lines.push('*Gamepass:*\n'+gpArr.map(v=>`  • ${v.nama} x${v.qty} = ${v.harga*v.qty}rb`).join('\n'));
-  if(cashArr.length) lines.push('*Cash:*\n'+cashArr.map(v=>`  • ${v.nama} x${v.qty} = ${v.harga*v.qty}rb`).join('\n'));
+  if(gpArr.length)lines.push('*Gamepass:*\n'+gpArr.map(v=>`  • ${v.nama} x${v.qty} = ${v.harga*v.qty}rb`).join('\n'));
+  if(cashArr.length)lines.push('*Cash:*\n'+cashArr.map(v=>`  • ${v.nama} x${v.qty} = ${v.harga*v.qty}rb`).join('\n'));
   lines.push(`*Total: Rp ${fmt(totalRb)}.000*`);
-
   const text=`Halo ${nama}, saya mau order:\n`+lines.join('\n');
   window.open('https://wa.me/'+nomor+'?text='+encodeURIComponent(text));
 }
 
-/* toast */
 let tT;
 function toast(msg,type='ok'){
   const t=document.getElementById('toast');
-  t.textContent=msg; t.className=`toast ${type} show`;
-  clearTimeout(tT); tT=setTimeout(()=>t.classList.remove('show'),2400);
+  t.textContent=msg;t.className=`toast ${type} show`;
+  clearTimeout(tT);tT=setTimeout(()=>t.classList.remove('show'),2400);
 }
 
-/* init */
 buildItems();
 </script>
 </body>
