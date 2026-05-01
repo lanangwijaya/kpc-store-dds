@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DRAG DRIVE STORE</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: linear-gradient(135deg,#020617,#0f172a);
+  color: white;
+  text-align: center;
+}
+
+h1 { margin: 20px; }
+
+.section {
+  font-size: 22px;
+  margin-top: 20px;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+  gap: 15px;
+  padding: 15px;
+}
+
+.card {
+  background: #1e293b;
+  padding: 15px;
+  border-radius: 12px;
+  transition: 0.3s;
+}
+
+.card:hover { transform: scale(1.05); }
+
+button {
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.buy { background: #22c55e; }
+.wa { background: #25D366; }
+.qris { background: #facc15; }
+</style>
+</head>
+
+<body>
+
+<h1>🏁 DRAG DRIVE STORE</h1>
+
+<div class="section">🚗 GAMEPASS</div>
+<div class="container">
+
+<div class="card"><h3>Radio</h3><p>4 yebu</p>
+<button class="buy" onclick="beli('LINK_RADIO')">Beli</button>
+<button class="wa" onclick="wa('Radio - 4 yebu')">WA</button></div>
+
+<div class="card"><h3>Suspensi</h3><p>4 yebu</p>
+<button class="buy" onclick="beli('LINK_SUSPENSI')">Beli</button>
+<button class="wa" onclick="wa('Suspensi - 4 yebu')">WA</button></div>
+
+<div class="card"><h3>Paint</h3><p>7 yebu</p>
+<button class="buy" onclick="beli('LINK_PAINT')">Beli</button>
+<button class="wa" onclick="wa('Paint - 7 yebu')">WA</button></div>
+
+<div class="card"><h3>Aksesoris</h3><p>7 yebu</p>
+<button class="buy" onclick="beli('LINK_AKSESORIS')">Beli</button>
+<button class="wa" onclick="wa('Aksesoris - 7 yebu')">WA</button></div>
+
+<div class="card"><h3>Plat</h3><p>8 yebu</p>
+<button class="buy" onclick="beli('LINK_PLAT')">Beli</button>
+<button class="wa" onclick="wa('Plat - 8 yebu')">WA</button></div>
+
+<div class="card"><h3>Velg</h3><p>8 yebu</p>
+<button class="buy" onclick="beli('LINK_VELG')">Beli</button>
+<button class="wa" onclick="wa('Velg - 8 yebu')">WA</button></div>
+
+<div class="card"><h3>Slot</h3><p>9 yebu</p>
+<button class="buy" onclick="beli('LINK_SLOT')">Beli</button>
+<button class="wa" onclick="wa('Slot - 9 yebu')">WA</button></div>
+
+<div class="card"><h3>Drag</h3><p>10 yebu</p>
+<button class="buy" onclick="beli('LINK_DRAG')">Beli</button>
+<button class="wa" onclick="wa('Drag - 10 yebu')">WA</button></div>
+
+<div class="card"><h3>Luxury</h3><p>13 yebu</p>
+<button class="buy" onclick="beli('LINK_LUXURY')">Beli</button>
+<button class="wa" onclick="wa('Luxury - 13 yebu')">WA</button></div>
+
+<div class="card"><h3>Polisi</h3><p>15 yebu</p>
+<button class="buy" onclick="beli('LINK_POLISI')">Beli</button>
+<button class="wa" onclick="wa('Polisi - 15 yebu')">WA</button></div>
+
+<div class="card"><h3>2x Gaji</h3><p>45 yebu</p>
+<button class="buy" onclick="beli('LINK_GAJI')">Beli</button>
+<button class="wa" onclick="wa('2x Gaji - 45 yebu')">WA</button></div>
+
+</div>
+
+<div class="section">💰 CASH</div>
+<div class="container">
+
+<div class="card"><h3>1jt</h3><p>1 yebu</p><button class="wa" onclick="wa('Cash 1jt - 1 yebu')">Beli</button></div>
+<div class="card"><h3>5jt</h3><p>3 yebu</p><button class="wa" onclick="wa('Cash 5jt - 3 yebu')">Beli</button></div>
+<div class="card"><h3>10jt</h3><p>5 yebu</p><button class="wa" onclick="wa('Cash 10jt - 5 yebu')">Beli</button></div>
+<div class="card"><h3>50jt</h3><p>7 yebu</p><button class="wa" onclick="wa('Cash 50jt - 7 yebu')">Beli</button></div>
+<div class="card"><h3>100jt</h3><p>10 yebu</p><button class="wa" onclick="wa('Cash 100jt - 10 yebu')">Beli</button></div>
+<div class="card"><h3>500jt</h3><p>37 yebu</p><button class="wa" onclick="wa('Cash 500jt - 37 yebu')">Beli</button></div>
+<div class="card"><h3>1M</h3><p>70 yebu</p><button class="wa" onclick="wa('Cash 1M - 70 yebu')">Beli</button></div>
+
+</div>
+
+<div style="padding:20px">
+<h2>💳 PEMBAYARAN</h2>
+<button class="wa" onclick="wa('Halo saya mau bayar')">💬 WhatsApp</button>
+<button class="qris" onclick="qris()">📷 QRIS</button>
+</div>
+
+<script>
+function beli(link){
+  window.open(link, "_blank");
+}
+
+function wa(item){
+  window.open("https://wa.me/6281252425581?text=Halo saya mau beli "+item, "_blank");
+}
+
+function qris(){
+  window.open("LINK_QRIS_KAMU", "_blank");
+}
+</script>
+
+</body>
+</html>
