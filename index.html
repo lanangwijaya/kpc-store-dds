@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Drag Drive Store</title>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-
 <style>
 :root {
   --red: #ff2244;
@@ -13,139 +12,62 @@
   --green: #00e676;
   --gold: #ffd600;
   --bg-dark: #050a0f;
-  --panel-red: rgba(255,20,60,0.12);
-  --panel-blue: rgba(0,200,255,0.1);
 }
-
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
 body {
   font-family: 'Rajdhani', sans-serif;
   background: var(--bg-dark);
   color: white;
   min-height: 100vh;
   overflow-x: hidden;
+  padding-bottom: 80px;
 }
 
-/* ── ROAD BACKGROUND ── */
+/* BG */
 .road-bg {
-  position: fixed;
-  inset: 0;
-  background:
-    linear-gradient(180deg, #050a0f 0%, #0a1520 40%, #0d1f10 100%);
+  position: fixed; inset: 0;
+  background: linear-gradient(180deg, #050a0f 0%, #0a1520 40%, #0d1f10 100%);
   z-index: 0;
 }
-
-/* Animated road stripes */
 .road-bg::after {
   content: '';
-  position: fixed;
-  left: 50%;
+  position: fixed; left: 50%;
   transform: translateX(-50%);
-  bottom: 0;
-  width: 6px;
-  height: 200%;
-  background: repeating-linear-gradient(
-    180deg,
-    var(--gold) 0px,
-    var(--gold) 40px,
-    transparent 40px,
-    transparent 80px
-  );
+  bottom: 0; width: 6px; height: 200%;
+  background: repeating-linear-gradient(180deg, var(--gold) 0px, var(--gold) 40px, transparent 40px, transparent 80px);
   animation: roadMove 0.6s linear infinite;
-  opacity: 0.3;
-  z-index: 0;
+  opacity: 0.25; z-index: 0;
 }
-
 @keyframes roadMove {
   from { transform: translateX(-50%) translateY(0); }
   to   { transform: translateX(-50%) translateY(80px); }
 }
-
-/* Starfield particles */
-.stars {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-}
+.stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
 .star {
-  position: absolute;
-  width: 2px; height: 2px;
-  border-radius: 50%;
-  background: white;
-  animation: twinkle var(--d) ease-in-out infinite alternate;
-  opacity: 0.4;
+  position: absolute; width: 2px; height: 2px;
+  border-radius: 50%; background: white;
+  animation: twinkle var(--d) ease-in-out infinite alternate; opacity: 0.4;
 }
 @keyframes twinkle {
   from { opacity: 0.1; transform: scale(1); }
   to   { opacity: 0.9; transform: scale(1.8); }
 }
 
-/* Speed lines */
-.speed-lines {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-.speed-line {
-  position: absolute;
-  left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0,240,255,0.15), transparent);
-  animation: speedLine var(--d, 2s) linear infinite;
-  top: var(--t, 50%);
-}
-@keyframes speedLine {
-  from { transform: translateX(-100%); }
-  to   { transform: translateX(100%); }
-}
+/* LAYOUT */
+.main { position: relative; z-index: 1; padding: 16px; max-width: 480px; margin: 0 auto; }
 
-/* ── LAYOUT ── */
-.main {
-  position: relative;
-  z-index: 1;
-  padding: 16px;
-  max-width: 480px;
-  margin: 0 auto;
-}
-
-/* ── HEADER ── */
-.header {
-  text-align: center;
-  margin-bottom: 24px;
-  padding-top: 10px;
-  animation: fadeDown 0.8s ease both;
-}
-
-/* Animated car SVG */
-.car-wrap {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 8px;
-}
-.car-svg {
-  animation: carBounce 1.8s ease-in-out infinite;
-  filter: drop-shadow(0 0 18px var(--cyan));
-}
+/* HEADER */
+.header { text-align: center; margin-bottom: 20px; padding-top: 10px; animation: fadeDown 0.8s ease both; }
+.car-wrap { display: flex; justify-content: center; margin-bottom: 8px; }
+.car-svg { animation: carBounce 1.8s ease-in-out infinite; filter: drop-shadow(0 0 18px var(--cyan)); }
 @keyframes carBounce {
   0%,100% { transform: translateY(0) rotate(-1deg); }
   50%      { transform: translateY(-8px) rotate(1deg); }
 }
-
-/* Exhaust smoke */
-.exhaust {
-  position: relative;
-  display: inline-block;
-}
+.exhaust { position: relative; display: inline-block; }
 .smoke {
-  position: absolute;
-  bottom: 12px;
-  left: -10px;
-  width: 8px; height: 8px;
-  border-radius: 50%;
+  position: absolute; bottom: 12px; left: -10px;
+  width: 8px; height: 8px; border-radius: 50%;
   background: rgba(200,200,200,0.6);
   animation: smokeRise 1.2s ease-out infinite;
 }
@@ -155,22 +77,14 @@ body {
   0%   { transform: translate(0,0) scale(0.5); opacity: 0.7; }
   100% { transform: translate(-30px,-20px) scale(2); opacity: 0; }
 }
-
 .title {
-  font-family: 'Orbitron', monospace;
-  font-size: 22px;
-  font-weight: 900;
+  font-family: 'Orbitron', monospace; font-size: 22px; font-weight: 900;
   letter-spacing: 3px;
   background: linear-gradient(90deg, var(--red), var(--gold), var(--cyan));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: none;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   animation: titleGlow 3s ease-in-out infinite alternate;
-  line-height: 1.2;
 }
 .title-flag { font-size: 26px; display: block; margin-bottom: 4px; }
-
 @keyframes titleGlow {
   from { filter: brightness(1); }
   to   { filter: brightness(1.4) drop-shadow(0 0 12px var(--gold)); }
@@ -179,168 +93,120 @@ body {
   from { opacity: 0; transform: translateY(-20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-
-/* Divider */
 .divider {
   height: 2px;
   background: linear-gradient(90deg, transparent, var(--red), var(--gold), var(--cyan), transparent);
-  margin: 12px 0 20px;
-  animation: scanLine 3s linear infinite;
-}
-@keyframes scanLine {
-  0%,100% { opacity: 0.6; }
-  50%      { opacity: 1; }
+  margin: 10px 0 18px;
 }
 
-/* ── PANELS ── */
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
+/* PANELS */
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
 .panel {
-  border-radius: 16px;
-  padding: 14px;
+  border-radius: 16px; padding: 14px;
   backdrop-filter: blur(12px);
-  position: relative;
-  overflow: hidden;
+  position: relative; overflow: hidden;
   animation: fadeUp 0.7s ease both;
 }
-.panel::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 16px;
-  padding: 1px;
-  background: linear-gradient(135deg, var(--border-a), transparent, var(--border-b));
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-}
-/* Shimmer overlay */
 .panel::after {
   content: '';
-  position: absolute;
-  top: -60%;
-  left: -60%;
-  width: 40%;
-  height: 200%;
-  background: linear-gradient(105deg, transparent, rgba(255,255,255,0.06), transparent);
-  animation: shimmer 4s ease-in-out infinite;
-  pointer-events: none;
+  position: absolute; top: -60%; left: -60%; width: 40%; height: 200%;
+  background: linear-gradient(105deg, transparent, rgba(255,255,255,0.05), transparent);
+  animation: shimmer 4s ease-in-out infinite; pointer-events: none;
 }
-@keyframes shimmer {
-  0%   { left: -60%; }
-  100% { left: 140%; }
-}
+@keyframes shimmer { 0% { left: -60%; } 100% { left: 140%; } }
 
 .panel-red {
-  --border-a: var(--red);
-  --border-b: rgba(255,100,0,0.5);
-  background: var(--panel-red);
-  box-shadow: 0 0 25px rgba(255,20,60,0.35), inset 0 0 30px rgba(255,0,0,0.05);
+  background: rgba(255,20,60,0.1);
+  border: 1px solid rgba(255,34,68,0.4);
+  box-shadow: 0 0 25px rgba(255,20,60,0.3);
 }
 .panel-blue {
-  --border-a: var(--cyan);
-  --border-b: rgba(0,100,255,0.4);
-  background: var(--panel-blue);
-  box-shadow: 0 0 25px rgba(0,200,255,0.35), inset 0 0 30px rgba(0,150,255,0.05);
+  background: rgba(0,200,255,0.08);
+  border: 1px solid rgba(0,240,255,0.35);
+  box-shadow: 0 0 25px rgba(0,200,255,0.3);
 }
-
 .panel-title {
-  font-family: 'Orbitron', monospace;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  font-family: 'Orbitron', monospace; font-size: 12px; font-weight: 700;
+  letter-spacing: 1.5px; margin-bottom: 10px;
+  display: flex; align-items: center; gap: 6px;
 }
 .panel-red .panel-title { color: var(--red); }
 .panel-blue .panel-title { color: var(--cyan); }
 
+/* ITEMS — clickable */
 .item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6px 4px;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
-  font-size: 13px;
-  transition: background 0.2s;
-  border-radius: 4px;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 7px 6px; border-bottom: 1px solid rgba(255,255,255,0.07);
+  font-size: 13px; border-radius: 6px; cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  user-select: none; position: relative;
 }
-.item:hover {
-  background: rgba(255,255,255,0.06);
-  padding-left: 8px;
+.item:hover { background: rgba(255,255,255,0.06); }
+.item:active { transform: scale(0.97); }
+.item .check { display: none; font-size: 10px; font-weight: 900; margin-right: 4px; }
+.item span.price {
+  font-family: 'Orbitron', monospace; font-size: 11px; font-weight: 700;
 }
-.item span {
-  font-family: 'Orbitron', monospace;
-  font-size: 11px;
-  font-weight: 700;
-}
-.panel-red .item span { color: var(--gold); }
-.panel-blue .item span { color: var(--green); }
+.panel-red .item span.price { color: var(--gold); }
+.panel-blue .item span.price { color: var(--green); }
 
-/* ── BUTTONS ── */
-.btn {
-  margin-top: 12px;
-  width: 100%;
-  padding: 10px;
-  border: none;
-  border-radius: 10px;
-  font-family: 'Orbitron', monospace;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.15s, box-shadow 0.15s;
+/* Selected */
+.panel-red .item.sel {
+  background: rgba(255,34,68,0.22);
+  border: 1px solid rgba(255,34,68,0.7);
+  box-shadow: 0 0 10px rgba(255,34,68,0.3);
+  border-bottom: 1px solid rgba(255,34,68,0.7);
 }
-.btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.25) 50%, transparent 70%);
-  transform: translateX(-100%);
-  transition: transform 0.4s;
+.panel-blue .item.sel {
+  background: rgba(0,240,255,0.15);
+  border: 1px solid rgba(0,240,255,0.7);
+  box-shadow: 0 0 10px rgba(0,240,255,0.3);
+  border-bottom: 1px solid rgba(0,240,255,0.7);
 }
-.btn:hover::before { transform: translateX(100%); }
-.btn:hover { transform: scale(1.04); }
-.btn:active { transform: scale(0.97); }
+.panel-red .item.sel .check { display: inline; color: var(--red); }
+.panel-blue .item.sel .check { display: inline; color: var(--cyan); }
 
-.btn-green {
-  background: linear-gradient(135deg, #00c853, #00e676);
-  color: #003311;
-  box-shadow: 0 4px 20px rgba(0,200,100,0.5);
+/* Summary chip */
+.sel-summary {
+  margin-top: 8px; min-height: 26px;
+  display: flex; align-items: center; gap: 6px;
 }
-.btn-green:hover { box-shadow: 0 6px 28px rgba(0,230,118,0.7); }
+.sel-tag {
+  font-family: 'Orbitron', monospace; font-size: 9px; font-weight: 700;
+  padding: 3px 8px; border-radius: 20px;
+  flex: 1; opacity: 0; transform: translateY(4px);
+  transition: opacity 0.3s, transform 0.3s;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.sel-tag.visible { opacity: 1; transform: translateY(0); }
+.panel-red  .sel-tag { background: rgba(255,34,68,0.2); color: var(--red); border: 1px solid rgba(255,34,68,0.5); }
+.panel-blue .sel-tag { background: rgba(0,240,255,0.15); color: var(--cyan); border: 1px solid rgba(0,240,255,0.5); }
+.clear-btn {
+  font-size: 14px; background: none; border: none;
+  color: rgba(255,255,255,0.35); cursor: pointer; padding: 2px 5px;
+  display: none; transition: color 0.2s; flex-shrink: 0;
+}
+.clear-btn.visible { display: block; }
+.clear-btn:hover { color: white; }
 
-/* ── ADMIN SECTION ── */
+/* ADMIN */
 .section-label {
-  font-family: 'Orbitron', monospace;
-  font-size: 11px;
-  letter-spacing: 3px;
-  color: rgba(255,255,255,0.4);
-  text-align: center;
-  margin: 4px 0 12px;
+  font-family: 'Orbitron', monospace; font-size: 11px;
+  letter-spacing: 3px; color: rgba(255,255,255,0.4);
+  text-align: center; margin: 4px 0 6px;
+}
+.hint-msg {
+  text-align: center; font-family: 'Orbitron', monospace;
+  font-size: 9px; letter-spacing: 1px; margin-bottom: 10px;
+  min-height: 14px; transition: color 0.4s;
+  color: rgba(255,200,0,0.65);
 }
 
-.admin-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
+.admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .admin-card {
   background: rgba(0,255,100,0.05);
   border: 1px solid rgba(0,230,118,0.25);
-  border-radius: 12px;
-  padding: 12px;
+  border-radius: 12px; padding: 12px;
   box-shadow: 0 0 14px rgba(0,200,80,0.1);
   animation: fadeUp 0.8s ease both;
   transition: box-shadow 0.2s, border-color 0.2s;
@@ -349,86 +215,73 @@ body {
   box-shadow: 0 0 24px rgba(0,230,118,0.35);
   border-color: rgba(0,230,118,0.6);
 }
-
 .admin-name {
-  font-family: 'Orbitron', monospace;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--green);
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
+  font-family: 'Orbitron', monospace; font-size: 11px; font-weight: 700;
+  color: var(--green); margin-bottom: 8px;
+  display: flex; align-items: center; gap: 5px;
 }
 .admin-name::before {
-  content: '';
-  display: inline-block;
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 6px var(--green);
-  animation: pulse 1.5s ease-in-out infinite;
+  content: ''; display: inline-block;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green); box-shadow: 0 0 6px var(--green);
+  animation: pulse 1.5s ease-in-out infinite; flex-shrink: 0;
 }
 @keyframes pulse {
   0%,100% { opacity: 1; transform: scale(1); }
   50%      { opacity: 0.5; transform: scale(0.7); }
 }
 
-/* ── BADGE CORNER ── */
-.corner-badge {
-  position: absolute;
-  top: 8px; right: 8px;
-  font-family: 'Orbitron', monospace;
-  font-size: 7px;
-  letter-spacing: 1px;
-  padding: 2px 6px;
-  border-radius: 20px;
-  font-weight: 700;
+/* BUTTONS */
+.btn {
+  width: 100%; padding: 9px; border: none; border-radius: 10px;
+  font-family: 'Orbitron', monospace; font-size: 10px; font-weight: 700;
+  letter-spacing: 0.5px; cursor: pointer;
+  position: relative; overflow: hidden;
+  transition: transform 0.15s, box-shadow 0.15s;
 }
-.badge-red  { background: rgba(255,34,68,0.3); color: var(--red); border: 1px solid var(--red); }
-.badge-blue { background: rgba(0,240,255,0.2); color: var(--cyan); border: 1px solid var(--cyan); }
+.btn::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.25) 50%, transparent 70%);
+  transform: translateX(-100%); transition: transform 0.4s;
+}
+.btn:hover::before { transform: translateX(100%); }
+.btn:hover { transform: scale(1.04); }
+.btn:active { transform: scale(0.97); }
+.btn-green {
+  background: linear-gradient(135deg, #00c853, #00e676);
+  color: #003311; box-shadow: 0 4px 18px rgba(0,200,100,0.45);
+}
+.btn-green:hover { box-shadow: 0 6px 28px rgba(0,230,118,0.65); }
 
-/* ── BOTTOM TICKER ── */
+/* TICKER */
 .ticker-wrap {
-  margin-top: 20px;
-  overflow: hidden;
-  border-top: 1px solid rgba(255,255,255,0.08);
-  padding-top: 8px;
+  margin-top: 20px; overflow: hidden;
+  border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;
 }
 .ticker {
-  display: flex;
-  gap: 40px;
-  white-space: nowrap;
+  display: flex; gap: 40px; white-space: nowrap;
   animation: ticker 12s linear infinite;
-  font-size: 11px;
-  color: rgba(255,255,255,0.35);
-  font-family: 'Orbitron', monospace;
-  letter-spacing: 2px;
+  font-size: 11px; color: rgba(255,255,255,0.3);
+  font-family: 'Orbitron', monospace; letter-spacing: 2px;
 }
 @keyframes ticker {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
 }
 
-/* ── NOTIFICATION TOAST ── */
+/* TOAST */
 .toast {
-  position: fixed;
-  bottom: 30px;
-  left: 50%;
+  position: fixed; bottom: 20px; left: 50%;
   transform: translateX(-50%) translateY(100px);
-  background: rgba(0,230,118,0.95);
-  color: #003311;
-  padding: 10px 20px;
-  border-radius: 30px;
-  font-family: 'Orbitron', monospace;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  z-index: 999;
+  background: rgba(0,230,118,0.97); color: #003311;
+  padding: 10px 22px; border-radius: 30px;
+  font-family: 'Orbitron', monospace; font-size: 11px; font-weight: 700;
+  letter-spacing: 1px; z-index: 999;
   transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
-  box-shadow: 0 8px 30px rgba(0,200,80,0.5);
-  pointer-events: none;
+  box-shadow: 0 8px 30px rgba(0,200,80,0.5); pointer-events: none;
+  white-space: nowrap; max-width: 90vw;
 }
+.toast.warn { background: rgba(255,200,0,0.97); }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
 @keyframes fadeUp {
@@ -439,10 +292,8 @@ body {
 </head>
 <body>
 
-<!-- Backgrounds -->
 <div class="road-bg"></div>
 <div class="stars" id="stars"></div>
-<div class="speed-lines" id="speedLines"></div>
 
 <div class="main">
 
@@ -450,43 +301,28 @@ body {
   <div class="header">
     <div class="car-wrap">
       <div class="exhaust">
-        <div class="smoke"></div>
-        <div class="smoke"></div>
-        <div class="smoke"></div>
-        <!-- Inline SVG car -->
+        <div class="smoke"></div><div class="smoke"></div><div class="smoke"></div>
         <svg class="car-svg" width="110" height="54" viewBox="0 0 110 54" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Body -->
-          <rect x="10" y="22" width="88" height="22" rx="6" fill="#1a1a2e"/>
           <rect x="10" y="22" width="88" height="22" rx="6" fill="url(#bodyGrad)"/>
-          <!-- Roof -->
-          <path d="M30 22 L40 8 L72 8 L82 22 Z" fill="#0d1b2a"/>
           <path d="M30 22 L40 8 L72 8 L82 22 Z" fill="url(#roofGrad)" opacity="0.9"/>
-          <!-- Windshield -->
           <path d="M35 21 L43 10 L68 10 L77 21 Z" fill="rgba(0,240,255,0.3)" stroke="rgba(0,240,255,0.6)" stroke-width="0.5"/>
-          <!-- Headlights -->
           <ellipse cx="97" cy="31" rx="5" ry="4" fill="#00f0ff" opacity="0.9"/>
           <ellipse cx="97" cy="31" rx="3" ry="2.5" fill="white"/>
-          <!-- Taillights -->
           <rect x="11" y="28" width="6" height="8" rx="2" fill="#ff2244" opacity="0.9"/>
-          <!-- Wheels -->
           <circle cx="30" cy="44" r="9" fill="#111" stroke="#333" stroke-width="1.5"/>
           <circle cx="30" cy="44" r="5.5" fill="#222" stroke="#00f0ff" stroke-width="1"/>
           <circle cx="30" cy="44" r="2" fill="#00f0ff"/>
           <circle cx="78" cy="44" r="9" fill="#111" stroke="#333" stroke-width="1.5"/>
           <circle cx="78" cy="44" r="5.5" fill="#222" stroke="#00f0ff" stroke-width="1"/>
           <circle cx="78" cy="44" r="2" fill="#00f0ff"/>
-          <!-- Stripe -->
           <rect x="18" y="28" width="72" height="3" rx="1.5" fill="url(#stripeGrad)" opacity="0.7"/>
-          <!-- Headlight glow -->
           <ellipse cx="100" cy="31" rx="12" ry="5" fill="#00f0ff" opacity="0.12"/>
           <defs>
             <linearGradient id="bodyGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#0d3b6e"/>
-              <stop offset="100%" stop-color="#061628"/>
+              <stop offset="0%" stop-color="#0d3b6e"/><stop offset="100%" stop-color="#061628"/>
             </linearGradient>
             <linearGradient id="roofGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#1a3a5c"/>
-              <stop offset="100%" stop-color="#0a1e30"/>
+              <stop offset="0%" stop-color="#1a3a5c"/><stop offset="100%" stop-color="#0a1e30"/>
             </linearGradient>
             <linearGradient id="stripeGrad" x1="0" y1="0" x2="1" y2="0">
               <stop offset="0%" stop-color="#ff2244"/>
@@ -497,51 +333,56 @@ body {
         </svg>
       </div>
     </div>
-
     <span class="title-flag">🏁</span>
     <div class="title">DRAG DRIVE STORE</div>
     <div class="divider"></div>
   </div>
 
-  <!-- CARDS -->
+  <!-- PANELS -->
   <div class="grid">
 
     <!-- GAMEPASS -->
-    <div class="panel panel-red" style="animation-delay:0.1s">
-      <span class="corner-badge badge-red">PASS</span>
+    <div class="panel panel-red" style="animation-delay:0.1s" id="panel-gp">
       <div class="panel-title">🚗 GAMEPASS</div>
-      <div class="item">Radio <span>4 yebu</span></div>
-      <div class="item">Suspensi <span>4 yebu</span></div>
-      <div class="item">Paint <span>7 yebu</span></div>
-      <div class="item">Aksesoris <span>7 yebu</span></div>
-      <div class="item">Plat <span>8 yebu</span></div>
-      <div class="item">Velg <span>8 yebu</span></div>
-      <div class="item">Slot <span>9 yebu</span></div>
-      <div class="item">Drag <span>10 yebu</span></div>
-      <div class="item">Luxury <span>13 yebu</span></div>
-      <div class="item">Polisi <span>15 yebu</span></div>
-      <div class="item">2x Gaji <span>45 yebu</span></div>
-      <button class="btn btn-green" onclick="pilihAdmin('Gamepass')">⚡ BELI GAMEPASS</button>
+      <div class="item" onclick="pilih(this,'red','Gamepass','Radio','4 yebu')"><span class="check">✓</span>Radio<span class="price">4 yebu</span></div>
+      <div class="item" onclick="pilih(this,'red','Gamepass','Suspensi','4 yebu')"><span class="check">✓</span>Suspensi<span class="price">4 yebu</span></div>
+      <div class="item" onclick="pilih(this,'red','Gamepass','Paint','7 yebu')"><span class="check">✓</span>Paint<span class="price">7 yebu</span></div>
+      <div class="item" onclick="pilih(this,'red','Gamepass','Aksesoris','7 yebu')"><span class="check">✓</span>Aksesoris<span class="price">7 yebu</span></div>
+      <div class="item" onclick="pilih(this,'red','Gamepass','Plat','8 yebu')"><span class="check">✓</span>Plat<span class="price">8 yebu</span></div>
+      <div class="item" onclick="pilih(this,'red','Gamepass','Velg','8 yebu')"><span class="check">✓</span>Velg<span class="price">8 yebu</span></div>
+      <div class="item" onclick="pilih(this,'red','Gamepass','Slot','9 yebu')"><span class="check">✓</span>Slot<span class="price">9 yebu</span></div>
+      <div class="item" onclick="pilih(this,'red','Gamepass','Drag','10 yebu')"><span class="check">✓</span>Drag<span class="price">10 yebu</span></div>
+      <div class="item" onclick="pilih(this,'red','Gamepass','Luxury','13 yebu')"><span class="check">✓</span>Luxury<span class="price">13 yebu</span></div>
+      <div class="item" onclick="pilih(this,'red','Gamepass','Polisi','15 yebu')"><span class="check">✓</span>Polisi<span class="price">15 yebu</span></div>
+      <div class="item" onclick="pilih(this,'red','Gamepass','2x Gaji','45 yebu')"><span class="check">✓</span>2x Gaji<span class="price">45 yebu</span></div>
+      <div class="sel-summary">
+        <span class="sel-tag" id="tag-gp"></span>
+        <button class="clear-btn" id="clear-gp" onclick="clearPilih('red')">✕</button>
+      </div>
     </div>
 
     <!-- CASH -->
-    <div class="panel panel-blue" style="animation-delay:0.2s">
-      <span class="corner-badge badge-blue">CASH</span>
+    <div class="panel panel-blue" style="animation-delay:0.2s" id="panel-cash">
       <div class="panel-title">💰 CASH</div>
-      <div class="item">1jt <span>1 yebu</span></div>
-      <div class="item">5jt <span>3 yebu</span></div>
-      <div class="item">10jt <span>5 yebu</span></div>
-      <div class="item">50jt <span>7 yebu</span></div>
-      <div class="item">100jt <span>10 yebu</span></div>
-      <div class="item">500jt <span>37 yebu</span></div>
-      <div class="item">1M <span>70 yebu</span></div>
-      <button class="btn btn-green" onclick="pilihAdmin('Cash')">⚡ BELI CASH</button>
+      <div class="item" onclick="pilih(this,'blue','Cash','1jt','1 yebu')"><span class="check">✓</span>1jt<span class="price">1 yebu</span></div>
+      <div class="item" onclick="pilih(this,'blue','Cash','5jt','3 yebu')"><span class="check">✓</span>5jt<span class="price">3 yebu</span></div>
+      <div class="item" onclick="pilih(this,'blue','Cash','10jt','5 yebu')"><span class="check">✓</span>10jt<span class="price">5 yebu</span></div>
+      <div class="item" onclick="pilih(this,'blue','Cash','50jt','7 yebu')"><span class="check">✓</span>50jt<span class="price">7 yebu</span></div>
+      <div class="item" onclick="pilih(this,'blue','Cash','100jt','10 yebu')"><span class="check">✓</span>100jt<span class="price">10 yebu</span></div>
+      <div class="item" onclick="pilih(this,'blue','Cash','500jt','37 yebu')"><span class="check">✓</span>500jt<span class="price">37 yebu</span></div>
+      <div class="item" onclick="pilih(this,'blue','Cash','1M','70 yebu')"><span class="check">✓</span>1M<span class="price">70 yebu</span></div>
+      <div class="sel-summary">
+        <span class="sel-tag" id="tag-cash"></span>
+        <button class="clear-btn" id="clear-cash" onclick="clearPilih('blue')">✕</button>
+      </div>
     </div>
 
   </div>
 
   <!-- ADMIN -->
   <div class="section-label">— PILIH ADMIN —</div>
+  <div class="hint-msg" id="hintMsg">👆 Tap item dulu sebelum chat admin</div>
+
   <div class="admin-grid">
     <div class="admin-card" style="animation-delay:0.3s">
       <div class="admin-name">Alfian</div>
@@ -561,23 +402,21 @@ body {
     </div>
   </div>
 
-  <!-- TICKER -->
   <div class="ticker-wrap">
     <div class="ticker">
       <span>🏁 DRAG DRIVE STORE</span>
       <span>⚡ FAST &amp; TRUSTED</span>
-      <span>🚗 PROSES CEPAT</span>
+      <span>🚗 TOP UP CEPAT</span>
       <span>💰 HARGA TERJANGKAU</span>
       <span>🏁 DRAG DRIVE STORE</span>
       <span>⚡ FAST &amp; TRUSTED</span>
-      <span>🚗 PROSES CEPAT</span>
+      <span>🚗 TOP UP CEPAT</span>
       <span>💰 HARGA TERJANGKAU</span>
     </div>
   </div>
 
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
@@ -586,48 +425,78 @@ const starsEl = document.getElementById('stars');
 for (let i = 0; i < 60; i++) {
   const s = document.createElement('div');
   s.className = 'star';
-  s.style.cssText = `
-    left:${Math.random()*100}%;
-    top:${Math.random()*100}%;
-    --d:${(Math.random()*3+1.5).toFixed(1)}s;
-    animation-delay:${(Math.random()*3).toFixed(1)}s;
-    width:${Math.random()<0.3?3:2}px;
-    height:${Math.random()<0.3?3:2}px;
-  `;
+  s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${(Math.random()*3+1.5).toFixed(1)}s;animation-delay:${(Math.random()*3).toFixed(1)}s;`;
   starsEl.appendChild(s);
 }
 
-// Speed lines
-const linesEl = document.getElementById('speedLines');
-for (let i = 0; i < 8; i++) {
-  const l = document.createElement('div');
-  l.className = 'speed-line';
-  l.style.cssText = `
-    --d:${(Math.random()*2+1.5).toFixed(1)}s;
-    --t:${Math.floor(Math.random()*100)}%;
-    animation-delay:${(Math.random()*2).toFixed(1)}s;
-  `;
-  linesEl.appendChild(l);
+// State
+const state = { red: null, blue: null };
+
+function pilih(el, warna, kategori, nama, harga) {
+  // Hapus sel dari semua item dalam panel yang sama
+  el.closest('.panel').querySelectorAll('.item').forEach(i => i.classList.remove('sel'));
+  el.classList.add('sel');
+
+  state[warna] = { kategori, nama, harga };
+
+  // Update chip
+  const tagId   = warna === 'red' ? 'tag-gp' : 'tag-cash';
+  const clearId = warna === 'red' ? 'clear-gp' : 'clear-cash';
+  const tag = document.getElementById(tagId);
+  tag.textContent = `✓ ${nama} — ${harga}`;
+  tag.classList.add('visible');
+  document.getElementById(clearId).classList.add('visible');
+
+  updateHint();
+  showToast(`✅ ${kategori}: ${nama} dipilih!`);
 }
 
-// Toast
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2800);
+function clearPilih(warna) {
+  state[warna] = null;
+  const panelId = warna === 'red' ? 'panel-gp' : 'panel-cash';
+  document.getElementById(panelId).querySelectorAll('.item').forEach(i => i.classList.remove('sel'));
+  const tagId   = warna === 'red' ? 'tag-gp' : 'tag-cash';
+  const clearId = warna === 'red' ? 'clear-gp' : 'clear-cash';
+  document.getElementById(tagId).classList.remove('visible');
+  document.getElementById(clearId).classList.remove('visible');
+  updateHint();
 }
 
-let selectedItem = '';
-function pilihAdmin(item) {
-  selectedItem = item;
-  showToast('✅ ' + item + ' dipilih — pilih admin di bawah!');
+function updateHint() {
+  const hint = document.getElementById('hintMsg');
+  const parts = [];
+  if (state.red)  parts.push(`🚗 ${state.red.nama}`);
+  if (state.blue) parts.push(`💰 ${state.blue.nama}`);
+
+  if (parts.length) {
+    hint.textContent = '🛒 ' + parts.join(' + ') + ' — pilih admin!';
+    hint.style.color = '#00e676';
+  } else {
+    hint.textContent = '👆 Tap item dulu sebelum chat admin';
+    hint.style.color = 'rgba(255,200,0,0.65)';
+  }
 }
 
 function wa(nama, nomor) {
-  const item = selectedItem || 'item';
-  const text = 'Halo ' + nama + ', saya mau beli ' + item;
+  if (!state.red && !state.blue) {
+    showToast('⚠️ Pilih item dulu!', true);
+    return;
+  }
+  const parts = [];
+  if (state.red)  parts.push(`Gamepass ${state.red.nama} (${state.red.harga})`);
+  if (state.blue) parts.push(`Cash ${state.blue.nama} (${state.blue.harga})`);
+
+  const text = `Halo ${nama}, saya mau beli ${parts.join(' + ')}`;
   window.open('https://wa.me/' + nomor + '?text=' + encodeURIComponent(text));
+}
+
+let toastTimer;
+function showToast(msg, warn = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (warn ? ' warn' : '') + ' show';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
 }
 </script>
 </body>
