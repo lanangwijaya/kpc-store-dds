@@ -333,10 +333,10 @@ body{
 .section-label{font-family:'Orbitron',monospace;font-size:10px;letter-spacing:3px;color:rgba(255,255,255,.32);text-align:center;margin:4px 0 6px;}
 .hint-msg{text-align:center;font-family:'Orbitron',monospace;font-size:9px;letter-spacing:1px;margin-bottom:10px;min-height:14px;transition:color .4s;color:rgba(255,200,0,.65);}
 .admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.admin-card{background:rgba(0,255,100,.05);border:1px solid rgba(0,230,118,.2);border-radius:13px;padding:12px;animation:fadeUp .8s ease both;transition:box-shadow .2s,border-color .2s;}
-.admin-card:hover{box-shadow:0 0 22px rgba(0,230,118,.28);border-color:rgba(0,230,118,.5);}
-.admin-name{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:var(--green);margin-bottom:8px;display:flex;align-items:center;gap:5px;}
-.admin-name::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:pulse 1.5s ease-in-out infinite;flex-shrink:0;}
+
+
+
+
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.7);}}
 .btn{width:100%;padding:9px;border:none;border-radius:10px;font-family:'Orbitron',monospace;font-size:10px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#00c853,#00e676);color:#003311;box-shadow:0 4px 16px rgba(0,200,100,.4);transition:transform .15s,box-shadow .15s;position:relative;overflow:hidden;}
 .btn::before{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.28) 50%,transparent 70%);transform:translateX(-100%);transition:transform .4s;}
@@ -487,6 +487,88 @@ body{
   animation:warnShake .4s ease;
 }
 
+
+/* ══ COMMUNITY ══ */
+.comm-section{margin-top:16px;}
+.comm-lbl{font-family:'Orbitron',monospace;font-size:10px;letter-spacing:3px;color:rgba(255,255,255,.3);text-align:center;margin-bottom:10px;}
+.comm-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.comm-card{border-radius:13px;padding:13px 10px;display:flex;flex-direction:column;align-items:center;gap:7px;text-decoration:none;transition:transform .15s,box-shadow .2s;animation:fadeUp .7s ease both;}
+.comm-card:hover{transform:translateY(-2px);}
+.comm-wa{background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.3);}
+.comm-wa:hover{box-shadow:0 0 22px rgba(37,211,102,.25);}
+.comm-ch{background:rgba(0,140,255,.1);border:1px solid rgba(0,140,255,.3);}
+.comm-ch:hover{box-shadow:0 0 22px rgba(0,140,255,.25);}
+.comm-icon{font-size:26px;}
+.comm-name{font-family:'Orbitron',monospace;font-size:9px;font-weight:700;letter-spacing:1px;}
+.comm-wa .comm-name{color:#25d366;}
+.comm-ch .comm-name{color:#0099ff;}
+.comm-desc{font-family:'Orbitron',monospace;font-size:7px;color:rgba(255,255,255,.28);}
+.comm-btn{font-family:'Orbitron',monospace;font-size:8px;font-weight:700;padding:3px 10px;border-radius:20px;border:none;pointer-events:none;}
+.comm-wa .comm-btn{background:#25d366;color:#003311;}
+.comm-ch .comm-btn{background:#0099ff;color:#fff;}
+/* ══ TESTI ══ */
+.testi-wrap{background:rgba(191,95,255,.05);border:1px solid rgba(191,95,255,.18);border-radius:14px;padding:12px;}
+.testi-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.testi-ttl{font-family:'Orbitron',monospace;font-size:11px;font-weight:900;letter-spacing:1.5px;}
+.testi-cnt{font-family:'Orbitron',monospace;font-size:9px;color:rgba(191,95,255,.6);}
+.testi-form{background:rgba(0,0,0,.22);border-radius:10px;padding:10px;margin-bottom:10px;}
+.testi-form-lbl{font-family:'Orbitron',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,.3);margin-bottom:7px;}
+.testi-col{display:flex;flex-direction:column;gap:6px;}
+.testi-inp{background:rgba(0,0,0,.4);border:1px solid rgba(191,95,255,.22);border-radius:8px;padding:8px 11px;font-family:'Rajdhani',sans-serif;font-size:13px;color:#fff;outline:none;width:100%;caret-color:#bf5fff;}
+.testi-inp::placeholder{color:rgba(255,255,255,.2);font-size:11px;}
+.testi-inp:focus{border-color:rgba(191,95,255,.5);}
+.testi-msg{resize:none;height:60px;font-size:12px;}
+.testi-stars-row{display:flex;gap:3px;}
+.star-btn{font-size:18px;background:none;border:none;cursor:pointer;opacity:.3;transition:opacity .15s;padding:0;}
+.star-btn.on{opacity:1;}
+.testi-submit{width:100%;padding:9px;border:none;border-radius:10px;font-family:'Orbitron',monospace;font-size:10px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#bf5fff,#7b2fff);color:#fff;margin-top:2px;transition:transform .15s;}
+.testi-submit:hover{transform:scale(1.03);}
+.testi-submit:active{transform:scale(.97);}
+.testi-list{display:flex;flex-direction:column;gap:7px;max-height:260px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(191,95,255,.25) transparent;}
+.testi-list::-webkit-scrollbar{width:3px;}
+.testi-list::-webkit-scrollbar-thumb{background:rgba(191,95,255,.3);border-radius:3px;}
+.testi-item{background:rgba(0,0,0,.28);border-radius:9px;padding:9px 11px;border-left:3px solid rgba(191,95,255,.45);animation:fadeUp .3s ease both;}
+.testi-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;gap:4px;}
+.testi-top-l{display:flex;align-items:center;gap:6px;flex:1;min-width:0;}
+.testi-name{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:#bf5fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.testi-stars-show{font-size:10px;flex-shrink:0;}
+.testi-del{background:none;border:none;color:rgba(255,34,68,.3);cursor:pointer;font-size:13px;padding:0 0 0 4px;display:none;flex-shrink:0;}
+.testi-del.show{display:inline;}
+.testi-del:hover{color:#ff2244;}
+.testi-body{font-size:12px;color:rgba(255,255,255,.68);line-height:1.4;}
+.testi-time{font-family:'Orbitron',monospace;font-size:7px;color:rgba(255,255,255,.18);margin-top:3px;}
+.testi-empty{font-family:'Orbitron',monospace;font-size:9px;color:rgba(255,255,255,.18);text-align:center;padding:16px 0;letter-spacing:2px;}
+/* ══ ADMIN BADGE ══ */
+.admin-card{background:rgba(0,255,100,.05);border:1px solid rgba(0,230,118,.2);border-radius:13px;padding:12px;animation:fadeUp .8s ease both;transition:box-shadow .2s,border-color .2s,opacity .3s,background .3s;}
+.admin-card:hover:not(.offline){box-shadow:0 0 22px rgba(0,230,118,.28);border-color:rgba(0,230,118,.5);}
+.admin-card.offline{opacity:.5;background:rgba(60,60,60,.08);border-color:rgba(120,120,120,.2);}
+.admin-name{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:var(--green);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:4px;}
+.admin-name-l{display:flex;align-items:center;gap:5px;}
+.admin-name-l::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:pulse 1.5s ease-in-out infinite;flex-shrink:0;}
+.admin-card.offline .admin-name-l::before{background:#555;box-shadow:none;animation:none;}
+.admin-badge{font-family:'Orbitron',monospace;font-size:7px;font-weight:700;padding:2px 6px;border-radius:20px;cursor:pointer;flex-shrink:0;}
+.admin-card:not(.offline) .admin-badge{background:rgba(0,230,118,.15);color:var(--green);border:1px solid rgba(0,230,118,.4);}
+.admin-card.offline .admin-badge{background:rgba(255,34,68,.12);color:#ff6680;border:1px solid rgba(255,34,68,.3);}
+.btn.btn-off{background:rgba(80,80,80,.3)!important;color:rgba(255,255,255,.3)!important;box-shadow:none!important;cursor:not-allowed!important;pointer-events:none;}
+/* ══ MODAL ══ */
+.modal-ov{position:fixed;inset:0;z-index:800;background:rgba(3,7,13,.92);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;}
+.modal-ov.show{display:flex;}
+.modal-box{background:#060d18;border:1px solid rgba(0,240,255,.3);border-radius:18px;padding:22px 20px;width:86%;max-width:320px;box-shadow:0 0 32px rgba(0,240,255,.12);animation:modalPop .4s cubic-bezier(.34,1.56,.64,1) both;}
+@keyframes modalPop{from{opacity:0;transform:scale(.8);}to{opacity:1;transform:scale(1);}}
+.modal-lock{font-size:32px;text-align:center;display:block;margin-bottom:10px;}
+.modal-ttl{font-family:'Orbitron',monospace;font-size:12px;font-weight:900;letter-spacing:2px;text-align:center;margin-bottom:3px;}
+.modal-sub{font-family:'Orbitron',monospace;font-size:8px;letter-spacing:1px;color:rgba(255,255,255,.3);text-align:center;margin-bottom:14px;}
+.modal-inp-wrap{position:relative;margin-bottom:8px;}
+.modal-inp{width:100%;background:rgba(0,0,0,.5);border:1px solid rgba(0,240,255,.25);border-radius:10px;padding:11px 40px 11px 14px;font-family:'Orbitron',monospace;font-size:14px;font-weight:700;color:#fff;outline:none;letter-spacing:4px;caret-color:var(--cyan);transition:border-color .2s;}
+.modal-inp:focus{border-color:rgba(0,240,255,.6);}
+.modal-inp.err{border-color:rgba(255,34,68,.7)!important;}
+.modal-eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.3);cursor:pointer;font-size:15px;}
+.modal-wrong{font-family:'Orbitron',monospace;font-size:9px;color:var(--red);text-align:center;display:none;margin-bottom:6px;}
+.modal-wrong.show{display:block;}
+.modal-btns{display:flex;gap:8px;}
+.modal-cancel{flex:1;padding:9px;border:1px solid rgba(255,255,255,.15);border-radius:10px;background:none;color:rgba(255,255,255,.4);font-family:'Orbitron',monospace;font-size:9px;font-weight:700;cursor:pointer;}
+.modal-cancel:hover{border-color:var(--red);color:var(--red);}
+.modal-ok{flex:2;padding:9px;border:none;border-radius:10px;background:linear-gradient(135deg,#00f0ff,#bf5fff);color:#000;font-family:'Orbitron',monospace;font-size:9px;font-weight:700;cursor:pointer;}
 </style>
 </head>
 <body>
@@ -697,25 +779,68 @@ body{
   <!-- ADMIN PANEL (hidden by default) -->
   <div class="admin-panel-wrap" id="adminPanelWrap">
     <div class="admin-grid">
-      <div class="admin-card" style="animation-delay:.3s">
-        <div class="admin-name">Alfian Bahlil</div>
-        <button class="btn" onclick="wa('Alfian','628983923559')">💬 Chat</button>
+      <div class="admin-card" id="ac0">
+        <div class="admin-name"><div class="admin-name-l"><span>Alfian Bahlil</span></div><span class="admin-badge" onclick="tapBadge(0,event)">ONLINE</span></div>
+        <button class="btn" id="ab0" onclick="wa('Alfian','628983923559')">💬 Chat</button>
       </div>
-      <div class="admin-card" style="animation-delay:.35s">
-        <div class="admin-name">Nanang Dlogok</div>
-        <button class="btn" onclick="wa('nanang','6281252425581')">💬 Chat</button>
+      <div class="admin-card" id="ac1">
+        <div class="admin-name"><div class="admin-name-l"><span>Nanang Dlogok</span></div><span class="admin-badge" onclick="tapBadge(1,event)">ONLINE</span></div>
+        <button class="btn" id="ab1" onclick="wa('nanang','6281252425581')">💬 Chat</button>
       </div>
-      <div class="admin-card" style="animation-delay:.4s">
-        <div class="admin-name">Boss Tuyul</div>
-        <button class="btn" onclick="wa('bos tuyul','6288989378157')">💬 Chat</button>
+      <div class="admin-card" id="ac2">
+        <div class="admin-name"><div class="admin-name-l"><span>Boss Tuyul</span></div><span class="admin-badge" onclick="tapBadge(2,event)">ONLINE</span></div>
+        <button class="btn" id="ab2" onclick="wa('bos tuyul','6288989378157')">💬 Chat</button>
       </div>
-      <div class="admin-card" style="animation-delay:.45s">
-        <div class="admin-name">Vinzzz Plenger</div>
-        <button class="btn" onclick="wa('vinzzz','628211549460')">💬 Chat</button>
+      <div class="admin-card" id="ac3">
+        <div class="admin-name"><div class="admin-name-l"><span>Vinzzz Plenger</span></div><span class="admin-badge" onclick="tapBadge(3,event)">ONLINE</span></div>
+        <button class="btn" id="ab3" onclick="wa('vinzzz','628211549460')">💬 Chat</button>
       </div>
     </div>
   </div>
 
+
+  <!-- COMMUNITY & TESTI -->
+  <div class="comm-section">
+    <div class="comm-lbl">— KOMUNITAS KPC —</div>
+    <div class="comm-grid">
+      <a class="comm-card comm-wa" href="https://chat.whatsapp.com/HnlqRlWVFB2ALoVyHckf89" target="_blank">
+        <div class="comm-icon">💬</div>
+        <div class="comm-name">GRUP WA</div>
+        <div class="comm-desc">KPC FAMILY</div>
+        <button class="comm-btn">JOIN</button>
+      </a>
+      <a class="comm-card comm-ch" href="https://whatsapp.com/channel/0029Vb7GKgSDDmFRODiMBz0K" target="_blank">
+        <div class="comm-icon">📢</div>
+        <div class="comm-name">SALURAN</div>
+        <div class="comm-desc">KPC STORE INFO</div>
+        <button class="comm-btn">FOLLOW</button>
+      </a>
+    </div>
+    <div class="testi-wrap">
+      <div class="testi-hdr">
+        <span class="testi-ttl gtext-blue">⭐ TESTIMONI</span>
+        <span class="testi-cnt" id="tCnt">0 testi</span>
+      </div>
+      <div class="testi-form">
+        <div class="testi-form-lbl">TULIS TESTIMONI KAMU</div>
+        <div class="testi-col">
+          <input class="testi-inp" id="tName" placeholder="Username / Nama kamu" maxlength="30" autocomplete="off"/>
+          <div class="testi-stars-row">
+            <button class="star-btn on" data-s="1" onclick="setStar(1)">⭐</button>
+            <button class="star-btn on" data-s="2" onclick="setStar(2)">⭐</button>
+            <button class="star-btn on" data-s="3" onclick="setStar(3)">⭐</button>
+            <button class="star-btn on" data-s="4" onclick="setStar(4)">⭐</button>
+            <button class="star-btn on" data-s="5" onclick="setStar(5)">⭐</button>
+          </div>
+          <textarea class="testi-inp testi-msg" id="tMsg" placeholder="Cerita pengalaman belanja kamu di KPC Store..." maxlength="200"></textarea>
+          <button class="testi-submit" id="tBtn" onclick="submitTesti()">✨ KIRIM TESTIMONI</button>
+        </div>
+      </div>
+      <div class="testi-list" id="tList">
+        <div class="testi-empty" id="tEmpty">BELUM ADA TESTI — JADILAH YANG PERTAMA! 🏁</div>
+      </div>
+    </div>
+  </div>
   <div class="ticker-wrap">
     <div class="ticker">
       <span>🏁 KPC STORE</span><span>⚡ PROSES CEPAT</span>
@@ -747,6 +872,23 @@ body{
   </div>
 </div>
 
+<!-- ADMIN MODAL -->
+<div class="modal-ov" id="mOv">
+  <div class="modal-box">
+    <span class="modal-lock" id="mLock">🔐</span>
+    <div class="modal-ttl gtext">ADMIN ACCESS</div>
+    <div class="modal-sub">MASUKKAN PASSWORD ADMIN</div>
+    <div class="modal-inp-wrap">
+      <input class="modal-inp" id="mPass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doConfirm()" autocomplete="off"/>
+      <button class="modal-eye" id="mEye" onclick="toggleEye()">👁</button>
+    </div>
+    <div class="modal-wrong" id="mWrong">⚠️ PASSWORD SALAH!</div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal()">BATAL</button>
+      <button class="modal-ok" onclick="doConfirm()">🔓 MASUK</button>
+    </div>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -959,6 +1101,65 @@ function toast(msg,type='ok'){
 
 buildItems();
 
+/* ══ ADMIN ONLINE/OFFLINE + PASSWORD ══ */
+var aOn=[true,true,true,true];
+var aNom=['628983923559','6281252425581','6288989378157','628211549460'];
+var PASS='kpc2025';
+var unlocked=false,pending=-1;
+window._unlocked=false;
+
+function tapBadge(i,e){
+  e.stopPropagation();
+  if(!unlocked){pending=i;openModal();return;}
+  doFlip(i);
+}
+function doFlip(i){
+  aOn[i]=!aOn[i];
+  var card=document.getElementById('ac'+i),badge=card.querySelector('.admin-badge'),btn=document.getElementById('ab'+i);
+  if(aOn[i]){card.classList.remove('offline');badge.textContent='ONLINE';btn.classList.remove('btn-off');btn.textContent='💬 Chat';}
+  else{card.classList.add('offline');badge.textContent='OFFLINE';btn.classList.add('btn-off');btn.textContent='😴 Offline';}
+  document.querySelectorAll('.testi-del').forEach(function(b){b.classList.toggle('show',unlocked);});
+}
+window.openModal=function openModal(){
+  var o=document.getElementById('mOv'),i=document.getElementById('mPass'),w=document.getElementById('mWrong');
+  o.classList.add('show');w.classList.remove('show');i.value='';i.classList.remove('err');
+  setTimeout(function(){i.focus();},250);
+}
+function closeModal(){document.getElementById('mOv').classList.remove('show');pending=-1;}
+function doConfirm(){
+  var i=document.getElementById('mPass'),w=document.getElementById('mWrong');
+  if(i.value===PASS){
+    unlocked=true;window._unlocked=true;document.getElementById('mLock').textContent='🔓';
+    closeModal();if(pending>=0){doFlip(pending);pending=-1;}
+    document.querySelectorAll('.testi-del').forEach(function(b){b.classList.add('show');});
+    toast('✅ Admin mode aktif!','ok');
+  }else{
+    i.classList.add('err');w.classList.add('show');i.value='';
+    setTimeout(function(){i.classList.remove('err');},500);
+  }
+}
+function toggleEye(){
+  var i=document.getElementById('mPass'),e=document.getElementById('mEye');
+  i.type=i.type==='password'?'text':'password';e.textContent=i.type==='password'?'👁':'🙈';
+}
+document.getElementById('mOv').addEventListener('click',function(e){if(e.target===this)closeModal();});
+
+/* Override wa */
+var _wa0=wa;
+window.wa=function(nama,nomor){
+  var idx=aNom.indexOf(nomor);
+  if(idx>=0&&!aOn[idx]){toast('⚠️ '+nama+' sedang offline!','warn');return;}
+  _wa0(nama,nomor);
+};
+
+/* ══ TESTI - bintang ══ */
+var tStar=5;window.tStar=5;
+function setStar(n){
+  tStar=n;window.tStar=n;
+  document.querySelectorAll('.star-btn').forEach(function(b){b.classList.toggle('on',parseInt(b.dataset.s)<=n);});
+}
+
+
 /* ══ MUSIC ══ */
 (function(){
   var mbarsEl = document.getElementById('mbars');
@@ -1043,5 +1244,82 @@ function checkUsn(){
 }
 
 </script>
+
+<!-- Firebase Firestore Realtime -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, deleteDoc, doc, query, orderBy, onSnapshot, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const app = initializeApp({
+  apiKey:"AIzaSyC8iPr3Ww5K9NLUtOmytto0sKjWu8Zr28o",
+  authDomain:"testimoni-33abd.firebaseapp.com",
+  projectId:"testimoni-33abd",
+  storageBucket:"testimoni-33abd.firebasestorage.app",
+  messagingSenderId:"499376066418",
+  appId:"1:499376066418:web:a082972e7c4f70f64657eb"
+});
+const db = getFirestore(app);
+const col = collection(db, "testimoni");
+
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+/* Realtime listener */
+onSnapshot(query(col, orderBy("createdAt","desc")), function(snap){
+  var list=document.getElementById('tList'),empty=document.getElementById('tEmpty'),cnt=document.getElementById('tCnt');
+  list.querySelectorAll('.testi-item').forEach(function(el){el.remove();});
+  cnt.textContent = snap.size + ' testi';
+  if(snap.empty){empty.style.display='block';return;}
+  empty.style.display='none';
+  snap.forEach(function(d){
+    var t=d.data(), id=d.id;
+    var stars=''; for(var i=1;i<=5;i++) stars += i<=(t.s||5)?'⭐':'☆';
+    var u = window._unlocked||false;
+    var el=document.createElement('div'); el.className='testi-item';
+    el.innerHTML=
+      '<div class="testi-top"><div class="testi-top-l">'+
+        '<span class="testi-name">'+esc(t.n||'')+'</span>'+
+        '<span class="testi-stars-show">'+stars+'</span>'+
+      '</div>'+
+      '<button class="testi-del'+(u?' show':'')+'" data-id="'+id+'">🗑</button></div>'+
+      '<div class="testi-body">'+esc(t.m||'')+'</div>'+
+      '<div class="testi-time">'+(t.tStr||'')+'</div>';
+    list.appendChild(el);
+  });
+  /* attach hapus handler */
+  list.querySelectorAll('.testi-del').forEach(function(b){
+    b.onclick=function(){
+      if(!window._unlocked){window.openModal&&window.openModal();return;}
+      deleteDoc(doc(db,'testimoni',this.dataset.id))
+        .then(function(){if(window.toast)window.toast('🗑️ Testi dihapus','ok');})
+        .catch(function(){if(window.toast)window.toast('❌ Gagal hapus!','warn');});
+    };
+  });
+});
+
+/* Submit */
+window.submitTesti = async function(){
+  var nm=document.getElementById('tName').value.trim();
+  var msg=document.getElementById('tMsg').value.trim();
+  if(!nm){if(window.toast)window.toast('⚠️ Isi nama dulu!','warn');document.getElementById('tName').focus();return;}
+  if(!msg){if(window.toast)window.toast('⚠️ Tulis pesan dulu!','warn');document.getElementById('tMsg').focus();return;}
+  var btn=document.getElementById('tBtn');
+  btn.textContent='⏳ Mengirim...';btn.disabled=true;
+  try{
+    var now=new Date();
+    var ts=now.getDate()+'/'+(now.getMonth()+1)+'/'+now.getFullYear()+' '+now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
+    await addDoc(col,{n:nm,s:window.tStar||5,m:msg,tStr:ts,createdAt:serverTimestamp()});
+    document.getElementById('tName').value='';
+    document.getElementById('tMsg').value='';
+    if(window.setStar)window.setStar(5);
+    if(window.toast)window.toast('✅ Testimoni terkirim! Makasih 🙏','ok');
+  }catch(e){
+    if(window.toast)window.toast('❌ Gagal kirim: '+e.message,'warn');
+  }finally{
+    btn.textContent='✨ KIRIM TESTIMONI';btn.disabled=false;
+  }
+};
+</script>
+
 </body>
 </html>
