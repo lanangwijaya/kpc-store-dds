@@ -28,13 +28,7 @@ body{
     radial-gradient(ellipse 60% 40% at 80% 70%,rgba(0,240,255,.1),transparent 60%),
     linear-gradient(180deg,#03070d 0%,#060f18 50%,#050d0a 100%);
 }
-.road-line{
-  position:absolute;left:50%;transform:translateX(-50%);
-  bottom:0;width:4px;height:200%;
-  background:repeating-linear-gradient(180deg,#ffd600 0,#ffd600 36px,transparent 36px,transparent 72px);
-  animation:road .5s linear infinite;opacity:.18;
 }
-@keyframes road{to{transform:translateX(-50%) translateY(72px);}}
 .pts{position:absolute;inset:0;pointer-events:none;}
 .p{position:absolute;border-radius:50%;animation:pfloat var(--d) ease-in-out infinite alternate;}
 @keyframes pfloat{from{transform:translateY(0);opacity:.5;}to{transform:translateY(-28px);opacity:.08;}}
@@ -92,29 +86,10 @@ body{
   position:relative;display:inline-block;margin:12px 0 6px;
 }
 /* glow ring — pulsing (no spin) */
-.bike-glow-ring{
-  position:absolute;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  width:160px;height:160px;
-  border-radius:50%;
-  border:2px solid transparent;
-  background:
-    linear-gradient(#03070d,#03070d) padding-box,
-    linear-gradient(90deg,var(--red),var(--gold),var(--cyan),var(--purple),var(--red)) border-box;
-  background-size:300% 100%;
-  animation:ringPulse 2s ease-in-out infinite alternate, gshift 3s linear infinite;
-  pointer-events:none;
-  z-index:0;
-}
+
 /* outer soft glow */
-.bike-glow-ring::after{
-  content:'';position:absolute;inset:-8px;border-radius:50%;
-  background:radial-gradient(ellipse,rgba(0,240,255,.18),transparent 70%);
-  animation:ringPulse 2s ease-in-out infinite alternate;
-}
-@keyframes ringPulse{
-  from{opacity:.5;transform:translate(-50%,-50%) scale(.9);}
+
+
   to{opacity:1;transform:translate(-50%,-50%) scale(1.05);}
 }
 
@@ -135,17 +110,11 @@ body{
   100%{transform:translate(-26px,-18px) scale(2.2);opacity:0;}
 }
 /* speed lines behind bike */
-.speed-line{
-  position:absolute;top:50%;left:-60px;
-  height:1.5px;border-radius:2px;
-  background:linear-gradient(90deg,transparent,rgba(0,240,255,.5),transparent);
-  animation:sline 1s ease-in-out infinite;
-  transform-origin:right center;
-}
+
 .sl1{width:55px;margin-top:-10px;animation-delay:0s;}
 .sl2{width:40px;margin-top:0px;animation-delay:.15s;}
 .sl3{width:50px;margin-top:10px;animation-delay:.3s;}
-@keyframes sline{0%,100%{opacity:0;transform:scaleX(0);}50%{opacity:1;transform:scaleX(1);}}
+50%{opacity:1;transform:scaleX(1);}}
 
 .store-title{font-family:'Orbitron',monospace;font-size:13px;font-weight:700;letter-spacing:4px;display:block;color:rgba(255,255,255,.5);margin-top:4px;}
 .divider{
@@ -569,6 +538,51 @@ body{
 .modal-cancel{flex:1;padding:9px;border:1px solid rgba(255,255,255,.15);border-radius:10px;background:none;color:rgba(255,255,255,.4);font-family:'Orbitron',monospace;font-size:9px;font-weight:700;cursor:pointer;}
 .modal-cancel:hover{border-color:var(--red);color:var(--red);}
 .modal-ok{flex:2;padding:9px;border:none;border-radius:10px;background:linear-gradient(135deg,#00f0ff,#bf5fff);color:#000;font-family:'Orbitron',monospace;font-size:9px;font-weight:700;cursor:pointer;}
+
+/* ══ GALAXY NEBULA ══ */
+.bg::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 40% at 75% 25%, rgba(150,50,255,.12) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 35% at 25% 65%, rgba(50,100,255,.1) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 30% at 50% 50%, rgba(80,0,120,.08) 0%, transparent 50%);
+  animation:nebulaDrift 20s ease-in-out infinite alternate;
+}
+@keyframes nebulaDrift{
+  from{opacity:.6;transform:scale(1);}
+  to{opacity:1;transform:scale(1.05);}
+}
+/* Milky way band */
+.bg::before{
+  content:'';position:absolute;
+  left:-10%;right:-10%;top:30%;height:40%;
+  background:linear-gradient(105deg,transparent 0%,rgba(180,120,255,.04) 30%,rgba(100,80,200,.07) 50%,rgba(180,120,255,.04) 70%,transparent 100%);
+  transform:rotate(-15deg);
+  animation:milkyway 25s ease-in-out infinite alternate;
+  pointer-events:none;
+}
+@keyframes milkyway{
+  from{opacity:.4;transform:rotate(-15deg) scaleX(1);}
+  to{opacity:.8;transform:rotate(-15deg) scaleX(1.1);}
+}
+/* Shooting stars */
+.shoot{
+  position:absolute;
+  width:120px;height:1px;
+  background:linear-gradient(90deg,rgba(255,255,255,.8),transparent);
+  border-radius:2px;
+  animation:shoot var(--d) linear infinite;
+  opacity:0;
+  top:var(--t);left:var(--l);
+  transform:rotate(-30deg);
+}
+@keyframes shoot{
+  0%{opacity:0;transform:rotate(-30deg) translateX(0);}
+  5%{opacity:1;}
+  30%{opacity:0;transform:rotate(-30deg) translateX(300px);}
+  100%{opacity:0;transform:rotate(-30deg) translateX(300px);}
+}
+
 </style>
 </head>
 <body>
@@ -593,8 +607,11 @@ body{
 
 <div class="bg">
   <div class="bg-grad"></div>
-  <div class="road-line"></div>
   <div class="pts" id="pts"></div>
+  <div class="shoot" style="--d:8s;--t:10%;--l:-10%"></div>
+  <div class="shoot" style="--d:13s;--t:35%;--l:-15%;animation-delay:4s"></div>
+  <div class="shoot" style="--d:11s;--t:60%;--l:-5%;animation-delay:7s"></div>
+  <div class="shoot" style="--d:9s;--t:20%;--l:-20%;animation-delay:2s"></div>
 </div>
 
 <div class="main">
@@ -608,10 +625,6 @@ body{
 
     <!-- DRAG BIKE SCENE -->
     <div class="bike-scene">
-      <div class="bike-glow-ring"></div>
-      <div class="speed-line sl1"></div>
-      <div class="speed-line sl2"></div>
-      <div class="speed-line sl3"></div>
       <div class="smoke"></div><div class="smoke"></div><div class="smoke"></div>
 
       <!-- DRAG MOTORCYCLE SVG -->
@@ -803,13 +816,13 @@ body{
   <div class="comm-section">
     <div class="comm-lbl">— KOMUNITAS KPC —</div>
     <div class="comm-grid">
-      <a class="comm-card comm-wa" href="https://chat.whatsapp.com/HnlqRlWVFB2ALoVyHckf89" target="_blank">
+      <a class="comm-card comm-wa" href="https://chat.whatsapp.com/GANTI_LINK_GRUP" target="_blank">
         <div class="comm-icon">💬</div>
         <div class="comm-name">GRUP WA</div>
         <div class="comm-desc">KPC FAMILY</div>
         <button class="comm-btn">JOIN</button>
       </a>
-      <a class="comm-card comm-ch" href="https://whatsapp.com/channel/0029Vb7GKgSDDmFRODiMBz0K" target="_blank">
+      <a class="comm-card comm-ch" href="https://whatsapp.com/channel/GANTI_LINK_SALURAN" target="_blank">
         <div class="comm-icon">📢</div>
         <div class="comm-name">SALURAN</div>
         <div class="comm-desc">KPC STORE INFO</div>
@@ -892,13 +905,24 @@ body{
 <div class="toast" id="toast"></div>
 
 <script>
-/* BG PARTICLES */
+/* GALAXY STARS */
 const ptsEl=document.getElementById('pts');
-const pColors=['#ff2244','#00f0ff','#ffd600','#00e676','#bf5fff'];
-for(let i=0;i<40;i++){
-  const p=document.createElement('div');p.className='p';
-  const sz=Math.random()*3+1;
-  p.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;width:${sz}px;height:${sz}px;background:${pColors[i%5]};--d:${(Math.random()*4+2).toFixed(1)}s;animation-delay:${(Math.random()*4).toFixed(1)}s;`;
+// Small white stars
+for(let i=0;i<120;i++){
+  const p=document.createElement('div');
+  p.className='p';
+  const sz=Math.random()<0.15?2.5:Math.random()<0.4?1.5:1;
+  const bright=Math.random()*.7+.3;
+  p.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;width:${sz}px;height:${sz}px;background:white;opacity:${bright};--d:${(Math.random()*4+2).toFixed(1)}s;animation-delay:${(Math.random()*5).toFixed(1)}s;border-radius:50%;`;
+  ptsEl.appendChild(p);
+}
+// Colored nebula stars
+const nebColors=['#c8a8ff','#a8c8ff','#ffd8ff','#a8ffee','#ffe8a8'];
+for(let i=0;i<30;i++){
+  const p=document.createElement('div');
+  p.className='p';
+  const sz=Math.random()*2+1;
+  p.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;width:${sz}px;height:${sz}px;background:${nebColors[i%5]};opacity:${Math.random()*.5+.2};--d:${(Math.random()*6+3).toFixed(1)}s;animation-delay:${(Math.random()*5).toFixed(1)}s;border-radius:50%;box-shadow:0 0 ${sz*2}px ${nebColors[i%5]};`;
   ptsEl.appendChild(p);
 }
 
@@ -1248,7 +1272,7 @@ function checkUsn(){
 <!-- Firebase Firestore Realtime -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc, deleteDoc, doc, query, orderBy, onSnapshot, serverTimestamp }
+import { getFirestore, collection, addDoc, deleteDoc, doc, getDoc, setDoc, query, orderBy, onSnapshot, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const app = initializeApp({
@@ -1261,6 +1285,59 @@ const app = initializeApp({
 });
 const db = getFirestore(app);
 const col = collection(db, "testimoni");
+
+/* ══ ADMIN STATUS — SIMPAN KE FIREBASE ══ */
+async function loadAdminStatus(){
+  try{
+    const snap = await getDoc(doc(db,'settings','adminStatus'));
+    if(snap.exists()){
+      const data = snap.data();
+      for(let i=0;i<4;i++){
+        const isOn = data['a'+i] !== false;
+        window.aOn[i] = isOn;
+        applyAdminUI(i, isOn);
+      }
+    }
+  }catch(e){}
+}
+
+async function saveAdminStatus(){
+  try{
+    const data = {};
+    for(let i=0;i<4;i++) data['a'+i] = window.aOn[i];
+    await setDoc(doc(db,'settings','adminStatus'), data);
+  }catch(e){}
+}
+
+function applyAdminUI(i, isOn){
+  const card = document.getElementById('ac'+i);
+  const badge = card ? card.querySelector('.admin-badge') : null;
+  const btn = document.getElementById('ab'+i);
+  if(!card) return;
+  if(isOn){
+    card.classList.remove('offline');
+    if(badge) badge.textContent='ONLINE';
+    if(btn){ btn.classList.remove('btn-off'); btn.textContent='\ud83d\udcac Chat'; }
+  } else {
+    card.classList.add('offline');
+    if(badge) badge.textContent='OFFLINE';
+    if(btn){ btn.classList.add('btn-off'); btn.textContent='\ud83d\ude34 Offline'; }
+  }
+}
+
+// Override doFlip supaya nyimpan ke Firebase
+const _origFlip = window.doFlip;
+window.doFlip = function(i){
+  window.aOn[i] = !window.aOn[i];
+  applyAdminUI(i, window.aOn[i]);
+  saveAdminStatus();
+  document.querySelectorAll('.testi-del').forEach(function(b){
+    b.classList.toggle('show', window._unlocked||false);
+  });
+};
+
+// Load status pas halaman dibuka
+loadAdminStatus();
 
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
