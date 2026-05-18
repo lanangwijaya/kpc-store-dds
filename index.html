@@ -1109,24 +1109,28 @@ function animateTotal(target){
   rafId=requestAnimationFrame(step);
 }
 
-/* WA */
+/* WA — simpan order ke Firebase dulu sebelum buka WA */
 function wa(nama,nomor){
   if(sel.size===0){toast('⚠️ Pilih item dulu!','warn');return;}
   if(!checkUsn()){toast('⚠️ Isi username Roblox dulu!','warn');return;}
-  const usn=getUsn();
-  const gpArr=[...sel.values()].filter(v=>v.panel==='gp');
-  const cashArr=[...sel.values()].filter(v=>v.panel==='cash');
-  const totalRb=[...sel.values()].reduce((a,v)=>a+v.harga*v.qty,0);
-
-  let lines=[];
-  if(usn) lines.push(`*Username Roblox:* ${usn}`);
-  if(gpArr.length)lines.push('*Gamepass:*\n'+gpArr.map(v=>`  • ${v.nama} x${v.qty} = ${v.harga*v.qty}rb`).join('\n'));
-  if(cashArr.length)lines.push('*Cash:*\n'+cashArr.map(v=>`  • ${v.nama} x${v.qty} = ${v.harga*v.qty}rb`).join('\n'));
-  lines.push(`*Total: Rp ${fmt(totalRb)}.000*`);
-
-  const text=`Halo ${nama}, saya mau order dari KPC Store:\n`+lines.join('\n');
-  window.open('https://wa.me/'+nomor+'?text='+encodeURIComponent(text));
+  if(window.waWithSave){
+    window.waWithSave(nama,nomor,[...sel.values()],getUsn());
+  }
 }
+
+function buildWaText(nama,items,usn,orderId){
+  const gpArr=items.filter(v=>v.panel==='gp');
+  const cashArr=items.filter(v=>v.panel==='cash');
+  const totalRb=items.reduce((a,v)=>a+v.harga*v.qty,0);
+  let lines=[];
+  if(usn) lines.push('*Username Roblox:* '+usn);
+  if(gpArr.length)lines.push('*Gamepass:*\n'+gpArr.map(v=>'  • '+v.nama+' x'+v.qty+' = '+v.harga*v.qty+'rb').join('\n'));
+  if(cashArr.length)lines.push('*Cash:*\n'+cashArr.map(v=>'  • '+v.nama+' x'+v.qty+' = '+v.harga*v.qty+'rb').join('\n'));
+  lines.push('*Total: Rp '+totalRb.toLocaleString('id-ID')+'.000*');
+  lines.push('*Order ID: #'+orderId+'*  _(admin bisa cek dashboard)_');
+  return 'Halo '+nama+', saya mau order dari KPC Store:\n'+lines.join('\n');
+}
+window.buildWaText=buildWaText;
 
 let tT;
 function toast(msg,type='ok'){
@@ -1297,6 +1301,39 @@ const app = initializeApp({
 });
 const db = getFirestore(app);
 const col = collection(db, "testimoni");
+const orderCol = collection(db, "orders");
+
+/* ══ SIMPAN ORDER & BUKA WA ══ */
+window.waWithSave = async function(nama, nomor, items, usn){
+  const idx = ['628983923559','6281252425581','6288989378157','628211549460'].indexOf(nomor);
+  if(idx>=0 && window.aOn && !window.aOn[idx]){ 
+    if(window.toast) window.toast('⚠️ '+nama+' sedang offline!','warn'); 
+    return; 
+  }
+  if(window.toast) window.toast('⏳ Menyimpan order...','ok');
+
+  const totalRb = items.reduce((a,v)=>a+v.harga*v.qty,0);
+  const now = new Date();
+  const tStr = now.getDate()+'/'+(now.getMonth()+1)+'/'+now.getFullYear()+' '+now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
+  let orderId = 'ORD'+Date.now().toString(36).toUpperCase();
+
+  try {
+    const ref = await addDoc(orderCol, {
+      orderId, usn, admin: nama, adminNomor: nomor,
+      items: items.map(v=>({nama:v.nama,panel:v.panel,harga:v.harga,qty:v.qty})),
+      totalRb, tStr, status:'pending', createdAt: serverTimestamp()
+    });
+    // Pakai 6 karakter dari doc ID sebagai short order ID
+    const shortId = ref.id.slice(-6).toUpperCase();
+    orderId = shortId;
+  } catch(e) {
+    if(window.toast) window.toast('⚠️ Order tetap dikirim (gagal simpan DB)','warn');
+  }
+
+  const text = window.buildWaText ? window.buildWaText(nama,items,usn,orderId)
+    : 'Halo '+nama+', order KPC Store - Total: Rp '+totalRb+'.000 | ID: #'+orderId;
+  setTimeout(()=>window.open('https://wa.me/'+nomor+'?text='+encodeURIComponent(text)), 300);
+};
 
 /* ══ ADMIN STATUS — SIMPAN KE FIREBASE ══ */
 async function loadAdminStatus(){

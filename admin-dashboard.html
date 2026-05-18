@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KPC Store — Admin Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#ff2244;--cyan:#00f0ff;--green:#00e676;
+  --gold:#ffd600;--purple:#bf5fff;--orange:#ff6b00;--bg:#03070d;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:#fff;min-height:100vh;padding:14px 14px 40px;}
+
+/* BG */
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.bg-grad{position:absolute;inset:0;background:
+  radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,100,255,.15),transparent 70%),
+  radial-gradient(ellipse 60% 40% at 20% 80%,rgba(255,34,68,.1),transparent 60%),
+  linear-gradient(180deg,#03070d 0%,#060f18 50%,#050d0a 100%);}
+
+/* LOCK SCREEN */
+#lockScreen{
+  position:fixed;inset:0;z-index:9999;
+  background:rgba(3,7,13,.98);
+  display:flex;align-items:center;justify-content:center;
+}
+.lock-box{
+  background:#060d18;border:1px solid rgba(0,240,255,.3);
+  border-radius:20px;padding:32px 28px;width:90%;max-width:340px;
+  box-shadow:0 0 40px rgba(0,240,255,.12);
+  animation:popIn .5s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes popIn{from{opacity:0;transform:scale(.8);}to{opacity:1;transform:scale(1);}}
+.lock-icon{font-size:44px;text-align:center;display:block;margin-bottom:14px;}
+.lock-title{font-family:'Orbitron',monospace;font-size:14px;font-weight:900;
+  letter-spacing:2px;text-align:center;margin-bottom:4px;
+  background:linear-gradient(90deg,#00f0ff,#bf5fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.lock-sub{font-family:'Orbitron',monospace;font-size:8px;letter-spacing:2px;color:rgba(255,255,255,.3);text-align:center;margin-bottom:20px;}
+.lock-inp-wrap{position:relative;margin-bottom:10px;}
+.lock-inp{width:100%;background:rgba(0,0,0,.5);border:1px solid rgba(0,240,255,.25);border-radius:12px;
+  padding:13px 44px 13px 16px;font-family:'Orbitron',monospace;font-size:16px;font-weight:700;
+  color:#fff;outline:none;letter-spacing:5px;caret-color:var(--cyan);transition:border-color .2s;}
+.lock-inp:focus{border-color:rgba(0,240,255,.6);box-shadow:0 0 0 3px rgba(0,240,255,.1);}
+.lock-inp.err{border-color:rgba(255,34,68,.7)!important;animation:shake .4s ease;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
+.lock-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.3);cursor:pointer;font-size:16px;}
+.lock-err{font-family:'Orbitron',monospace;font-size:9px;color:var(--red);text-align:center;display:none;margin-bottom:8px;}
+.lock-err.show{display:block;}
+.lock-btn{width:100%;padding:13px;border:none;border-radius:12px;
+  font-family:'Orbitron',monospace;font-size:11px;font-weight:700;cursor:pointer;
+  background:linear-gradient(135deg,#00f0ff,#bf5fff);color:#000;
+  transition:transform .15s,box-shadow .15s;letter-spacing:1px;}
+.lock-btn:hover{transform:scale(1.03);box-shadow:0 6px 24px rgba(0,240,255,.4);}
+.lock-btn:active{transform:scale(.97);}
+
+/* MAIN */
+.main{position:relative;z-index:1;max-width:520px;margin:0 auto;}
+
+/* HEADER */
+.dash-header{text-align:center;padding:14px 0 18px;}
+.dash-logo{font-family:'Orbitron',monospace;font-size:36px;font-weight:900;letter-spacing:4px;
+  background:linear-gradient(90deg,#ff2244,#ff6b00,#ffd600,#00e676,#00f0ff,#bf5fff,#ff2244);
+  background-size:300% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:gshift 4s linear infinite;}
+@keyframes gshift{from{background-position:0% 50%;}to{background-position:300% 50%;}}
+.dash-sub{font-family:'Orbitron',monospace;font-size:9px;letter-spacing:4px;color:rgba(0,240,255,.5);margin-top:4px;}
+.dash-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(0,240,255,.4),rgba(255,214,0,.5),transparent);margin:10px 0 18px;}
+
+/* STATS ROW */
+.stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px;}
+.stat-card{background:rgba(0,240,255,.05);border:1px solid rgba(0,240,255,.15);border-radius:14px;padding:12px 10px;text-align:center;}
+.stat-card.red{background:rgba(255,34,68,.05);border-color:rgba(255,34,68,.2);}
+.stat-card.green{background:rgba(0,230,118,.05);border-color:rgba(0,230,118,.2);}
+.stat-num{font-family:'Orbitron',monospace;font-size:22px;font-weight:900;line-height:1;}
+.stat-card:not(.red):not(.green) .stat-num{color:var(--cyan);}
+.stat-card.red .stat-num{color:var(--red);}
+.stat-card.green .stat-num{color:var(--green);}
+.stat-lbl{font-family:'Orbitron',monospace;font-size:7px;letter-spacing:1px;color:rgba(255,255,255,.3);margin-top:4px;}
+
+/* FILTER BAR */
+.filter-bar{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap;}
+.filter-btn{font-family:'Orbitron',monospace;font-size:8px;font-weight:700;padding:5px 12px;border-radius:20px;cursor:pointer;border:1px solid;background:none;transition:background .15s,color .15s;letter-spacing:1px;}
+.filter-btn[data-f="all"]{color:rgba(255,255,255,.5);border-color:rgba(255,255,255,.15);}
+.filter-btn[data-f="all"].active,.filter-btn[data-f="all"]:hover{background:rgba(255,255,255,.1);color:#fff;}
+.filter-btn[data-f="pending"]{color:var(--gold);border-color:rgba(255,214,0,.3);}
+.filter-btn[data-f="pending"].active,.filter-btn[data-f="pending"]:hover{background:rgba(255,214,0,.12);}
+.filter-btn[data-f="done"]{color:var(--green);border-color:rgba(0,230,118,.3);}
+.filter-btn[data-f="done"].active,.filter-btn[data-f="done"]:hover{background:rgba(0,230,118,.1);}
+.filter-btn[data-f="cancel"]{color:var(--red);border-color:rgba(255,34,68,.3);}
+.filter-btn[data-f="cancel"].active,.filter-btn[data-f="cancel"]:hover{background:rgba(255,34,68,.1);}
+.filter-right{margin-left:auto;font-family:'Orbitron',monospace;font-size:8px;color:rgba(255,255,255,.25);padding:5px 0;letter-spacing:1px;display:flex;align-items:center;gap:5px;}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 1.5s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.7);}}
+
+/* ORDER CARDS */
+.order-list{display:flex;flex-direction:column;gap:10px;}
+.order-card{
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;padding:14px;
+  animation:fadeUp .4s ease both;
+  position:relative;overflow:hidden;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.order-card.pending{border-color:rgba(255,214,0,.25);background:rgba(255,214,0,.03);}
+.order-card.done{border-color:rgba(0,230,118,.25);background:rgba(0,230,118,.03);}
+.order-card.cancel{border-color:rgba(255,34,68,.2);background:rgba(255,34,68,.02);opacity:.7;}
+.order-card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px;
+}
+.order-card.pending::before{background:var(--gold);}
+.order-card.done::before{background:var(--green);}
+.order-card.cancel::before{background:var(--red);}
+
+.order-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;gap:8px;}
+.order-id-wrap{display:flex;flex-direction:column;gap:2px;}
+.order-id{font-family:'Orbitron',monospace;font-size:11px;font-weight:900;color:var(--cyan);letter-spacing:1px;}
+.order-time{font-family:'Orbitron',monospace;font-size:7px;color:rgba(255,255,255,.28);letter-spacing:1px;}
+.order-usn{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:var(--purple);margin-top:1px;}
+.status-badge{font-family:'Orbitron',monospace;font-size:7px;font-weight:700;padding:3px 9px;border-radius:20px;flex-shrink:0;letter-spacing:1px;}
+.status-badge.pending{background:rgba(255,214,0,.15);color:var(--gold);border:1px solid rgba(255,214,0,.4);}
+.status-badge.done{background:rgba(0,230,118,.15);color:var(--green);border:1px solid rgba(0,230,118,.4);}
+.status-badge.cancel{background:rgba(255,34,68,.12);color:#ff6680;border:1px solid rgba(255,34,68,.3);}
+
+.order-items{display:flex;flex-direction:column;gap:3px;margin-bottom:10px;}
+.order-item-row{display:flex;align-items:center;justify-content:space-between;font-size:12px;padding:3px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.order-item-row:last-child{border-bottom:none;}
+.item-label{display:flex;align-items:center;gap:6px;}
+.item-tag{font-family:'Orbitron',monospace;font-size:7px;font-weight:700;padding:1px 5px;border-radius:10px;}
+.item-tag.gp{background:rgba(255,34,68,.15);color:var(--red);}
+.item-tag.cash{background:rgba(0,240,255,.12);color:var(--cyan);}
+.item-nm{color:rgba(255,255,255,.8);}
+.item-qty{font-family:'Orbitron',monospace;font-size:10px;color:rgba(255,255,255,.4);}
+.item-price{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:var(--gold);}
+
+.order-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.order-total-wrap{display:flex;flex-direction:column;gap:1px;}
+.total-lbl{font-family:'Orbitron',monospace;font-size:7px;color:rgba(255,255,255,.3);letter-spacing:1px;}
+.total-amt{font-family:'Orbitron',monospace;font-size:18px;font-weight:900;color:var(--green);}
+.total-amt .curr{font-size:10px;vertical-align:super;color:rgba(255,255,255,.4);margin-right:1px;}
+.order-admin{font-family:'Orbitron',monospace;font-size:8px;color:rgba(255,255,255,.3);letter-spacing:1px;text-align:right;}
+
+.action-row{display:flex;gap:6px;margin-top:10px;}
+.act-btn{flex:1;padding:7px 4px;border:none;border-radius:10px;font-family:'Orbitron',monospace;font-size:8px;font-weight:700;cursor:pointer;transition:transform .15s,opacity .15s;letter-spacing:.5px;}
+.act-btn:active{transform:scale(.96);}
+.act-btn:disabled{opacity:.35;cursor:not-allowed;}
+.btn-done{background:linear-gradient(135deg,#00c853,#00e676);color:#003311;}
+.btn-done:not(:disabled):hover{box-shadow:0 4px 16px rgba(0,200,100,.4);}
+.btn-cancel{background:rgba(255,34,68,.15);color:#ff6680;border:1px solid rgba(255,34,68,.25);}
+.btn-cancel:not(:disabled):hover{background:rgba(255,34,68,.25);}
+.btn-del{background:rgba(80,80,80,.2);color:rgba(255,255,255,.3);border:1px solid rgba(255,255,255,.1);}
+.btn-del:not(:disabled):hover{background:rgba(255,34,68,.12);color:var(--red);border-color:rgba(255,34,68,.3);}
+
+/* EMPTY */
+.empty-state{text-align:center;padding:40px 20px;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:2px;color:rgba(255,255,255,.18);}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(16px);padding:9px 22px;border-radius:30px;font-family:'Orbitron',monospace;font-size:10px;font-weight:700;z-index:9999;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;white-space:nowrap;}
+.toast.warn{background:rgba(255,200,0,.97);color:#1a0d00;}
+.toast.ok{background:rgba(0,230,118,.97);color:#003311;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* LOGOUT BTN */
+.logout-btn{
+  position:fixed;top:12px;right:12px;z-index:100;
+  font-family:'Orbitron',monospace;font-size:8px;font-weight:700;
+  padding:6px 12px;border-radius:20px;border:1px solid rgba(255,34,68,.3);
+  background:rgba(255,34,68,.08);color:rgba(255,100,120,.7);cursor:pointer;
+  letter-spacing:1px;transition:background .2s,color .2s;
+}
+.logout-btn:hover{background:rgba(255,34,68,.18);color:#ff6680;}
+</style>
+</head>
+<body>
+
+<!-- LOCK SCREEN -->
+<div id="lockScreen">
+  <div class="lock-box">
+    <span class="lock-icon">🔐</span>
+    <div class="lock-title">ADMIN DASHBOARD</div>
+    <div class="lock-sub">KPC STORE — MASUKKAN PASSWORD</div>
+    <div class="lock-inp-wrap">
+      <input class="lock-inp" id="lockPass" type="password" placeholder="••••••••"
+        onkeydown="if(event.key==='Enter')doUnlock()" autocomplete="off"/>
+      <button class="lock-eye" id="lockEye" onclick="toggleLockEye()">👁</button>
+    </div>
+    <div class="lock-err" id="lockErr">⚠️ PASSWORD SALAH!</div>
+    <button class="lock-btn" onclick="doUnlock()">🔓 MASUK DASHBOARD</button>
+  </div>
+</div>
+
+<button class="logout-btn" onclick="doLogout()">⏻ LOGOUT</button>
+
+<div class="bg"><div class="bg-grad"></div></div>
+
+<div class="main" id="mainDash" style="display:none;">
+
+  <!-- HEADER -->
+  <div class="dash-header">
+    <div class="dash-logo">KPC</div>
+    <div class="dash-sub">ADMIN DASHBOARD — ORDER MONITOR</div>
+    <div class="dash-divider"></div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-num" id="statTotal">0</div>
+      <div class="stat-lbl">TOTAL ORDER</div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-num" id="statPending">0</div>
+      <div class="stat-lbl">PENDING</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-num" id="statDone">0</div>
+      <div class="stat-lbl">SELESAI</div>
+    </div>
+  </div>
+
+  <!-- FILTER -->
+  <div class="filter-bar">
+    <button class="filter-btn active" data-f="all" onclick="setFilter('all',this)">SEMUA</button>
+    <button class="filter-btn" data-f="pending" onclick="setFilter('pending',this)">⏳ PENDING</button>
+    <button class="filter-btn" data-f="done" onclick="setFilter('done',this)">✅ SELESAI</button>
+    <button class="filter-btn" data-f="cancel" onclick="setFilter('cancel',this)">❌ BATAL</button>
+    <div class="filter-right"><span class="live-dot"></span>LIVE</div>
+  </div>
+
+  <!-- ORDER LIST -->
+  <div class="order-list" id="orderList">
+    <div class="empty-state">⏳ LOADING ORDERS...</div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, doc, updateDoc, deleteDoc, query, orderBy, onSnapshot }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const PASS = 'kpc2025';
+
+const app = initializeApp({
+  apiKey:"AIzaSyC8iPr3Ww5K9NLUtOmytto0sKjWu8Zr28o",
+  authDomain:"testimoni-33abd.firebaseapp.com",
+  projectId:"testimoni-33abd",
+  storageBucket:"testimoni-33abd.firebasestorage.app",
+  messagingSenderId:"499376066418",
+  appId:"1:499376066418:web:a082972e7c4f70f64657eb"
+});
+const db = getFirestore(app);
+const orderCol = collection(db, "orders");
+
+let allOrders = [];
+let currentFilter = 'all';
+let unsubscribe = null;
+
+/* ══ LOCK / UNLOCK ══ */
+window.doUnlock = function(){
+  const inp = document.getElementById('lockPass');
+  const err = document.getElementById('lockErr');
+  if(inp.value === PASS){
+    document.getElementById('lockScreen').style.display = 'none';
+    document.getElementById('mainDash').style.display = 'block';
+    startListener();
+  } else {
+    inp.classList.add('err');
+    err.classList.add('show');
+    inp.value = '';
+    setTimeout(()=>inp.classList.remove('err'),500);
+  }
+};
+
+window.toggleLockEye = function(){
+  const i = document.getElementById('lockPass');
+  const e = document.getElementById('lockEye');
+  i.type = i.type === 'password' ? 'text' : 'password';
+  e.textContent = i.type === 'password' ? '👁' : '🙈';
+};
+
+window.doLogout = function(){
+  if(unsubscribe) unsubscribe();
+  document.getElementById('mainDash').style.display = 'none';
+  document.getElementById('lockScreen').style.display = 'flex';
+  document.getElementById('lockPass').value = '';
+};
+
+/* ══ LISTENER ══ */
+function startListener(){
+  const q = query(orderCol, orderBy("createdAt","desc"));
+  unsubscribe = onSnapshot(q, snap => {
+    allOrders = [];
+    snap.forEach(d => allOrders.push({id: d.id, ...d.data()}));
+    updateStats();
+    renderOrders();
+  });
+}
+
+function updateStats(){
+  document.getElementById('statTotal').textContent = allOrders.length;
+  document.getElementById('statPending').textContent = allOrders.filter(o=>o.status==='pending').length;
+  document.getElementById('statDone').textContent = allOrders.filter(o=>o.status==='done').length;
+}
+
+/* ══ FILTER ══ */
+window.setFilter = function(f, btn){
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderOrders();
+};
+
+/* ══ RENDER ══ */
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function renderOrders(){
+  const list = document.getElementById('orderList');
+  list.innerHTML = '';
+
+  const filtered = currentFilter === 'all' ? allOrders : allOrders.filter(o=>o.status===currentFilter);
+
+  if(filtered.length === 0){
+    list.innerHTML = '<div class="empty-state">📭 TIDAK ADA ORDER DI KATEGORI INI</div>';
+    return;
+  }
+
+  filtered.forEach((order,idx) => {
+    const card = document.createElement('div');
+    card.className = 'order-card ' + (order.status||'pending');
+    card.style.animationDelay = (idx*0.05)+'s';
+
+    const items = order.items || [];
+    const itemsHtml = items.map(it => `
+      <div class="order-item-row">
+        <div class="item-label">
+          <span class="item-tag ${it.panel==='gp'?'gp':'cash'}">${it.panel==='gp'?'GP':'CASH'}</span>
+          <span class="item-nm">${esc(it.nama)}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="item-qty">x${it.qty||1}</span>
+          <span class="item-price">${(it.harga||0)*(it.qty||1)}rb</span>
+        </div>
+      </div>`).join('');
+
+    const isDone = order.status === 'done';
+    const isCancel = order.status === 'cancel';
+    const statusLabel = isDone ? '✅ SELESAI' : isCancel ? '❌ BATAL' : '⏳ PENDING';
+
+    card.innerHTML = `
+      <div class="order-top">
+        <div class="order-id-wrap">
+          <div class="order-id">🧾 #${esc(order.orderId||order.id.slice(-6).toUpperCase())}</div>
+          <div class="order-time">🕐 ${esc(order.tStr||'-')}</div>
+          <div class="order-usn">🎮 ${esc(order.usn||'-')}</div>
+        </div>
+        <span class="status-badge ${order.status||'pending'}">${statusLabel}</span>
+      </div>
+      <div class="order-items">${itemsHtml}</div>
+      <div class="order-footer">
+        <div class="order-total-wrap">
+          <div class="total-lbl">TOTAL SEHARUSNYA</div>
+          <div class="total-amt"><span class="curr">Rp</span>${(order.totalRb||0).toLocaleString('id-ID')}.000</div>
+        </div>
+        <div class="order-admin">Admin<br>${esc(order.admin||'-')}</div>
+      </div>
+      <div class="action-row">
+        <button class="act-btn btn-done" ${isDone?'disabled':''} onclick="setStatus('${order.id}','done')">✅ SELESAI</button>
+        <button class="act-btn btn-cancel" ${isCancel?'disabled':''} onclick="setStatus('${order.id}','cancel')">❌ BATAL</button>
+        <button class="act-btn btn-del" onclick="delOrder('${order.id}')">🗑</button>
+      </div>`;
+
+    list.appendChild(card);
+  });
+}
+
+/* ══ ACTIONS ══ */
+window.setStatus = async function(id, status){
+  try{
+    await updateDoc(doc(db,'orders',id), {status});
+    toast(status==='done'?'✅ Order ditandai selesai!':'❌ Order dibatalkan', status==='done'?'ok':'warn');
+  }catch(e){ toast('❌ Gagal update!','warn'); }
+};
+
+window.delOrder = async function(id){
+  if(!confirm('Hapus order ini dari database?')) return;
+  try{
+    await deleteDoc(doc(db,'orders',id));
+    toast('🗑️ Order dihapus','ok');
+  }catch(e){ toast('❌ Gagal hapus!','warn'); }
+};
+
+/* ══ TOAST ══ */
+let tT;
+function toast(msg,type='ok'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className=`toast ${type} show`;
+  clearTimeout(tT);tT=setTimeout(()=>t.classList.remove('show'),2400);
+}
+window.toast = toast;
+
+/* Enter key on lock */
+document.getElementById('lockPass').addEventListener('keydown', e=>{
+  if(e.key==='Enter') window.doUnlock();
+});
+</script>
+
+</body>
+</html>
