@@ -1265,14 +1265,30 @@ async function lookupRoblox(username){
   showRobloxPreview('loading');
   robloxValid=false;
   try{
-    // Pakai search endpoint — terbukti jalan dari browser
+    // Coba search dulu
     const r1=await fetch('https://users.roproxy.com/v1/users/search?keyword='+encodeURIComponent(username)+'&limit=10');
     const d1=await r1.json();
-    console.log('[Roblox]',JSON.stringify(d1).slice(0,200));
+    let user=d1.data&&d1.data.find(u=>u.name.toLowerCase()===username.toLowerCase());
 
-    if(!d1.data||d1.data.length===0){showRobloxPreview('error');return;}
-    // Cari exact match (case insensitive)
-    const user=d1.data.find(u=>u.name.toLowerCase()===username.toLowerCase());
+    // Kalau tidak ketemu di search, coba endpoint khusus username exact
+    if(!user){
+      try{
+        const r1b=await fetch('https://users.roproxy.com/v1/users/search?keyword='+encodeURIComponent(username)+'&limit=100');
+        const d1b=await r1b.json();
+        user=d1b.data&&d1b.data.find(u=>u.name.toLowerCase()===username.toLowerCase());
+      }catch(e){}
+    }
+
+    // Kalau masih tidak ketemu, coba via usernamehistory trick — GET profile langsung
+    if(!user){
+      try{
+        // Coba cari di page berikutnya
+        const r1c=await fetch('https://users.roproxy.com/v1/users/search?keyword='+encodeURIComponent(username)+'&limit=100&cursor=');
+        const d1c=await r1c.json();
+        user=d1c.data&&d1c.data.find(u=>u.name.toLowerCase()===username.toLowerCase());
+      }catch(e){}
+    }
+
     if(!user){showRobloxPreview('error');return;}
 
     // Avatar
