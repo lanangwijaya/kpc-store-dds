@@ -1,4 +1,4 @@
-<!DOCTYPE html>
++<!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
@@ -869,9 +869,10 @@ body{
         id="usnInput"
         type="text"
         placeholder="Ketik username Roblox kamu..."
-        oninput="onUsn()"
+        oninput="autoCapUsn();onUsn()"
         autocomplete="off"
         autocorrect="off"
+        autocapitalize="words"
         spellcheck="false"
       />
       <button class="usn-clear" id="usnClear" onclick="clearUsn()">×</button>
@@ -1091,6 +1092,19 @@ const CATALOG={
 const sel=new Map();
 
 /* USERNAME */
+/* AUTO KAPITAL USERNAME */
+function autoCapUsn(){
+  const inp=document.getElementById('usnInput');
+  const val=inp.value;
+  // Kapitalkan huruf pertama setiap kata
+  const capped=val.replace(/(?:^|_)(\w)/g,m=>m.toUpperCase());
+  if(capped!==val){
+    const pos=inp.selectionStart;
+    inp.value=capped;
+    inp.setSelectionRange(pos,pos);
+  }
+}
+
 /* ROBLOX LOOKUP */
 let robloxTimer=null;
 let robloxValid=false;
