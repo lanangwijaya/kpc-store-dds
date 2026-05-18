@@ -175,6 +175,46 @@ body{
 .announce-text{font-family:'Rajdhani',sans-serif;font-size:13px;color:rgba(255,255,255,.85);flex:1;line-height:1.4;}
 .announce-text b{color:var(--cyan);}
 
+/* ══ LEADERBOARD ══ */
+onSnapshot(query(orderCol, orderBy("createdAt","desc")), function(snap){
+  // Hitung per username
+  const map={};
+  snap.forEach(d=>{
+    const o=d.data();
+    if(!o.usn||o.status==='cancel') return;
+    const k=o.usn.toLowerCase();
+    if(!map[k]) map[k]={usn:o.usn,count:0,totalRb:0};
+    map[k].count++;
+    map[k].totalRb+=(o.totalRb||0);
+  });
+
+  const sorted=Object.values(map).sort((a,b)=>b.count-a.count||b.totalRb-a.totalRb).slice(0,10);
+
+  const list=document.getElementById('lbList');
+  const empty=document.getElementById('lbEmpty');
+  if(!list) return;
+  list.querySelectorAll('.lb-card').forEach(el=>el.remove());
+
+  if(sorted.length===0){if(empty)empty.style.display='block';return;}
+  if(empty) empty.style.display='none';
+
+  const medals=['🥇','🥈','🥉'];
+  sorted.forEach((u,i)=>{
+    const card=document.createElement('div');
+    const rankClass=i<3?'rank-'+(i+1):'';
+    card.className='lb-card '+rankClass;
+    card.innerHTML=
+      '<div class="lb-rank">'+(medals[i]||(i+1))+'</div>'+
+      '<div class="lb-info">'+
+        '<div class="lb-usn">🎮 '+u.usn+'</div>'+
+        '<div class="lb-count">'+u.count+' ORDER</div>'+
+      '</div>'+
+      '<div class="lb-total">'+u.totalRb+'rb</div>'+
+      (i===0?'<span class="lb-crown">👑</span>':'');
+    list.appendChild(card);
+  });
+});
+
 /* ══ COUNTER TRANSAKSI ══ */
 .counter-row{display:flex;gap:8px;margin-bottom:12px;}
 .counter-card{flex:1;background:rgba(0,230,118,.05);border:1px solid rgba(0,230,118,.15);border-radius:12px;padding:10px;text-align:center;}
@@ -198,6 +238,45 @@ body{
 .search-result-count{font-family:'Orbitron',monospace;font-size:8px;color:rgba(255,255,255,.25);letter-spacing:1px;margin-bottom:8px;display:none;}
 .search-result-count.show{display:block;}
 .item-hidden{display:none!important;}
+
+/* ══ SHARE SECTION ══ */
+.share-section{margin-top:14px;margin-bottom:14px;}
+.share-ttl{font-family:'Orbitron',monospace;font-size:11px;font-weight:900;letter-spacing:1.5px;color:var(--cyan);display:block;margin-bottom:10px;}
+.share-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.share-btn{display:flex;flex-direction:column;align-items:center;gap:5px;padding:10px 6px;border:none;border-radius:12px;cursor:pointer;font-family:'Orbitron',monospace;font-size:7px;font-weight:700;letter-spacing:.5px;transition:transform .15s,box-shadow .15s;}
+.share-btn:active{transform:scale(.93);}
+.share-btn .sh-icon{font-size:22px;}
+.sh-wa{background:linear-gradient(135deg,#1fad52,#25d366);color:#fff;}
+.sh-wa:hover{box-shadow:0 4px 16px rgba(37,211,102,.4);}
+.sh-ig{background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);color:#fff;}
+.sh-ig:hover{box-shadow:0 4px 16px rgba(253,29,29,.3);}
+.sh-tt{background:linear-gradient(135deg,#010101,#69c9d0);color:#fff;}
+.sh-tt:hover{box-shadow:0 4px 16px rgba(105,201,208,.3);}
+.sh-copy{background:rgba(0,240,255,.1);border:1px solid rgba(0,240,255,.25);color:var(--cyan);}
+.sh-copy:hover{box-shadow:0 4px 16px rgba(0,240,255,.2);}
+.sh-copy.copied{background:rgba(0,230,118,.12);border-color:rgba(0,230,118,.3);color:var(--green);}
+
+/* ══ LEADERBOARD ══ */
+.lb-section{margin-top:14px;margin-bottom:14px;}
+.lb-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.lb-ttl{font-family:'Orbitron',monospace;font-size:11px;font-weight:900;letter-spacing:1.5px;color:var(--gold);}
+.lb-sub{font-family:'Orbitron',monospace;font-size:7px;color:rgba(255,255,255,.25);letter-spacing:1px;}
+.lb-list{display:flex;flex-direction:column;gap:6px;}
+.lb-card{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:10px 12px;position:relative;overflow:hidden;}
+.lb-card.rank-1{background:rgba(255,214,0,.07);border-color:rgba(255,214,0,.25);}
+.lb-card.rank-2{background:rgba(192,192,192,.05);border-color:rgba(192,192,192,.2);}
+.lb-card.rank-3{background:rgba(205,127,50,.05);border-color:rgba(205,127,50,.2);}
+.lb-rank{font-family:'Orbitron',monospace;font-size:18px;font-weight:900;width:32px;text-align:center;flex-shrink:0;}
+.rank-1 .lb-rank{color:var(--gold);}
+.rank-2 .lb-rank{color:#c0c0c0;}
+.rank-3 .lb-rank{color:#cd7f32;}
+.lb-card:not(.rank-1):not(.rank-2):not(.rank-3) .lb-rank{color:rgba(255,255,255,.3);font-size:13px;}
+.lb-info{flex:1;min-width:0;}
+.lb-usn{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lb-count{font-family:'Orbitron',monospace;font-size:7px;color:rgba(255,255,255,.3);letter-spacing:1px;margin-top:2px;}
+.lb-total{font-family:'Orbitron',monospace;font-size:12px;font-weight:900;color:var(--green);flex-shrink:0;}
+.lb-crown{position:absolute;right:10px;top:6px;font-size:14px;opacity:.4;}
+.lb-empty{font-family:'Orbitron',monospace;font-size:9px;color:rgba(255,255,255,.18);text-align:center;padding:20px 0;letter-spacing:2px;}
 
 /* ══ HISTORI PEMBELIAN ══ */
 .histori-section{margin-top:16px;margin-bottom:14px;}
@@ -1059,6 +1138,36 @@ body{
     </div>
   </div>
 
+  <!-- SHARE SECTION -->
+  <div class="share-section">
+    <span class="share-ttl">📱 BAGIKAN TOKO INI</span>
+    <div class="share-grid">
+      <button class="share-btn sh-wa" onclick="shareWa()">
+        <span class="sh-icon">💬</span>WHATSAPP
+      </button>
+      <button class="share-btn sh-ig" onclick="shareIg()">
+        <span class="sh-icon">📸</span>INSTAGRAM
+      </button>
+      <button class="share-btn sh-tt" onclick="shareTt()">
+        <span class="sh-icon">🎵</span>TIKTOK
+      </button>
+      <button class="share-btn sh-copy" id="shareCopyBtn" onclick="shareCopy()">
+        <span class="sh-icon">🔗</span>COPY LINK
+      </button>
+    </div>
+  </div>
+
+  <!-- LEADERBOARD -->
+  <div class="lb-section">
+    <div class="lb-hdr">
+      <span class="lb-ttl">🏆 TOP PEMBELI</span>
+      <span class="lb-sub">ORDER TERBANYAK</span>
+    </div>
+    <div class="lb-list" id="lbList">
+      <div class="lb-empty" id="lbEmpty">⏳ BELUM ADA DATA...</div>
+    </div>
+  </div>
+
   <div class="comm-section">
     <div class="comm-lbl">— KOMUNITAS KPC —</div>
     <div class="comm-grid">
@@ -1344,6 +1453,22 @@ function renderUsn(){
   const el=document.getElementById('orderUsn');
   if(usn){el.textContent='🎮 '+usn;el.classList.add('on');}
   else{el.classList.remove('on');}
+}
+
+/* ══ SHARE ══ */
+const STORE_URL='https://lanangwijaya.github.io/kpc-store-dds/';
+const STORE_MSG='🏍️ KPC STORE — Jual Gamepass & Cash Roblox murah! Proses cepat, harga fixed. Cek sekarang: '+STORE_URL;
+function shareWa(){window.open('https://wa.me/?text='+encodeURIComponent(STORE_MSG));}
+function shareIg(){shareCopy();toast('📋 Link dicopy! Paste di bio/story Instagram kamu','ok');}
+function shareTt(){shareCopy();toast('📋 Link dicopy! Paste di bio TikTok kamu','ok');}
+function shareCopy(){
+  navigator.clipboard.writeText(STORE_URL).then(()=>{
+    const btn=document.getElementById('shareCopyBtn');
+    btn.classList.add('copied');
+    btn.querySelector('.sh-icon').textContent='✅';
+    toast('✅ Link toko dicopy!','ok');
+    setTimeout(()=>{btn.classList.remove('copied');btn.querySelector('.sh-icon').textContent='🔗';},2000);
+  }).catch(()=>toast('🔗 '+STORE_URL,'ok'));
 }
 
 /* ══ SEARCH ══ */
@@ -1898,6 +2023,46 @@ window.submitTesti = async function(){
     });
   });
 })();
+
+/* ══ LEADERBOARD ══ */
+onSnapshot(query(orderCol, orderBy("createdAt","desc")), function(snap){
+  // Hitung per username
+  const map={};
+  snap.forEach(d=>{
+    const o=d.data();
+    if(!o.usn||o.status==='cancel') return;
+    const k=o.usn.toLowerCase();
+    if(!map[k]) map[k]={usn:o.usn,count:0,totalRb:0};
+    map[k].count++;
+    map[k].totalRb+=(o.totalRb||0);
+  });
+
+  const sorted=Object.values(map).sort((a,b)=>b.count-a.count||b.totalRb-a.totalRb).slice(0,10);
+
+  const list=document.getElementById('lbList');
+  const empty=document.getElementById('lbEmpty');
+  if(!list) return;
+  list.querySelectorAll('.lb-card').forEach(el=>el.remove());
+
+  if(sorted.length===0){if(empty)empty.style.display='block';return;}
+  if(empty) empty.style.display='none';
+
+  const medals=['🥇','🥈','🥉'];
+  sorted.forEach((u,i)=>{
+    const card=document.createElement('div');
+    const rankClass=i<3?'rank-'+(i+1):'';
+    card.className='lb-card '+rankClass;
+    card.innerHTML=
+      '<div class="lb-rank">'+(medals[i]||(i+1))+'</div>'+
+      '<div class="lb-info">'+
+        '<div class="lb-usn">🎮 '+u.usn+'</div>'+
+        '<div class="lb-count">'+u.count+' ORDER</div>'+
+      '</div>'+
+      '<div class="lb-total">'+u.totalRb+'rb</div>'+
+      (i===0?'<span class="lb-crown">👑</span>':'');
+    list.appendChild(card);
+  });
+});
 
 /* ══ COUNTER TRANSAKSI ══ */
 onSnapshot(query(orderCol, orderBy("createdAt","desc")), function(snap){
