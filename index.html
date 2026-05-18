@@ -116,6 +116,90 @@ body{
 .sl3{width:50px;margin-top:10px;animation-delay:.3s;}
 50%{opacity:1;transform:scaleX(1);}}
 
+/* ══ HISTORI PEMBELIAN ══ */
+.histori-section{margin-top:16px;margin-bottom:14px;}
+.histori-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.histori-ttl{font-family:'Orbitron',monospace;font-size:11px;font-weight:900;letter-spacing:1.5px;}
+.histori-live{font-family:'Orbitron',monospace;font-size:8px;color:rgba(0,230,118,.6);display:flex;align-items:center;gap:5px;letter-spacing:1px;}
+.live-dot2{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 1.5s ease-in-out infinite;flex-shrink:0;}
+.histori-list{display:flex;flex-direction:column;gap:8px;max-height:320px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(0,240,255,.2) transparent;}
+.histori-list::-webkit-scrollbar{width:3px;}
+.histori-list::-webkit-scrollbar-thumb{background:rgba(0,240,255,.25);border-radius:3px;}
+.histori-card{
+  background:rgba(0,240,255,.04);
+  border:1px solid rgba(0,240,255,.12);
+  border-left:3px solid rgba(0,240,255,.5);
+  border-radius:12px;padding:10px 12px;
+  animation:fadeUp .35s ease both;
+}
+.histori-card.done{border-left-color:var(--green);background:rgba(0,230,118,.04);}
+.histori-card.cancel{border-left-color:var(--red);background:rgba(255,34,68,.03);opacity:.6;}
+.histori-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:6px;}
+.histori-id{font-family:'Orbitron',monospace;font-size:9px;font-weight:700;color:var(--cyan);}
+.histori-time{font-family:'Orbitron',monospace;font-size:7px;color:rgba(255,255,255,.25);}
+.histori-usn{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:var(--purple);margin-bottom:6px;}
+.histori-badge{font-family:'Orbitron',monospace;font-size:7px;font-weight:700;padding:2px 7px;border-radius:20px;flex-shrink:0;}
+.histori-badge.pending{background:rgba(255,214,0,.15);color:var(--gold);border:1px solid rgba(255,214,0,.35);}
+.histori-badge.done{background:rgba(0,230,118,.15);color:var(--green);border:1px solid rgba(0,230,118,.35);}
+.histori-badge.cancel{background:rgba(255,34,68,.12);color:#ff6680;border:1px solid rgba(255,34,68,.3);}
+.histori-items{display:flex;flex-direction:column;gap:2px;margin-bottom:7px;}
+.histori-item-row{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.7);}
+.histori-tag{font-family:'Orbitron',monospace;font-size:6px;font-weight:700;padding:1px 4px;border-radius:8px;margin-right:5px;}
+.histori-tag.gp{background:rgba(255,34,68,.15);color:var(--red);}
+.histori-tag.cash{background:rgba(0,240,255,.12);color:var(--cyan);}
+.histori-itemprice{font-family:'Orbitron',monospace;font-size:9px;color:var(--gold);}
+.histori-footer{display:flex;align-items:center;justify-content:space-between;}
+.histori-total-lbl{font-family:'Orbitron',monospace;font-size:7px;color:rgba(255,255,255,.28);letter-spacing:1px;}
+.histori-total{font-family:'Orbitron',monospace;font-size:15px;font-weight:900;color:var(--green);}
+.histori-total .curr{font-size:9px;vertical-align:super;color:rgba(255,255,255,.35);margin-right:1px;}
+.histori-admin{font-family:'Orbitron',monospace;font-size:7px;color:rgba(255,255,255,.25);text-align:right;}
+.histori-empty{font-family:'Orbitron',monospace;font-size:9px;color:rgba(255,255,255,.18);text-align:center;padding:20px 0;letter-spacing:2px;}
+
+/* ══ NO NEGO BANNER ══ */
+.nonego-banner{
+  background:linear-gradient(135deg,rgba(255,34,68,.18),rgba(255,107,0,.15));
+  border:2px solid rgba(255,34,68,.6);
+  border-radius:16px;padding:14px 16px;margin-bottom:14px;
+  text-align:center;position:relative;overflow:hidden;
+  animation:negoPulse 2s ease-in-out infinite alternate;
+}
+.nonego-banner::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.05) 50%,transparent 70%);
+  animation:shimmer 3s ease-in-out infinite;pointer-events:none;
+}
+@keyframes negoPulse{
+  from{box-shadow:0 0 14px rgba(255,34,68,.3),inset 0 0 14px rgba(255,0,0,.05);}
+  to{box-shadow:0 0 32px rgba(255,34,68,.7),inset 0 0 24px rgba(255,0,0,.12);}
+}
+.nonego-top{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  margin-bottom:6px;
+}
+.nonego-icon{font-size:20px;animation:shake .5s ease-in-out infinite alternate;}
+.nonego-title{
+  font-family:'Orbitron',monospace;font-size:14px;font-weight:900;
+  letter-spacing:2px;
+  background:linear-gradient(90deg,#ff2244,#ff6b00,#ffd600,#ff2244);
+  background-size:300% 100%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:gshift 2s linear infinite;
+}
+.nonego-sub{
+  font-family:'Rajdhani',sans-serif;font-size:13px;
+  color:rgba(255,255,255,.65);margin-bottom:10px;
+}
+.nonego-rules{
+  display:flex;justify-content:center;gap:10px;flex-wrap:wrap;
+}
+.nonego-rules span{
+  font-family:'Orbitron',monospace;font-size:8px;font-weight:700;
+  padding:4px 10px;border-radius:20px;letter-spacing:.5px;
+}
+.nonego-rules span:nth-child(1){background:rgba(0,230,118,.12);color:var(--green);border:1px solid rgba(0,230,118,.3);}
+.nonego-rules span:nth-child(2){background:rgba(0,230,118,.12);color:var(--green);border:1px solid rgba(0,230,118,.3);}
+.nonego-rules span:nth-child(3){background:rgba(255,34,68,.12);color:#ff6680;border:1px solid rgba(255,34,68,.3);}
+
 .store-title{font-family:'Orbitron',monospace;font-size:13px;font-weight:700;letter-spacing:4px;display:block;color:rgba(255,255,255,.5);margin-top:4px;}
 .divider{
   height:1px;margin:10px 0 14px;
@@ -193,6 +277,26 @@ body{
   color:rgba(255,255,255,.25);margin-top:5px;
 }
 .usn-hint.filled{color:rgba(0,230,118,.6);}
+
+/* ══ ROBLOX PROFILE PREVIEW ══ */
+.roblox-preview{
+  display:none;margin-top:10px;
+  background:rgba(0,0,0,.3);border:1px solid rgba(0,240,255,.2);
+  border-radius:12px;padding:10px 12px;
+  animation:fadeUp .3s ease both;
+}
+.roblox-preview.show{display:flex;align-items:center;gap:10px;}
+.roblox-preview.error{display:flex;align-items:center;gap:8px;border-color:rgba(255,34,68,.3);background:rgba(255,34,68,.05);}
+.roblox-avatar{width:48px;height:48px;border-radius:50%;border:2px solid rgba(0,240,255,.4);flex-shrink:0;object-fit:cover;background:rgba(0,0,0,.3);}
+.roblox-avatar.loading{animation:avatarPulse 1s ease-in-out infinite alternate;}
+@keyframes avatarPulse{from{opacity:.3;}to{opacity:.7;}}
+.roblox-info{flex:1;min-width:0;}
+.roblox-name{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.roblox-disp{font-family:'Rajdhani',sans-serif;font-size:12px;color:rgba(255,255,255,.5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.roblox-ok{font-family:'Orbitron',monospace;font-size:8px;color:var(--green);letter-spacing:1px;margin-top:2px;}
+.roblox-err{font-family:'Orbitron',monospace;font-size:9px;color:var(--red);letter-spacing:1px;}
+.roblox-spin{font-size:18px;animation:spin .8s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg);}}
 
 /* ══ PANELS ══ */
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
@@ -741,6 +845,21 @@ body{
     <span class="promo-icon">⚡</span>
   </div>
 
+  <!-- NO NEGO BANNER -->
+  <div class="nonego-banner">
+    <div class="nonego-top">
+      <span class="nonego-icon">🚫</span>
+      <span class="nonego-title">HARGA FIXED — NO NEGO!</span>
+      <span class="nonego-icon">🚫</span>
+    </div>
+    <div class="nonego-sub">Semua harga sudah paling murah &amp; tidak bisa ditawar</div>
+    <div class="nonego-rules">
+      <span>✅ Harga sesuai list</span>
+      <span>✅ Proses cepat</span>
+      <span>❌ Tidak bisa kurang</span>
+    </div>
+  </div>
+
   <!-- USERNAME BOX -->
   <div class="usn-box">
     <div class="usn-label">USERNAME ROBLOX KAMU</div>
@@ -759,9 +878,15 @@ body{
     </div>
     <div class="usn-hint" id="usnHint">Username akan dikirim otomatis ke admin saat chat</div>
     <div class="usn-warning" id="usnWarning">⚠️ WAJIB ISI USERNAME DULU!</div>
+    <div class="roblox-preview" id="robloxPreview">
+      <img class="roblox-avatar" id="robloxAvatar" src="" alt="avatar"/>
+      <div class="roblox-info">
+        <div class="roblox-name" id="robloxName">-</div>
+        <div class="roblox-disp" id="robloxDisp">-</div>
+        <div class="roblox-ok">✅ USERNAME VALID</div>
+      </div>
+    </div>
   </div>
-
-  <!-- PANELS -->
   <div class="grid">
     <div class="panel panel-red" style="animation-delay:.1s" id="pgp">
       <div class="panel-title">
@@ -813,6 +938,17 @@ body{
 
 
   <!-- COMMUNITY & TESTI -->
+  <!-- HISTORI PEMBELIAN -->
+  <div class="histori-section">
+    <div class="histori-hdr">
+      <span class="histori-ttl gtext-blue">📋 HISTORI PEMBELIAN</span>
+      <span class="histori-live"><span class="live-dot2"></span>LIVE</span>
+    </div>
+    <div class="histori-list" id="historiList">
+      <div class="histori-empty" id="historiEmpty">⏳ BELUM ADA ORDER...</div>
+    </div>
+  </div>
+
   <div class="comm-section">
     <div class="comm-lbl">— KOMUNITAS KPC —</div>
     <div class="comm-grid">
@@ -955,22 +1091,94 @@ const CATALOG={
 const sel=new Map();
 
 /* USERNAME */
+/* ROBLOX LOOKUP */
+let robloxTimer=null;
+let robloxValid=false;
+
+function showRobloxPreview(state, data){
+  const box=document.getElementById('robloxPreview');
+  const av=document.getElementById('robloxAvatar');
+  const nm=document.getElementById('robloxName');
+  const dp=document.getElementById('robloxDisp');
+  if(state==='hide'){box.className='roblox-preview';return;}
+  if(state==='loading'){
+    box.className='roblox-preview show';
+    av.src='';av.className='roblox-avatar loading';
+    nm.textContent='Mencari username...';dp.textContent='';
+    box.innerHTML='<span class="roblox-spin">⏳</span><span style="font-family:\'Orbitron\',monospace;font-size:9px;color:rgba(255,255,255,.4);letter-spacing:1px;">MENGECEK USERNAME...</span>';
+    return;
+  }
+  if(state==='ok'){
+    box.className='roblox-preview show';
+    box.innerHTML=
+      '<img class="roblox-avatar" id="robloxAvatar" src="'+data.avatar+'" alt="avatar" onerror="this.src=\'\'"/>'+
+      '<div class="roblox-info">'+
+        '<div class="roblox-name" id="robloxName">'+data.username+'</div>'+
+        '<div class="roblox-disp" id="robloxDisp">'+(data.displayName||'')+'</div>'+
+        '<div class="roblox-ok">✅ USERNAME VALID</div>'+
+      '</div>';
+    return;
+  }
+  if(state==='error'){
+    box.className='roblox-preview error';
+    box.innerHTML='<span style="font-size:22px;">❌</span><span class="roblox-err">USERNAME TIDAK DITEMUKAN<br><span style="font-size:8px;color:rgba(255,255,255,.3);">Cek ejaan username Roblox kamu</span></span>';
+  }
+}
+
+async function lookupRoblox(username){
+  showRobloxPreview('loading');
+  robloxValid=false;
+  try{
+    // Step 1: get userId dari username
+    const r1=await fetch('https://users.roblox.com/v1/usernames/users',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({usernames:[username],excludeBannedUsers:false})
+    });
+    const d1=await r1.json();
+    if(!d1.data||d1.data.length===0){showRobloxPreview('error');return;}
+    const user=d1.data[0];
+    const uid=user.id;
+
+    // Step 2: get avatar headshot
+    const r2=await fetch('https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds='+uid+'&size=150x150&format=Png&isCircular=true');
+    const d2=await r2.json();
+    const avatarUrl=(d2.data&&d2.data[0])?d2.data[0].imageUrl:'';
+
+    robloxValid=true;
+    showRobloxPreview('ok',{username:user.name,displayName:user.displayName,avatar:avatarUrl});
+
+    // Update order bar juga
+    const el=document.getElementById('orderUsn');
+    if(el){el.textContent='🎮 '+user.name;el.classList.add('on');}
+
+  }catch(e){
+    showRobloxPreview('error');
+  }
+}
+
 function onUsn(){
   const val=document.getElementById('usnInput').value.trim();
   const hint=document.getElementById('usnHint');
   const clr=document.getElementById('usnClear');
   clr.classList.toggle('on',val.length>0);
   if(val){
-    hint.textContent=`✓ Username: ${val}`;
+    hint.textContent='Mengecek username Roblox...';
     hint.classList.add('filled');
+    clearTimeout(robloxTimer);
+    robloxTimer=setTimeout(()=>lookupRoblox(val), 700);
   } else {
     hint.textContent='Username akan dikirim otomatis ke admin saat chat';
     hint.classList.remove('filled');
+    showRobloxPreview('hide');
+    robloxValid=false;
   }
   renderUsn();
 }
 function clearUsn(){
   document.getElementById('usnInput').value='';
+  showRobloxPreview('hide');
+  robloxValid=false;
   onUsn();
 }
 function getUsn(){return document.getElementById('usnInput').value.trim();}
@@ -1445,6 +1653,59 @@ window.submitTesti = async function(){
     btn.textContent='✨ KIRIM TESTIMONI';btn.disabled=false;
   }
 };
+
+/* ══ HISTORI PEMBELIAN — REALTIME ══ */
+(function(){
+  function escH(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  onSnapshot(query(orderCol, orderBy("createdAt","desc")), function(snap){
+    const list = document.getElementById('historiList');
+    const empty = document.getElementById('historiEmpty');
+    if(!list) return;
+
+    list.querySelectorAll('.histori-card').forEach(el=>el.remove());
+
+    if(snap.empty){ if(empty) empty.style.display='block'; return; }
+    if(empty) empty.style.display='none';
+
+    snap.forEach(function(d){
+      const o = d.data();
+      const items = o.items || [];
+      const status = o.status || 'pending';
+      const statusLabel = status==='done'?'✅ SELESAI': status==='cancel'?'❌ BATAL':'⏳ PENDING';
+
+      const itemsHtml = items.map(it=>
+        '<div class="histori-item-row">'+
+          '<span><span class="histori-tag '+(it.panel==='gp'?'gp':'cash')+'">'+(it.panel==='gp'?'GP':'CASH')+'</span>'+
+          escH(it.nama)+' x'+(it.qty||1)+'</span>'+
+          '<span class="histori-itemprice">'+((it.harga||0)*(it.qty||1))+'rb</span>'+
+        '</div>'
+      ).join('');
+
+      const card = document.createElement('div');
+      card.className = 'histori-card '+status;
+      card.innerHTML =
+        '<div class="histori-top">'+
+          '<div>'+
+            '<div class="histori-id">🧾 #'+escH(o.orderId||d.id.slice(-6).toUpperCase())+'</div>'+
+            '<div class="histori-time">🕐 '+escH(o.tStr||'-')+'</div>'+
+          '</div>'+
+          '<span class="histori-badge '+status+'">'+statusLabel+'</span>'+
+        '</div>'+
+        '<div class="histori-usn">🎮 '+escH(o.usn||'-')+'</div>'+
+        '<div class="histori-items">'+itemsHtml+'</div>'+
+        '<div class="histori-footer">'+
+          '<div>'+
+            '<div class="histori-total-lbl">TOTAL</div>'+
+            '<div class="histori-total"><span class="curr">Rp</span>'+(o.totalRb||0).toLocaleString('id-ID')+'.000</div>'+
+          '</div>'+
+          '<div class="histori-admin">Admin<br>'+escH(o.admin||'-')+'</div>'+
+        '</div>';
+
+      list.appendChild(card);
+    });
+  });
+})();
 </script>
 
 </body>
