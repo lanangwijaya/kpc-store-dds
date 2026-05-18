@@ -164,6 +164,41 @@ body{
 .qris-wa-btn:hover{box-shadow:0 6px 20px rgba(37,211,102,.4);}
 .qris-wa-btn:active{transform:scale(.97);}
 
+/* ══ ANNOUNCEMENT BANNER ══ */
+.announce-banner{
+  background:linear-gradient(135deg,rgba(0,240,255,.08),rgba(191,95,255,.08));
+  border:1px solid rgba(0,240,255,.25);border-radius:14px;
+  padding:10px 14px;margin-bottom:12px;
+  display:flex;align-items:center;gap:10px;
+}
+.announce-icon{font-size:20px;flex-shrink:0;}
+.announce-text{font-family:'Rajdhani',sans-serif;font-size:13px;color:rgba(255,255,255,.85);flex:1;line-height:1.4;}
+.announce-text b{color:var(--cyan);}
+
+/* ══ COUNTER TRANSAKSI ══ */
+.counter-row{display:flex;gap:8px;margin-bottom:12px;}
+.counter-card{flex:1;background:rgba(0,230,118,.05);border:1px solid rgba(0,230,118,.15);border-radius:12px;padding:10px;text-align:center;}
+.counter-num{font-family:'Orbitron',monospace;font-size:22px;font-weight:900;color:var(--green);}
+.counter-lbl{font-family:'Orbitron',monospace;font-size:7px;color:rgba(255,255,255,.3);letter-spacing:1px;margin-top:2px;}
+.counter-card.gold{background:rgba(255,214,0,.05);border-color:rgba(255,214,0,.15);}
+.counter-card.gold .counter-num{color:var(--gold);}
+
+/* ══ SEARCH BAR ══ */
+.search-wrap{position:relative;margin-bottom:12px;}
+.search-inp{
+  width:100%;background:rgba(0,0,0,.4);
+  border:1px solid rgba(255,255,255,.1);border-radius:12px;
+  padding:10px 38px 10px 14px;
+  font-family:'Rajdhani',sans-serif;font-size:14px;color:#fff;
+  outline:none;transition:border-color .2s;
+}
+.search-inp:focus{border-color:rgba(0,240,255,.4);}
+.search-inp::placeholder{color:rgba(255,255,255,.25);}
+.search-icon{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none;}
+.search-result-count{font-family:'Orbitron',monospace;font-size:8px;color:rgba(255,255,255,.25);letter-spacing:1px;margin-bottom:8px;display:none;}
+.search-result-count.show{display:block;}
+.item-hidden{display:none!important;}
+
 /* ══ HISTORI PEMBELIAN ══ */
 .histori-section{margin-top:16px;margin-bottom:14px;}
 .histori-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
@@ -887,6 +922,24 @@ body{
   </div>
 
   <!-- PROMO -->
+  <!-- ANNOUNCEMENT BANNER -->
+  <div class="announce-banner" id="announceBanner">
+    <span class="announce-icon">📢</span>
+    <div class="announce-text" id="announceText">Selamat datang di <b>KPC Store</b>! Proses cepat, harga terjangkau. Semua harga <b>FIXED</b> ya!</div>
+  </div>
+
+  <!-- COUNTER TRANSAKSI -->
+  <div class="counter-row">
+    <div class="counter-card">
+      <div class="counter-num" id="ctrDone">0</div>
+      <div class="counter-lbl">TRANSAKSI SELESAI</div>
+    </div>
+    <div class="counter-card gold">
+      <div class="counter-num" id="ctrTotal">0rb</div>
+      <div class="counter-lbl">TOTAL TERJUAL</div>
+    </div>
+  </div>
+
   <div class="promo-bar">
     <span class="promo-icon">⚡</span>
     <span class="promo-text gtext">PROSES CEPAT — ORDER LANGSUNG DIPROSES!</span>
@@ -937,6 +990,13 @@ body{
       </div>
     </div>
   </div>
+  <!-- SEARCH BAR -->
+  <div class="search-wrap">
+    <input class="search-inp" id="searchInp" placeholder="🔍 Cari item..." oninput="doSearch()" autocomplete="off"/>
+    <span class="search-icon">🔍</span>
+  </div>
+  <div class="search-result-count" id="searchCount"></div>
+
   <div class="grid">
     <div class="panel panel-red" style="animation-delay:.1s" id="pgp">
       <div class="panel-title">
@@ -1205,17 +1265,15 @@ async function lookupRoblox(username){
   showRobloxPreview('loading');
   robloxValid=false;
   try{
-    // POST langsung by username — lebih akurat dari search
-    const r1=await fetch('https://users.roproxy.com/v1/usernames/users',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({usernames:[username],excludeBannedUsers:false})
-    });
+    // Pakai search endpoint — terbukti jalan dari browser
+    const r1=await fetch('https://users.roproxy.com/v1/users/search?keyword='+encodeURIComponent(username)+'&limit=10');
     const d1=await r1.json();
-    console.log('[Roblox]',JSON.stringify(d1));
+    console.log('[Roblox]',JSON.stringify(d1).slice(0,200));
 
     if(!d1.data||d1.data.length===0){showRobloxPreview('error');return;}
-    const user=d1.data[0];
+    // Cari exact match (case insensitive)
+    const user=d1.data.find(u=>u.name.toLowerCase()===username.toLowerCase());
+    if(!user){showRobloxPreview('error');return;}
 
     // Avatar
     let avatarUrl='';
@@ -1269,6 +1327,33 @@ function renderUsn(){
   if(usn){el.textContent='🎮 '+usn;el.classList.add('on');}
   else{el.classList.remove('on');}
 }
+
+/* ══ SEARCH ══ */
+function doSearch(){
+  const q=document.getElementById('searchInp').value.trim().toLowerCase();
+  const countEl=document.getElementById('searchCount');
+  let visible=0,total=0;
+  document.querySelectorAll('.item-row').forEach(row=>{
+    total++;
+    const name=(row.querySelector('.item-name')||row).textContent.toLowerCase();
+    if(!q||name.includes(q)){row.classList.remove('item-hidden');visible++;}
+    else row.classList.add('item-hidden');
+  });
+  if(q){countEl.textContent='🔍 '+visible+' item ditemukan';countEl.classList.add('show');}
+  else countEl.classList.remove('show');
+}
+
+/* ══ STAR PICKER ══ */
+let selectedStar=0;
+function pickStar(v){
+  selectedStar=v;
+  document.querySelectorAll('.star-btn').forEach((b,i)=>{
+    b.classList.toggle('active',i<v);
+  });
+}
+
+/* ══ SUBMIT RATING ══ */
+/* handled in module script */
 
 /* BUILD ITEMS */
 function buildItems(){
@@ -1795,6 +1880,31 @@ window.submitTesti = async function(){
     });
   });
 })();
+
+/* ══ COUNTER TRANSAKSI ══ */
+onSnapshot(query(orderCol, orderBy("createdAt","desc")), function(snap){
+  let done=0, totalRb=0;
+  snap.forEach(d=>{
+    const o=d.data();
+    if(o.status==='done'){ done++; totalRb+=(o.totalRb||0); }
+  });
+  const ctrDone=document.getElementById('ctrDone');
+  const ctrTotal=document.getElementById('ctrTotal');
+  if(ctrDone) ctrDone.textContent=done;
+  if(ctrTotal) ctrTotal.textContent=(totalRb>=1000?(totalRb/1000).toFixed(1)+'jt':totalRb+'rb');
+});
+
+/* ══ ANNOUNCEMENT — LOAD FROM FIREBASE ══ */
+const announceDoc = doc(db, "config", "announcement");
+import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js").then(({onSnapshot:oS, doc:d2})=>{
+  oS(doc(db,"config","announcement"), function(snap){
+    if(snap.exists()){
+      const txt=snap.data().text||'';
+      const el=document.getElementById('announceText');
+      if(el&&txt) el.innerHTML=txt;
+    }
+  });
+}).catch(()=>{});
 </script>
 
   <!-- QRIS POPUP NANANG -->

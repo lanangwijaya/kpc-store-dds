@@ -171,6 +171,12 @@ body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:#fff;min-heigh
   letter-spacing:1px;transition:background .2s,color .2s;
 }
 .logout-btn:hover{background:rgba(255,34,68,.18);color:#ff6680;}
+/* ANNOUNCE EDITOR */
+.announce-editor{background:rgba(0,240,255,.04);border:1px solid rgba(0,240,255,.15);border-radius:16px;padding:14px;margin-bottom:14px;}
+.announce-lbl{font-family:'Orbitron',monospace;font-size:9px;color:rgba(0,240,255,.6);letter-spacing:1px;margin-bottom:8px;}
+.announce-inp{width:100%;background:rgba(0,0,0,.3);border:1px solid rgba(0,240,255,.2);border-radius:10px;padding:9px 12px;font-family:'Rajdhani',sans-serif;font-size:13px;color:#fff;outline:none;resize:none;margin-bottom:8px;}
+.announce-save{width:100%;padding:10px;border:none;border-radius:10px;font-family:'Orbitron',monospace;font-size:9px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,rgba(0,240,255,.2),rgba(0,240,255,.1));color:var(--cyan);border:1px solid rgba(0,240,255,.3);letter-spacing:1px;}
+.announce-save:hover{background:rgba(0,240,255,.2);}
 </style>
 </head>
 <body>
@@ -218,6 +224,13 @@ body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:#fff;min-heigh
       <div class="stat-num" id="statDone">0</div>
       <div class="stat-lbl">SELESAI</div>
     </div>
+  </div>
+
+  <!-- ANNOUNCEMENT EDITOR -->
+  <div class="announce-editor">
+    <div class="announce-lbl">📢 EDIT PENGUMUMAN TOKO</div>
+    <textarea class="announce-inp" id="announceInp" rows="2" placeholder="Tulis pengumuman..."></textarea>
+    <button class="announce-save" onclick="saveAnnounce()">💾 SIMPAN PENGUMUMAN</button>
   </div>
 
   <!-- FILTER -->
@@ -377,6 +390,29 @@ function renderOrders(){
     list.appendChild(card);
   });
 }
+
+/* ══ ANNOUNCE ══ */
+window.saveAnnounce = async function(){
+  const text = document.getElementById('announceInp').value.trim();
+  if(!text){ toast('⚠️ Isi pengumuman dulu!','warn'); return; }
+  try{
+    const {doc, setDoc} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+    await setDoc(doc(db,'config','announcement'),{text});
+    toast('✅ Pengumuman disimpan!','ok');
+  }catch(e){ toast('❌ Gagal simpan!','warn'); }
+};
+
+// Load existing announcement
+(async()=>{
+  try{
+    const {doc, getDoc} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+    const snap = await getDoc(doc(db,'config','announcement'));
+    if(snap.exists()){
+      const el=document.getElementById('announceInp');
+      if(el) el.value=snap.data().text||'';
+    }
+  }catch(e){}
+})();
 
 /* ══ ACTIONS ══ */
 window.setStatus = async function(id, status){
