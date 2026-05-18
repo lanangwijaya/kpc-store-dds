@@ -1129,34 +1129,30 @@ async function lookupRoblox(username){
   showRobloxPreview('loading');
   robloxValid=false;
   try{
-    // Pakai proxy allorigins untuk bypass CORS
-    const proxy='https://api.allorigins.win/get?url=';
+    // RoProxy — proxy khusus Roblox, support CORS dari browser
+    const r1=await fetch('https://users.roproxy.com/v1/usernames/users',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({usernames:[username],excludeBannedUsers:false})
+    });
+    if(!r1.ok){showRobloxPreview('error');return;}
+    const d1=await r1.json();
+    if(!d1.data||d1.data.length===0){showRobloxPreview('error');return;}
+    const user=d1.data[0];
+    const uid=user.id;
 
-    // Step 1: get userId dari username
-    const url1=encodeURIComponent('https://users.roblox.com/v1/usernames/users');
-    const body1=JSON.stringify({usernames:[username],excludeBannedUsers:false});
-    // Karena POST tidak bisa lewat allorigins, pakai endpoint GET alternatif
-    const url2=encodeURIComponent('https://api.roblox.com/users/get-by-username?username='+encodeURIComponent(username));
-    const r1=await fetch(proxy+url2);
-    const raw1=await r1.json();
-    const d1=JSON.parse(raw1.contents);
-
-    if(d1.errorMessage||!d1.Id){showRobloxPreview('error');return;}
-    const uid=d1.Id;
-    const uname=d1.Username;
-
-    // Step 2: get avatar headshot
-    const url3=encodeURIComponent('https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds='+uid+'&size=150x150&format=Png&isCircular=true');
-    const r2=await fetch(proxy+url3);
-    const raw2=await r2.json();
-    const d2=JSON.parse(raw2.contents);
-    const avatarUrl=(d2.data&&d2.data[0])?d2.data[0].imageUrl:'';
+    // Avatar via roproxy thumbnails
+    let avatarUrl='';
+    try{
+      const r2=await fetch('https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds='+uid+'&size=150x150&format=Png&isCircular=true');
+      const d2=await r2.json();
+      avatarUrl=(d2.data&&d2.data[0])?d2.data[0].imageUrl:'';
+    }catch(e2){}
 
     robloxValid=true;
-    showRobloxPreview('ok',{username:uname,displayName:uname,avatar:avatarUrl});
-
+    showRobloxPreview('ok',{username:user.name,displayName:user.displayName||user.name,avatar:avatarUrl});
     const el=document.getElementById('orderUsn');
-    if(el){el.textContent='🎮 '+uname;el.classList.add('on');}
+    if(el){el.textContent='🎮 '+user.name;el.classList.add('on');}
 
   }catch(e){
     showRobloxPreview('error');
