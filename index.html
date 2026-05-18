@@ -160,6 +160,9 @@ body{
 .qris-note{font-family:'Rajdhani',sans-serif;font-size:11px;color:rgba(255,200,0,.5);text-align:center;margin-bottom:6px;}
 .qris-note b{color:var(--gold);}
 .qris-wa-note{font-family:'Orbitron',monospace;font-size:8px;color:rgba(255,255,255,.25);text-align:center;letter-spacing:1px;}
+.qris-wa-btn{width:100%;margin-top:10px;padding:13px;border:none;border-radius:14px;font-family:'Orbitron',monospace;font-size:10px;font-weight:900;cursor:pointer;letter-spacing:1px;background:linear-gradient(135deg,#25d366,#128c7e);color:#fff;transition:transform .15s,box-shadow .15s;}
+.qris-wa-btn:hover{box-shadow:0 6px 20px rgba(37,211,102,.4);}
+.qris-wa-btn:active{transform:scale(.97);}
 
 /* ══ HISTORI PEMBELIAN ══ */
 .histori-section{margin-top:16px;margin-bottom:14px;}
@@ -1132,6 +1135,13 @@ function closeQris(){
   document.getElementById('qrisOverlay').classList.remove('show');
   document.getElementById('qrisPopup').classList.remove('show');
 }
+function lanjutWa(){
+  closeQris();
+  if(window._pendingWaUrl){
+    setTimeout(()=>window.open(window._pendingWaUrl), 200);
+    window._pendingWaUrl=null;
+  }
+}
 
 /* COPY NMID */
 function copyNmid(){
@@ -1611,13 +1621,14 @@ window.waWithSave = async function(nama, nomor, items, usn){
 
   const text = window.buildWaText ? window.buildWaText(nama,items,usn,orderId)
     : 'Halo '+nama+', order KPC Store - Total: Rp '+totalRb+'.000 | ID: #'+orderId;
-  setTimeout(()=>window.open('https://wa.me/'+nomor+'?text='+encodeURIComponent(text)), 300);
-  // Tampilkan QRIS kalau admin Nanang
+
+  // Kalau Nanang — tampilkan QRIS dulu, tombol di popup yang buka WA
   if(nomor==='6281252425581'){
-    setTimeout(()=>{
-      document.getElementById('qrisOverlay').classList.add('show');
-      document.getElementById('qrisPopup').classList.add('show');
-    }, 600);
+    window._pendingWaUrl = 'https://wa.me/'+nomor+'?text='+encodeURIComponent(text);
+    document.getElementById('qrisOverlay').classList.add('show');
+    document.getElementById('qrisPopup').classList.add('show');
+  } else {
+    setTimeout(()=>window.open('https://wa.me/'+nomor+'?text='+encodeURIComponent(text)), 300);
   }
 };
 
@@ -1804,7 +1815,7 @@ window.submitTesti = async function(){
     </div>
     <button class="qris-copy-btn" onclick="copyNmid()" id="qrisCopyBtn">📋 COPY NMID</button>
     <div class="qris-note">⚠️ Pastikan nama tujuan <b>WARUNG SUPARTI</b> sebelum bayar</div>
-    <div class="qris-wa-note">Setelah bayar, lanjut chat ke Nanang Dlogok 👇</div>
+    <button class="qris-wa-btn" onclick="lanjutWa()">💬 SUDAH BAYAR — LANJUT CHAT WA</button>
   </div>
 
 </body>
