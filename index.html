@@ -1129,31 +1129,22 @@ async function lookupRoblox(username){
   showRobloxPreview('loading');
   robloxValid=false;
   try{
-    // Step 1: cari userId dari username
-    const r1=await fetch('https://users.roproxy.com/v1/usernames/users',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body:JSON.stringify({usernames:[username],excludeBannedUsers:false})
-    });
+    // Cari user by username via search, lalu exact match
+    const r1=await fetch('https://users.roproxy.com/v1/users/search?keyword='+encodeURIComponent(username)+'&limit=10');
     const d1=await r1.json();
-    console.log('[Roblox] step1 response:', JSON.stringify(d1));
+    console.log('[Roblox]',JSON.stringify(d1));
 
-    if(!d1.data||d1.data.length===0){
-      console.log('[Roblox] username tidak ditemukan');
-      showRobloxPreview('error');return;
-    }
-    const user=d1.data[0];
-    const uid=user.id;
-    console.log('[Roblox] found user:', user.name, uid);
+    if(!d1.data){showRobloxPreview('error');return;}
+    const user=d1.data.find(u=>u.name.toLowerCase()===username.toLowerCase());
+    if(!user){showRobloxPreview('error');return;}
 
-    // Step 2: avatar
+    // Avatar
     let avatarUrl='';
     try{
-      const r2=await fetch('https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds='+uid+'&size=150x150&format=Png&isCircular=true');
+      const r2=await fetch('https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds='+user.id+'&size=150x150&format=Png&isCircular=true');
       const d2=await r2.json();
-      console.log('[Roblox] avatar response:', JSON.stringify(d2));
       avatarUrl=(d2.data&&d2.data[0])?d2.data[0].imageUrl:'';
-    }catch(e2){console.log('[Roblox] avatar error:',e2);}
+    }catch(e2){}
 
     robloxValid=true;
     showRobloxPreview('ok',{username:user.name,displayName:user.displayName||user.name,avatar:avatarUrl});
@@ -1161,7 +1152,7 @@ async function lookupRoblox(username){
     if(el){el.textContent='🎮 '+user.name;el.classList.add('on');}
 
   }catch(e){
-    console.log('[Roblox] catch error:',e);
+    console.log('[Roblox] error:',e);
     showRobloxPreview('error');
   }
 }
