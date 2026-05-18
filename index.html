@@ -1129,25 +1129,31 @@ async function lookupRoblox(username){
   showRobloxPreview('loading');
   robloxValid=false;
   try{
-    // RoProxy — proxy khusus Roblox, support CORS dari browser
+    // Step 1: cari userId dari username
     const r1=await fetch('https://users.roproxy.com/v1/usernames/users',{
       method:'POST',
       headers:{'Content-Type':'application/json','Accept':'application/json'},
       body:JSON.stringify({usernames:[username],excludeBannedUsers:false})
     });
-    if(!r1.ok){showRobloxPreview('error');return;}
     const d1=await r1.json();
-    if(!d1.data||d1.data.length===0){showRobloxPreview('error');return;}
+    console.log('[Roblox] step1 response:', JSON.stringify(d1));
+
+    if(!d1.data||d1.data.length===0){
+      console.log('[Roblox] username tidak ditemukan');
+      showRobloxPreview('error');return;
+    }
     const user=d1.data[0];
     const uid=user.id;
+    console.log('[Roblox] found user:', user.name, uid);
 
-    // Avatar via roproxy thumbnails
+    // Step 2: avatar
     let avatarUrl='';
     try{
       const r2=await fetch('https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds='+uid+'&size=150x150&format=Png&isCircular=true');
       const d2=await r2.json();
+      console.log('[Roblox] avatar response:', JSON.stringify(d2));
       avatarUrl=(d2.data&&d2.data[0])?d2.data[0].imageUrl:'';
-    }catch(e2){}
+    }catch(e2){console.log('[Roblox] avatar error:',e2);}
 
     robloxValid=true;
     showRobloxPreview('ok',{username:user.name,displayName:user.displayName||user.name,avatar:avatarUrl});
@@ -1155,6 +1161,7 @@ async function lookupRoblox(username){
     if(el){el.textContent='🎮 '+user.name;el.classList.add('on');}
 
   }catch(e){
+    console.log('[Roblox] catch error:',e);
     showRobloxPreview('error');
   }
 }
