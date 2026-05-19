@@ -1339,6 +1339,8 @@ function autoCapUsn(){
 let robloxTimer=null;
 let robloxValid=false;
 const robloxCache={};
+let robloxBusy=false;
+let robloxQueue=null;
 
 async function lookupRoblox(username){
   showRobloxPreview('loading');
@@ -1355,27 +1357,53 @@ async function lookupRoblox(username){
     return;
   }
 
-  try{
-    // Pakai Vercel proxy — langsung exact match, tanpa rate limit
-    const r1=await fetch('https://kpc-store-dds.vercel.app/api/roblox?u='+encodeURIComponent(username));
-    const d1=await r1.json();
+  // Kalau masih ada request jalan, antri — batalkan yang lama
+  robloxQueue=username;
+  if(robloxBusy) return;
+  robloxBusy=true;
 
-    if(d1.error||!d1.username){
-      robloxCache[key]='notfound';
-      showRobloxPreview('error');return;
+  while(robloxQueue){
+    const uToFetch=robloxQueue;
+    robloxQueue=null;
+    const k=uToFetch.toLowerCase();
+
+    if(robloxCache[k]){
+      const cached=robloxCache[k];
+      robloxBusy=false;
+      if(cached==='notfound'){showRobloxPreview('error');return;}
+      robloxValid=true;
+      showRobloxPreview('ok',cached);
+      const el=document.getElementById('orderUsn');
+      if(el){el.textContent='🎮 '+cached.username;el.classList.add('on');}
+      return;
     }
 
-    const result={username:d1.username,displayName:d1.displayName||d1.username,avatar:d1.avatar||''};
-    robloxCache[key]=result;
-    robloxValid=true;
-    showRobloxPreview('ok',result);
-    const el=document.getElementById('orderUsn');
-    if(el){el.textContent='🎮 '+d1.username;el.classList.add('on');}
+    try{
+      const r1=await fetch('https://kpc-store-dds.vercel.app/api/roblox?u='+encodeURIComponent(uToFetch));
+      const d1=await r1.json();
 
-  }catch(e){
-    console.log('[Roblox] error:',e);
-    showRobloxPreview('error');
+      if(d1.error||!d1.username){
+        robloxCache[k]='notfound';
+        if(!robloxQueue) showRobloxPreview('error');
+      } else {
+        const result={username:d1.username,displayName:d1.displayName||d1.username,avatar:d1.avatar||''};
+        robloxCache[k]=result;
+        if(!robloxQueue){
+          robloxValid=true;
+          showRobloxPreview('ok',result);
+          const el=document.getElementById('orderUsn');
+          if(el){el.textContent='🎮 '+d1.username;el.classList.add('on');}
+        }
+      }
+    }catch(e){
+      console.log('[Roblox] error:',e);
+      if(!robloxQueue) showRobloxPreview('error');
+    }
+
+    // Jeda 800ms antar request biar tidak kena rate limit
+    if(robloxQueue) await new Promise(res=>setTimeout(res,800));
   }
+  robloxBusy=false;
 }
 
 function showRobloxPreview(state, data){
@@ -1629,11 +1657,14 @@ function buildWaText(nama,items,usn,orderId){
   const totalRb=items.reduce((a,v)=>a+v.harga*v.qty,0);
   let lines=[];
   if(usn) lines.push('*Username Roblox:* '+usn);
-  if(gpArr.length)lines.push('*Gamepass:*\n'+gpArr.map(v=>'  • '+v.nama+' x'+v.qty+' = '+v.harga*v.qty+'rb').join('\n'));
-  if(cashArr.length)lines.push('*Cash:*\n'+cashArr.map(v=>'  • '+v.nama+' x'+v.qty+' = '+v.harga*v.qty+'rb').join('\n'));
+  // Link avatar Roblox biar admin bisa lihat
+  const cached=window.robloxCache&&window.robloxCache[usn.toLowerCase()];
+  if(cached&&cached.avatar) lines.push('\uD83D\uDDBC\uFE0F *Avatar:* '+cached.avatar);
+  if(gpArr.length)lines.push('*Gamepass:*\\n'+gpArr.map(v=>'  • '+v.nama+' x'+v.qty+' = '+v.harga*v.qty+'rb').join('\\n'));
+  if(cashArr.length)lines.push('*Cash:*\\n'+cashArr.map(v=>'  • '+v.nama+' x'+v.qty+' = '+v.harga*v.qty+'rb').join('\\n'));
   lines.push('*Total: Rp '+totalRb.toLocaleString('id-ID')+'.000*');
   lines.push('*Order ID: #'+orderId+'*  _(admin bisa cek dashboard)_');
-  return 'Halo '+nama+', saya mau order dari KPC Store:\n'+lines.join('\n');
+  return 'Halo '+nama+', saya mau order dari KPC Store:\\n'+lines.join('\\n');
 }
 window.buildWaText=buildWaText;
 
@@ -1841,6 +1872,17 @@ window.waWithSave = async function(nama, nomor, items, usn){
   // Kalau Nanang — tampilkan QRIS dulu, tombol di popup yang buka WA
   if(nomor==='6281252425581'){
     window._pendingWaUrl = 'https://wa.me/'+nomor+'?text='+encodeURIComponent(text);
+    // Tampilkan avatar pembeli di popup kalau ada
+    const sub = document.getElementById('qrisPopupSub');
+    if(sub){
+      const av = document.getElementById('robloxAvatar');
+      const avSrc = av && av.src && !av.src.includes('data:') ? av.src : '';
+      const usnEl = document.getElementById('usnInput');
+      const usn2 = usnEl ? usnEl.value.trim() : '';
+      sub.innerHTML = avSrc
+        ? '<img src="'+avSrc+'" style="width:32px;height:32px;border-radius:50%;border:2px solid rgba(0,240,255,.4);vertical-align:middle;margin-right:6px;"/><span>Halo <b style="color:#00f0ff">'+usn2+'</b>! Scan QR & transfer sesuai total</span>'
+        : 'Scan QR lalu transfer sesuai total order kamu';
+    }
     document.getElementById('qrisOverlay').classList.add('show');
     document.getElementById('qrisPopup').classList.add('show');
   } else {
@@ -2083,7 +2125,7 @@ import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js").then(
   <div class="qris-popup" id="qrisPopup">
     <button class="qris-close" onclick="closeQris()">✕</button>
     <div class="qris-popup-title gtext">💳 QRIS PEMBAYARAN</div>
-    <div class="qris-popup-sub">Scan QR lalu transfer sesuai total order kamu</div>
+    <div class="qris-popup-sub" id="qrisPopupSub">Scan QR lalu transfer sesuai total order kamu</div>
     <div class="qris-popup-name-row">
       <span class="qris-icon">🏪</span>
       <div class="qris-info">
