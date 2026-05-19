@@ -416,9 +416,31 @@ window.saveAnnounce = async function(){
 
 /* ══ ACTIONS ══ */
 window.setStatus = async function(id, status){
+  const order = allOrders.find(o=>o.id===id);
   try{
     await updateDoc(doc(db,'orders',id), {status});
-    toast(status==='done'?'✅ Order ditandai selesai!':'❌ Order dibatalkan', status==='done'?'ok':'warn');
+    toast(status==='done'?'✅ Selesai! WA terbuka...':'❌ Batal! WA terbuka...', status==='done'?'ok':'warn');
+
+    if(order){
+      const usn = order.usn||'-';
+      const total = order.totalRb||0;
+      const orderId = order.orderId||id.slice(-6).toUpperCase();
+      let msg = '';
+      if(status==='done'){
+        msg = '✅ *ORDER SELESAI!*\n\nHalo *'+usn+'*, order kamu sudah kami proses!\n\n'
+            + '*Order ID:* #'+orderId+'\n'
+            + '*Total:* Rp '+total.toLocaleString('id-ID')+'.000\n\n'
+            + 'Terima kasih sudah belanja di *KPC Store* 🏍️\n'
+            + 'Jangan lupa kasih testimoni ya! 🌟';
+      } else {
+        msg = '❌ *ORDER DIBATALKAN*\n\nHalo *'+usn+'*, maaf order kamu dibatalkan.\n\n'
+            + '*Order ID:* #'+orderId+'\n\n'
+            + 'Jika ada pertanyaan silakan hubungi admin kembali 🙏';
+      }
+      // Buka WA dengan pesan siap kirim — admin tinggal forward ke pembeli
+      const waNum = order.adminNomor||'6281252425581';
+      setTimeout(()=>window.open('https://wa.me/'+waNum+'?text='+encodeURIComponent(msg),'_blank'), 400);
+    }
   }catch(e){ toast('❌ Gagal update!','warn'); }
 };
 
