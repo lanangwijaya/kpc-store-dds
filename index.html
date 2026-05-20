@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KPC Store</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏍️</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -23,10 +24,17 @@ body{
 .bg-grad{
   position:absolute;inset:0;
   background:
-    radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,100,255,.18),transparent 70%),
-    radial-gradient(ellipse 60% 40% at 20% 80%,rgba(255,34,68,.12),transparent 60%),
-    radial-gradient(ellipse 60% 40% at 80% 70%,rgba(0,240,255,.1),transparent 60%),
-    linear-gradient(180deg,#03070d 0%,#060f18 50%,#050d0a 100%);
+    radial-gradient(ellipse 90% 70% at 20% 10%,rgba(255,100,200,.15),transparent 60%),
+    radial-gradient(ellipse 70% 50% at 80% 20%,rgba(100,200,255,.15),transparent 60%),
+    radial-gradient(ellipse 80% 60% at 50% 80%,rgba(150,100,255,.15),transparent 60%),
+    radial-gradient(ellipse 60% 40% at 10% 70%,rgba(255,200,50,.1),transparent 60%),
+    radial-gradient(ellipse 50% 40% at 90% 80%,rgba(50,255,150,.1),transparent 60%),
+    linear-gradient(135deg,#0a0510 0%,#070a18 40%,#0a0a12 70%,#050d0a 100%);
+  animation:bgShift 12s ease-in-out infinite alternate;
+}
+@keyframes bgShift{
+  0%{filter:hue-rotate(0deg);}
+  100%{filter:hue-rotate(40deg);}
 }
 }
 .pts{position:absolute;inset:0;pointer-events:none;}
@@ -535,6 +543,7 @@ onSnapshot(query(orderCol, orderBy("createdAt","desc")), function(snap){
 .cb::after{content:'';}
 .item.sel .cb::after{content:'✓';}
 .item-name{flex:1;font-size:12px;cursor:pointer;}
+.item-icon{font-size:18px;margin-right:4px;flex-shrink:0;pointer-events:none;}
 .price{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;white-space:nowrap;}
 .panel-red .price{color:var(--gold);}
 .panel-blue .price{color:var(--green);}
@@ -849,6 +858,27 @@ onSnapshot(query(orderCol, orderBy("createdAt","desc")), function(snap){
   100%{opacity:0;transform:rotate(-30deg) translateX(300px);}
 }
 
+
+/* ══ TOUCH RIPPLE ══ */
+.ripple{
+  position:fixed;border-radius:50%;pointer-events:none;z-index:9999;
+  animation:rippleAnim .7s ease-out forwards;
+  transform:translate(-50%,-50%) scale(0);
+}
+@keyframes rippleAnim{
+  0%{transform:translate(-50%,-50%) scale(0);opacity:.8;}
+  100%{transform:translate(-50%,-50%) scale(6);opacity:0;}
+}
+/* ══ FLOATING EMOJI ══ */
+.float-emoji{
+  position:fixed;pointer-events:none;z-index:9998;
+  font-size:22px;animation:floatUp 1.2s ease-out forwards;
+  transform:translateX(-50%);
+}
+@keyframes floatUp{
+  0%{opacity:1;transform:translateX(-50%) translateY(0) scale(1);}
+  100%{opacity:0;transform:translateX(-50%) translateY(-120px) scale(1.5);}
+}
 </style>
 </head>
 <body>
@@ -1515,6 +1545,29 @@ function pickStar(v){
 /* handled in module script */
 
 /* BUILD ITEMS */
+const ITEM_ICONS={
+  // GP icons
+  'GP Radio':'📻',
+  'GP Suspensi':'🔧',
+  'GP Cat':'🎨',
+  'GP Aksesoris':'⚙️',
+  'GP Velg':'🛞',
+  'GP Plat':'🪪',
+  'GP Slot':'➕',
+  'GP Drag':'🏁',
+  'GP Mewah':'💎',
+  'GP Polisi':'🚔',
+  'GP 2x Gaji':'💵',
+  // Cash icons
+  '1jt':'💸',
+  '5jt':'💸',
+  '10jt':'💰',
+  '50jt':'💰',
+  '100jt':'🤑',
+  '500jt':'🤑',
+  '1M':'👑',
+};
+
 function buildItems(){
   ['gp','cash'].forEach(panel=>{
     const panelEl=document.getElementById('p'+panel);
@@ -1523,8 +1576,10 @@ function buildItems(){
       const id=panel+':'+nama;
       const row=document.createElement('div');
       row.className='item';row.id='item-'+id;
+      const icon = ITEM_ICONS[nama] || (panel==='gp'?'🎮':'💵');
       row.innerHTML=`
         <div class="cb-wrap" onclick="toggleItem('${id}','${panel}','${nama}',${harga})"><div class="cb"></div></div>
+        <span class="item-icon">${icon}</span>
         <span class="item-name" onclick="toggleItem('${id}','${panel}','${nama}',${harga})">${nama}</span>
         <span class="price">${harga}rb</span>
         <div class="qty-wrap" id="qty-${id}">
@@ -1818,6 +1873,27 @@ function checkUsn(){
   return true;
 }
 
+/* ══ TOUCH RIPPLE & EMOJI ══ */
+const RIPPLE_COLORS=['#ff6ec7','#67e8f9','#a78bfa','#6ee7b7','#fde68a','#fb923c','#f472b6'];
+const TOUCH_EMOJIS=['✨','⭐','💥','🌟','🎯','💫','🔥','🎮','🏍️','💎'];
+let lastRipple=0;
+
+function spawnRipple(x,y){
+  const now=Date.now();
+  if(now-lastRipple<80) return;
+  lastRipple=now;
+  const e=document.createElement('div');
+  e.className='float-emoji';
+  e.textContent=TOUCH_EMOJIS[Math.floor(Math.random()*TOUCH_EMOJIS.length)];
+  e.style.cssText='left:'+x+'px;top:'+(y-20)+'px;';
+  document.body.appendChild(e);
+  setTimeout(()=>e.remove(),1300);
+}
+document.addEventListener('touchstart',function(ev){
+  Array.from(ev.changedTouches).forEach(t=>spawnRipple(t.clientX,t.clientY));
+},{passive:true});
+document.addEventListener('click',function(ev){spawnRipple(ev.clientX,ev.clientY);},{passive:true});
+
 </script>
 
 <!-- Firebase Firestore Realtime -->
@@ -1865,8 +1941,17 @@ window.waWithSave = async function(nama, nomor, items, usn){
     if(window.toast) window.toast('⚠️ Order tetap dikirim (gagal simpan DB)','warn');
   }
 
-  const text = window.buildWaText ? window.buildWaText(nama,items,usn,orderId)
-    : 'Halo '+nama+', order KPC Store - Total: Rp '+totalRb+'.000 | ID: #'+orderId;
+  const gp2=items.filter(v=>v.panel==='gp');
+  const ca2=items.filter(v=>v.panel==='cash');
+  const ml=[];
+  if(usn) ml.push('*Username Roblox:* '+usn);
+  const cv=window.robloxCache&&window.robloxCache[usn.toLowerCase()];
+  if(cv&&cv.avatar) ml.push('\uD83D\uDDBC *Avatar:* '+cv.avatar);
+  if(gp2.length) ml.push('*Gamepass:*\n'+gp2.map(v=>'  \u2022 '+v.nama+' x'+v.qty+' = '+(v.harga*v.qty)+'rb').join('\n'));
+  if(ca2.length) ml.push('*Cash:*\n'+ca2.map(v=>'  \u2022 '+v.nama+' x'+v.qty+' = '+(v.harga*v.qty)+'rb').join('\n'));
+  ml.push('*Total: Rp '+totalRb.toLocaleString('id-ID')+'.000*');
+  ml.push('*Order ID: #'+orderId+'*  _(admin bisa cek dashboard)_');
+  const text='Halo '+nama+', saya mau order dari KPC Store:\n'+ml.join('\n');
 
   // Kalau Nanang — tampilkan QRIS dulu, tombol di popup yang buka WA
   if(nomor==='6281252425581'){
