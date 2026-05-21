@@ -385,6 +385,11 @@ window.doUnlock = function(){
     document.getElementById('lockScreen').style.display = 'none';
     document.getElementById('mainDash').style.display = 'block';
     startListener();
+    setTimeout(()=>{
+      if(window.loadLbConfig) window.loadLbConfig();
+      if(window.loadThemeConfig) window.loadThemeConfig();
+      if(window.loadAnnounceConfig) window.loadAnnounceConfig();
+    }, 500);
   } else {
     inp.classList.add('err');
     err.classList.add('show');
@@ -510,7 +515,7 @@ window.saveAnnounce = async function(){
 };
 
 // Load existing announcement
-(async()=>{
+window.loadAnnounceConfig = async function(){
   try{
     const {doc, getDoc} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
     const snap = await getDoc(doc(db,'config','announcement'));
@@ -519,7 +524,7 @@ window.saveAnnounce = async function(){
       if(el) el.value=snap.data().text||'';
     }
   }catch(e){}
-})();
+};
 
 /* ══ LEADERBOARD EDITOR ══ */
 let lbMode = 'auto';
@@ -588,8 +593,8 @@ window.saveLb = async function(){
   }catch(e){ toast('❌ Gagal simpan: '+e.message,'warn'); }
 };
 
-// Load lb config on start
-(async()=>{
+// Load lb config — dipanggil setelah login
+window.loadLbConfig = async function(){
   try{
     const {doc, getDoc} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
     const snap = await getDoc(doc(db,'config','leaderboard'));
@@ -597,14 +602,16 @@ window.saveLb = async function(){
       const d = snap.data();
       lbMode = d.mode||'auto';
       lbData = d.data||[];
-      document.getElementById('lbModeAuto').classList.toggle('active', lbMode==='auto');
-      document.getElementById('lbModeManual').classList.toggle('active', lbMode==='manual');
+      const autoBtn=document.getElementById('lbModeAuto');
+      const manBtn=document.getElementById('lbModeManual');
+      if(autoBtn) autoBtn.classList.toggle('active', lbMode==='auto');
+      if(manBtn) manBtn.classList.toggle('active', lbMode==='manual');
       renderLbEditor();
     } else {
       loadLbFromOrders();
     }
   }catch(e){ loadLbFromOrders(); }
-})();
+};
 
 /* ══ TEMA WARNA ══ */
 const PRESETS = {
@@ -653,8 +660,8 @@ window.resetTheme = async function(){
   }catch(e){ toast('❌ Gagal reset','warn'); }
 };
 
-// Load current theme
-(async()=>{
+// Load current theme — dipanggil setelah login
+window.loadThemeConfig = async function(){
   try{
     const {doc,getDoc}=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
     const snap=await getDoc(doc(db,'config','theme'));
@@ -670,7 +677,7 @@ window.resetTheme = async function(){
       });
     }
   }catch(e){}
-})();
+};
 
 /* ══ CATATAN ORDER ══ */
 window.saveNote = async function(id, note){
