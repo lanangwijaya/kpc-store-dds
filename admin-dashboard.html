@@ -525,6 +525,8 @@ window.saveAnnounce = async function(){
 let lbMode = 'auto';
 let lbData = [];
 
+function escH(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
 window.setLbMode = function(mode){
   lbMode = mode;
   document.getElementById('lbModeAuto').classList.toggle('active', mode==='auto');
