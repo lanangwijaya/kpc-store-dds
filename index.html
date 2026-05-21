@@ -184,30 +184,15 @@ body{
 .announce-text b{color:var(--cyan);}
 
 /* ══ LEADERBOARD ══ */
-onSnapshot(query(orderCol, orderBy("createdAt","desc")), function(snap){
-  // Hitung per username
-  const map={};
-  snap.forEach(d=>{
-    const o=d.data();
-    if(!o.usn||o.status==='cancel') return;
-    const k=o.usn.toLowerCase();
-    if(!map[k]) map[k]={usn:o.usn,count:0,totalRb:0};
-    map[k].count++;
-    map[k].totalRb+=(o.totalRb||0);
-  });
-
-  const sorted=Object.values(map).sort((a,b)=>b.count-a.count||b.totalRb-a.totalRb).slice(0,10);
-
+function renderLb(data){
   const list=document.getElementById('lbList');
   const empty=document.getElementById('lbEmpty');
   if(!list) return;
   list.querySelectorAll('.lb-card').forEach(el=>el.remove());
-
-  if(sorted.length===0){if(empty)empty.style.display='block';return;}
+  if(!data||data.length===0){if(empty)empty.style.display='block';return;}
   if(empty) empty.style.display='none';
-
   const medals=['🥇','🥈','🥉'];
-  sorted.forEach((u,i)=>{
+  data.forEach((u,i)=>{
     const card=document.createElement('div');
     const rankClass=i<3?'rank-'+(i+1):'';
     card.className='lb-card '+rankClass;
@@ -215,12 +200,35 @@ onSnapshot(query(orderCol, orderBy("createdAt","desc")), function(snap){
       '<div class="lb-rank">'+(medals[i]||(i+1))+'</div>'+
       '<div class="lb-info">'+
         '<div class="lb-usn">🎮 '+u.usn+'</div>'+
-        '<div class="lb-count">'+u.count+' ORDER</div>'+
+        '<div class="lb-count">Total: '+u.totalRb+'rb</div>'+
       '</div>'+
       '<div class="lb-total">'+u.totalRb+'rb</div>'+
       (i===0?'<span class="lb-crown">👑</span>':'');
     list.appendChild(card);
   });
+}
+
+// Cek dulu apakah ada custom leaderboard dari admin
+onSnapshot(doc(db,'config','leaderboard'), function(snap){
+  if(snap.exists()&&snap.data().mode==='manual'){
+    // Pakai data manual dari admin
+    renderLb(snap.data().data||[]);
+  } else {
+    // Pakai auto dari orders
+    onSnapshot(query(orderCol, orderBy("createdAt","desc")), function(snap2){
+      const map={};
+      snap2.forEach(d=>{
+        const o=d.data();
+        if(!o.usn||o.status!=='done') return;
+        const k=o.usn.toLowerCase();
+        if(!map[k]) map[k]={usn:o.usn,count:0,totalRb:0};
+        map[k].count++;
+        map[k].totalRb+=(o.totalRb||0);
+      });
+      const sorted=Object.values(map).sort((a,b)=>b.totalRb-a.totalRb||b.count-a.count).slice(0,10);
+      renderLb(sorted);
+    });
+  }
 });
 
 /* ══ COUNTER TRANSAKSI ══ */
@@ -529,9 +537,10 @@ onSnapshot(query(orderCol, orderBy("createdAt","desc")), function(snap){
 
 /* ══ ITEMS ══ */
 .item{
-  display:flex;align-items:center;gap:5px;
-  padding:5px 4px;border-bottom:1px solid rgba(255,255,255,.06);
+  display:flex;align-items:center;gap:4px;
+  padding:6px 4px;border-bottom:1px solid rgba(255,255,255,.06);
   border-radius:7px;transition:background .15s;font-size:12px;
+  flex-wrap:nowrap;min-width:0;
 }
 .item:last-of-type{border-bottom:none;}
 .cb-wrap{width:17px;height:17px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;}
@@ -542,9 +551,9 @@ onSnapshot(query(orderCol, orderBy("createdAt","desc")), function(snap){
 .panel-blue .item.sel .cb{background:var(--cyan);border-color:var(--cyan);box-shadow:0 0 8px rgba(0,240,255,.6);color:#001820;}
 .cb::after{content:'';}
 .item.sel .cb::after{content:'✓';}
-.item-name{flex:1;font-size:12px;cursor:pointer;}
-.item-icon{font-size:18px;margin-right:4px;flex-shrink:0;pointer-events:none;}
-.price{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;white-space:nowrap;}
+.item-icon{font-size:16px;flex-shrink:0;pointer-events:none;}
+.item-name{flex:1;font-size:11px;cursor:pointer;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.price{font-family:'Orbitron',monospace;font-size:9px;font-weight:700;white-space:nowrap;flex-shrink:0;}
 .panel-red .price{color:var(--gold);}
 .panel-blue .price{color:var(--green);}
 .panel-red .item.sel{background:rgba(255,34,68,.13);}
@@ -554,8 +563,8 @@ onSnapshot(query(orderCol, orderBy("createdAt","desc")), function(snap){
 .qty-wrap{display:flex;align-items:center;opacity:0;pointer-events:none;transform:scale(.7);transition:opacity .2s,transform .2s;flex-shrink:0;}
 .item.sel .qty-wrap{opacity:1;pointer-events:all;transform:scale(1);}
 .qty-btn{
-  width:22px;height:22px;border:none;border-radius:6px;
-  font-size:14px;font-weight:900;cursor:pointer;
+  width:20px;height:20px;border:none;border-radius:5px;
+  font-size:13px;font-weight:900;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
   transition:background .15s,transform .1s;line-height:1;flex-shrink:0;
 }
@@ -564,10 +573,21 @@ onSnapshot(query(orderCol, orderBy("createdAt","desc")), function(snap){
 .panel-red .qty-btn:hover{background:rgba(255,34,68,.45);}
 .panel-blue .qty-btn{background:rgba(0,240,255,.2);color:#fff;}
 .panel-blue .qty-btn:hover{background:rgba(0,240,255,.4);}
-.qty-num{font-family:'Orbitron',monospace;font-size:12px;font-weight:900;width:24px;text-align:center;}
+.qty-num{font-family:'Orbitron',monospace;font-size:11px;font-weight:900;width:18px;text-align:center;flex-shrink:0;}
 @keyframes qtyPop{from{transform:scale(.5);}to{transform:scale(1);}}
 .panel-red .qty-num{color:var(--red);}
 .panel-blue .qty-num{color:var(--cyan);}
+
+/* Layar sangat kecil < 360px */
+@media(max-width:359px){
+  .item-icon{display:none;}
+  .item-name{font-size:10px;}
+  .price{font-size:8px;}
+  .qty-btn{width:18px;height:18px;font-size:12px;}
+  .qty-num{font-size:10px;width:16px;}
+}
+
+
 
 .clear-panel{margin-top:5px;font-family:'Orbitron',monospace;font-size:8px;color:rgba(255,255,255,.28);cursor:pointer;text-align:right;letter-spacing:1px;display:none;transition:color .2s;}
 .clear-panel:hover{color:rgba(255,255,255,.6);}
@@ -879,6 +899,10 @@ onSnapshot(query(orderCol, orderBy("createdAt","desc")), function(snap){
   0%{opacity:1;transform:translateX(-50%) translateY(0) scale(1);}
   100%{opacity:0;transform:translateX(-50%) translateY(-120px) scale(1.5);}
 }
+
+/* ══ THEME TRANSITION ══ */
+body{transition:background .5s;}
+:root{transition:--red .5s,--cyan .5s,--green .5s,--gold .5s,--purple .5s;}
 </style>
 </head>
 <body>
@@ -2151,7 +2175,7 @@ onSnapshot(query(orderCol, orderBy("createdAt","desc")), function(snap){
     map[k].totalRb+=(o.totalRb||0);
   });
 
-  const sorted=Object.values(map).sort((a,b)=>b.count-a.count||b.totalRb-a.totalRb).slice(0,10);
+  const sorted=Object.values(map).sort((a,b)=>b.totalRb-a.totalRb||b.count-a.count).slice(0,10);
 
   const list=document.getElementById('lbList');
   const empty=document.getElementById('lbEmpty');
@@ -2199,6 +2223,22 @@ import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js").then(
       const txt=snap.data().text||'';
       const el=document.getElementById('announceText');
       if(el&&txt) el.innerHTML=txt;
+    }
+  });
+}).catch(()=>{});
+
+/* ══ TEMA WARNA — LOAD FROM FIREBASE ══ */
+import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js").then(({onSnapshot:oS2,doc:d3})=>{
+  oS2(d3(db,"config","theme"), function(snap){
+    if(snap.exists()){
+      const t=snap.data();
+      const r=document.documentElement.style;
+      if(t.red) r.setProperty('--red',t.red);
+      if(t.cyan) r.setProperty('--cyan',t.cyan);
+      if(t.green) r.setProperty('--green',t.green);
+      if(t.gold) r.setProperty('--gold',t.gold);
+      if(t.purple) r.setProperty('--purple',t.purple);
+      if(t.bg) r.setProperty('--bg',t.bg);
     }
   });
 }).catch(()=>{});

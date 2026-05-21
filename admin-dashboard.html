@@ -177,6 +177,49 @@ body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:#fff;min-heigh
 .announce-inp{width:100%;background:rgba(0,0,0,.3);border:1px solid rgba(0,240,255,.2);border-radius:10px;padding:9px 12px;font-family:'Rajdhani',sans-serif;font-size:13px;color:#fff;outline:none;resize:none;margin-bottom:8px;}
 .announce-save{width:100%;padding:10px;border:none;border-radius:10px;font-family:'Orbitron',monospace;font-size:9px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,rgba(0,240,255,.2),rgba(0,240,255,.1));color:var(--cyan);border:1px solid rgba(0,240,255,.3);letter-spacing:1px;}
 .announce-save:hover{background:rgba(0,240,255,.2);}
+/* LEADERBOARD EDITOR */
+.lb-editor{background:rgba(255,214,0,.04);border:1px solid rgba(255,214,0,.2);border-radius:16px;padding:14px;margin-bottom:14px;}
+.lb-editor-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.lb-editor-ttl{font-family:'Orbitron',monospace;font-size:9px;color:rgba(255,214,0,.7);letter-spacing:1px;}
+.lb-editor-add{font-family:'Orbitron',monospace;font-size:8px;font-weight:700;padding:5px 12px;border-radius:20px;border:1px solid rgba(255,214,0,.3);background:rgba(255,214,0,.1);color:var(--gold);cursor:pointer;letter-spacing:.5px;}
+.lb-rows{display:flex;flex-direction:column;gap:6px;margin-bottom:10px;max-height:280px;overflow-y:auto;}
+.lb-row{display:flex;align-items:center;gap:6px;background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:7px 10px;}
+.lb-row-rank{font-family:'Orbitron',monospace;font-size:11px;color:rgba(255,255,255,.3);width:20px;text-align:center;flex-shrink:0;}
+.lb-row-inp{flex:1;background:transparent;border:none;color:#fff;font-family:'Rajdhani',sans-serif;font-size:13px;outline:none;}
+.lb-row-rb{width:60px;background:transparent;border:none;color:var(--gold);font-family:'Orbitron',monospace;font-size:10px;outline:none;text-align:right;}
+.lb-row-del{background:none;border:none;color:rgba(255,34,68,.4);cursor:pointer;font-size:14px;flex-shrink:0;padding:0 2px;}
+.lb-row-del:hover{color:var(--red);}
+.lb-mode-row{display:flex;gap:8px;margin-bottom:10px;}
+.lb-mode-btn{flex:1;font-family:'Orbitron',monospace;font-size:8px;font-weight:700;padding:7px;border-radius:10px;cursor:pointer;border:1px solid;letter-spacing:.5px;transition:background .15s;}
+.lb-mode-btn.auto{color:var(--cyan);border-color:rgba(0,240,255,.3);background:rgba(0,240,255,.05);}
+.lb-mode-btn.auto.active{background:rgba(0,240,255,.15);}
+.lb-mode-btn.manual{color:var(--gold);border-color:rgba(255,214,0,.3);background:rgba(255,214,0,.05);}
+.lb-mode-btn.manual.active{background:rgba(255,214,0,.15);}
+.lb-save{width:100%;padding:10px;border:none;border-radius:10px;font-family:'Orbitron',monospace;font-size:9px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,rgba(255,214,0,.2),rgba(255,140,0,.2));color:var(--gold);border:1px solid rgba(255,214,0,.3);letter-spacing:1px;}
+
+/* THEME EDITOR */
+.theme-editor{background:rgba(191,95,255,.05);border:1px solid rgba(191,95,255,.2);border-radius:16px;padding:14px;margin-bottom:14px;}
+.theme-ttl{font-family:'Orbitron',monospace;font-size:9px;color:rgba(191,95,255,.7);letter-spacing:1px;margin-bottom:10px;display:block;}
+.theme-presets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.theme-preset{width:32px;height:32px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform .15s,border-color .15s;flex-shrink:0;}
+.theme-preset:hover{transform:scale(1.15);}
+.theme-preset.active{border-color:#fff;transform:scale(1.15);}
+.theme-colors{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.color-row{display:flex;flex-direction:column;gap:3px;}
+.color-lbl{font-family:'Orbitron',monospace;font-size:7px;color:rgba(255,255,255,.3);letter-spacing:1px;}
+.color-inp-row{display:flex;align-items:center;gap:6px;}
+.color-picker{width:32px;height:28px;border:none;border-radius:6px;cursor:pointer;background:none;padding:0;}
+.color-hex{flex:1;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:4px 8px;font-family:'Orbitron',monospace;font-size:9px;color:#fff;outline:none;}
+.theme-save{width:100%;padding:10px;border:none;border-radius:10px;font-family:'Orbitron',monospace;font-size:9px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,rgba(191,95,255,.2),rgba(100,50,255,.2));color:var(--purple);border:1px solid rgba(191,95,255,.3);letter-spacing:1px;}
+.theme-reset{width:100%;padding:8px;border:none;border-radius:10px;font-family:'Orbitron',monospace;font-size:8px;cursor:pointer;background:rgba(255,255,255,.05);color:rgba(255,255,255,.3);margin-top:6px;letter-spacing:1px;}
+
+/* CATATAN ORDER */
+.note-wrap{margin-top:8px;}
+.note-inp{width:100%;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:7px 10px;font-family:'Rajdhani',sans-serif;font-size:12px;color:#fff;outline:none;resize:none;}
+.note-inp::placeholder{color:rgba(255,255,255,.2);}
+.note-save-btn{margin-top:5px;font-family:'Orbitron',monospace;font-size:8px;font-weight:700;padding:5px 12px;border-radius:20px;border:1px solid rgba(0,240,255,.3);background:rgba(0,240,255,.08);color:var(--cyan);cursor:pointer;width:100%;}
+.note-saved{font-family:'Orbitron',monospace;font-size:7px;color:var(--green);margin-top:3px;text-align:center;display:none;}
+.has-note::after{content:'📝';font-size:10px;margin-left:4px;}
 </style>
 </head>
 <body>
@@ -231,6 +274,67 @@ body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:#fff;min-heigh
     <div class="announce-lbl">📢 EDIT PENGUMUMAN TOKO</div>
     <textarea class="announce-inp" id="announceInp" rows="2" placeholder="Tulis pengumuman..."></textarea>
     <button class="announce-save" onclick="saveAnnounce()">💾 SIMPAN PENGUMUMAN</button>
+  </div>
+
+  <!-- LEADERBOARD EDITOR -->
+  <div class="lb-editor">
+    <div class="lb-editor-hdr">
+      <span class="lb-editor-ttl">🏆 ATUR TOP PEMBELI</span>
+      <button class="lb-editor-add" onclick="lbAddRow()">+ TAMBAH</button>
+    </div>
+    <div class="lb-mode-row">
+      <button class="lb-mode-btn auto active" id="lbModeAuto" onclick="setLbMode('auto')">🔄 AUTO (dari order)</button>
+      <button class="lb-mode-btn manual" id="lbModeManual" onclick="setLbMode('manual')">✏️ MANUAL (custom)</button>
+    </div>
+    <div class="lb-rows" id="lbEditorRows">
+      <div style="font-family:'Orbitron',monospace;font-size:9px;color:rgba(255,255,255,.2);text-align:center;padding:10px;">Loading...</div>
+    </div>
+    <button class="lb-save" onclick="saveLb()">💾 SIMPAN LEADERBOARD</button>
+  </div>
+
+  <!-- TEMA WARNA -->
+  <div class="theme-editor">
+    <span class="theme-ttl">🎨 GANTI TEMA WARNA TOKO</span>
+    <div class="theme-presets" id="themePresets">
+      <div class="theme-preset active" data-theme="default" style="background:linear-gradient(135deg,#ff2244,#00f0ff)" onclick="applyPreset('default')" title="Default"></div>
+      <div class="theme-preset" data-theme="sunset" style="background:linear-gradient(135deg,#ff6b00,#ffd600)" onclick="applyPreset('sunset')" title="Sunset"></div>
+      <div class="theme-preset" data-theme="ocean" style="background:linear-gradient(135deg,#0066ff,#00e676)" onclick="applyPreset('ocean')" title="Ocean"></div>
+      <div class="theme-preset" data-theme="sakura" style="background:linear-gradient(135deg,#ff69b4,#bf5fff)" onclick="applyPreset('sakura')" title="Sakura"></div>
+      <div class="theme-preset" data-theme="toxic" style="background:linear-gradient(135deg,#00e676,#ffd600)" onclick="applyPreset('toxic')" title="Toxic"></div>
+      <div class="theme-preset" data-theme="midnight" style="background:linear-gradient(135deg,#1a0533,#bf5fff)" onclick="applyPreset('midnight')" title="Midnight"></div>
+    </div>
+    <div class="theme-colors">
+      <div class="color-row">
+        <span class="color-lbl">AKSEN MERAH</span>
+        <div class="color-inp-row">
+          <input type="color" class="color-picker" id="tc-red" value="#ff2244" oninput="syncHex('red',this.value)"/>
+          <input class="color-hex" id="th-red" value="#ff2244" maxlength="7" oninput="syncPicker('red',this.value)"/>
+        </div>
+      </div>
+      <div class="color-row">
+        <span class="color-lbl">AKSEN CYAN</span>
+        <div class="color-inp-row">
+          <input type="color" class="color-picker" id="tc-cyan" value="#00f0ff" oninput="syncHex('cyan',this.value)"/>
+          <input class="color-hex" id="th-cyan" value="#00f0ff" maxlength="7" oninput="syncPicker('cyan',this.value)"/>
+        </div>
+      </div>
+      <div class="color-row">
+        <span class="color-lbl">AKSEN HIJAU</span>
+        <div class="color-inp-row">
+          <input type="color" class="color-picker" id="tc-green" value="#00e676" oninput="syncHex('green',this.value)"/>
+          <input class="color-hex" id="th-green" value="#00e676" maxlength="7" oninput="syncPicker('green',this.value)"/>
+        </div>
+      </div>
+      <div class="color-row">
+        <span class="color-lbl">AKSEN GOLD</span>
+        <div class="color-inp-row">
+          <input type="color" class="color-picker" id="tc-gold" value="#ffd600" oninput="syncHex('gold',this.value)"/>
+          <input class="color-hex" id="th-gold" value="#ffd600" maxlength="7" oninput="syncPicker('gold',this.value)"/>
+        </div>
+      </div>
+    </div>
+    <button class="theme-save" onclick="saveTheme()">🎨 TERAPKAN TEMA</button>
+    <button class="theme-reset" onclick="resetTheme()">↺ RESET KE DEFAULT</button>
   </div>
 
   <!-- FILTER -->
@@ -385,6 +489,9 @@ function renderOrders(){
         <button class="act-btn btn-done" ${isDone?'disabled':''} onclick="setStatus('${order.id}','done')">✅ SELESAI</button>
         <button class="act-btn btn-cancel" ${isCancel?'disabled':''} onclick="setStatus('${order.id}','cancel')">❌ BATAL</button>
         <button class="act-btn btn-del" onclick="delOrder('${order.id}')">🗑</button>
+      </div>
+      <div class="note-wrap">
+        <textarea class="note-inp" id="note-${order.id}" rows="1" placeholder="📝 Tulis catatan admin..." onchange="saveNote('${order.id}',this.value)">${order.note||''}</textarea>
       </div>`;
 
     list.appendChild(card);
@@ -413,6 +520,162 @@ window.saveAnnounce = async function(){
     }
   }catch(e){}
 })();
+
+/* ══ LEADERBOARD EDITOR ══ */
+let lbMode = 'auto';
+let lbData = [];
+
+window.setLbMode = function(mode){
+  lbMode = mode;
+  document.getElementById('lbModeAuto').classList.toggle('active', mode==='auto');
+  document.getElementById('lbModeManual').classList.toggle('active', mode==='manual');
+  if(mode==='auto') loadLbFromOrders();
+  else renderLbEditor();
+};
+
+function loadLbFromOrders(){
+  const map={};
+  allOrders.forEach(o=>{
+    if(!o.usn||o.status!=='done') return;
+    const k=o.usn.toLowerCase();
+    if(!map[k]) map[k]={usn:o.usn,totalRb:0,count:0};
+    map[k].totalRb+=(o.totalRb||0);
+    map[k].count++;
+  });
+  lbData = Object.values(map).sort((a,b)=>b.totalRb-a.totalRb).slice(0,10)
+    .map(u=>({usn:u.usn,totalRb:u.totalRb}));
+  renderLbEditor();
+}
+
+function renderLbEditor(){
+  const container = document.getElementById('lbEditorRows');
+  if(!container) return;
+  container.innerHTML = '';
+  if(lbData.length===0){
+    container.innerHTML='<div style="font-family:'Orbitron',monospace;font-size:9px;color:rgba(255,255,255,.2);text-align:center;padding:10px;">Belum ada data</div>';
+    return;
+  }
+  lbData.forEach((item,i)=>{
+    const row = document.createElement('div');
+    row.className = 'lb-row';
+    row.innerHTML =
+      '<span class="lb-row-rank">'+(i+1)+'</span>'+
+      '<input class="lb-row-inp" value="'+escH(item.usn)+'" placeholder="Username..." oninput="lbData['+i+'].usn=this.value"/>'+
+      '<input class="lb-row-rb" type="number" value="'+(item.totalRb||0)+'" placeholder="0" oninput="lbData['+i+'].totalRb=+this.value"/>'+
+      '<span style="font-family:'Orbitron',monospace;font-size:8px;color:rgba(255,255,255,.3)">rb</span>'+
+      '<button class="lb-row-del" onclick="lbDeleteRow('+i+')">🗑</button>';
+    container.appendChild(row);
+  });
+}
+
+window.lbAddRow = function(){
+  lbData.push({usn:'',totalRb:0});
+  renderLbEditor();
+};
+
+window.lbDeleteRow = function(i){
+  lbData.splice(i,1);
+  renderLbEditor();
+};
+
+window.saveLb = async function(){
+  try{
+    const {doc, setDoc} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+    await setDoc(doc(db,'config','leaderboard'),{mode:lbMode,data:lbData,updatedAt:new Date().toISOString()});
+    toast('✅ Leaderboard disimpan!','ok');
+  }catch(e){ toast('❌ Gagal simpan: '+e.message,'warn'); }
+};
+
+// Load lb config on start
+(async()=>{
+  try{
+    const {doc, getDoc} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+    const snap = await getDoc(doc(db,'config','leaderboard'));
+    if(snap.exists()){
+      const d = snap.data();
+      lbMode = d.mode||'auto';
+      lbData = d.data||[];
+      document.getElementById('lbModeAuto').classList.toggle('active', lbMode==='auto');
+      document.getElementById('lbModeManual').classList.toggle('active', lbMode==='manual');
+      renderLbEditor();
+    } else {
+      loadLbFromOrders();
+    }
+  }catch(e){ loadLbFromOrders(); }
+})();
+
+/* ══ TEMA WARNA ══ */
+const PRESETS = {
+  default: {red:'#ff2244',cyan:'#00f0ff',green:'#00e676',gold:'#ffd600',purple:'#bf5fff',bg:'#03070d'},
+  sunset:  {red:'#ff6b00',cyan:'#ffd600',green:'#ffaa00',gold:'#ff4400',purple:'#ff69b4',bg:'#0d0500'},
+  ocean:   {red:'#0066ff',cyan:'#00cfff',green:'#00e676',gold:'#00b4ff',purple:'#6688ff',bg:'#000d1a'},
+  sakura:  {red:'#ff69b4',cyan:'#ffb3d9',green:'#ff85c2',gold:'#ffaadd',purple:'#bf5fff',bg:'#0d0008'},
+  toxic:   {red:'#aaff00',cyan:'#00e676',green:'#ccff33',gold:'#ffd600',purple:'#88ff44',bg:'#010d00'},
+  midnight:{red:'#bf5fff',cyan:'#9933ff',green:'#cc66ff',gold:'#bf5fff',purple:'#7700cc',bg:'#0a0015'},
+};
+
+window.applyPreset = function(name){
+  const t = PRESETS[name];
+  if(!t) return;
+  document.querySelectorAll('.theme-preset').forEach(el=>el.classList.toggle('active',el.dataset.theme===name));
+  ['red','cyan','green','gold'].forEach(k=>{
+    const pc=document.getElementById('tc-'+k);
+    const ph=document.getElementById('th-'+k);
+    if(pc) pc.value=t[k];
+    if(ph) ph.value=t[k];
+  });
+};
+
+window.syncHex = function(k,v){ const el=document.getElementById('th-'+k); if(el) el.value=v; };
+window.syncPicker = function(k,v){ if(/^#[0-9a-fA-F]{6}$/.test(v)){ const el=document.getElementById('tc-'+k); if(el) el.value=v; } };
+
+window.saveTheme = async function(){
+  const t={};
+  ['red','cyan','green','gold'].forEach(k=>{
+    const v=document.getElementById('th-'+k)?.value;
+    if(v) t[k]=v;
+  });
+  try{
+    const {doc,setDoc}=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+    await setDoc(doc(db,'config','theme'),t);
+    toast('🎨 Tema berhasil diterapkan!','ok');
+  }catch(e){ toast('❌ Gagal simpan tema','warn'); }
+};
+
+window.resetTheme = async function(){
+  try{
+    const {doc,setDoc}=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+    await setDoc(doc(db,'config','theme'),PRESETS.default);
+    applyPreset('default');
+    toast('↺ Tema direset ke default','ok');
+  }catch(e){ toast('❌ Gagal reset','warn'); }
+};
+
+// Load current theme
+(async()=>{
+  try{
+    const {doc,getDoc}=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+    const snap=await getDoc(doc(db,'config','theme'));
+    if(snap.exists()){
+      const t=snap.data();
+      ['red','cyan','green','gold'].forEach(k=>{
+        if(t[k]){
+          const pc=document.getElementById('tc-'+k);
+          const ph=document.getElementById('th-'+k);
+          if(pc) pc.value=t[k];
+          if(ph) ph.value=t[k];
+        }
+      });
+    }
+  }catch(e){}
+})();
+
+/* ══ CATATAN ORDER ══ */
+window.saveNote = async function(id, note){
+  try{
+    await updateDoc(doc(db,'orders',id),{note});
+  }catch(e){ toast('❌ Gagal simpan catatan','warn'); }
+};
 
 /* ══ ACTIONS ══ */
 window.setStatus = async function(id, status){
