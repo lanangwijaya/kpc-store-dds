@@ -355,12 +355,41 @@ body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:#fff;min-heigh
 
 <div class="toast" id="toast"></div>
 
+<script>
+// Lock screen functions — must be in regular script for onclick to work
+function toggleLockEye(){
+  const i = document.getElementById('lockPass');
+  const e = document.getElementById('lockEye');
+  i.type = i.type === 'password' ? 'text' : 'password';
+  e.textContent = i.type === 'password' ? '👁' : '🙈';
+}
+function doUnlock(){
+  const inp = document.getElementById('lockPass');
+  const err = document.getElementById('lockErr');
+  if(inp.value === 'kpc2025'){
+    document.getElementById('lockScreen').style.display = 'none';
+    document.getElementById('mainDash').style.display = 'block';
+    if(window._startDashboard){ window._startDashboard(); setTimeout(()=>{ if(window.loadLbConfig)window.loadLbConfig(); if(window.loadThemeConfig)window.loadThemeConfig(); if(window.loadAnnounceConfig)window.loadAnnounceConfig(); },800); }
+  } else {
+    inp.classList.add('err');
+    err.classList.add('show');
+    inp.value = '';
+    setTimeout(()=>{ inp.classList.remove('err'); err.classList.remove('show'); },1500);
+  }
+}
+function doLogout(){
+  document.getElementById('mainDash').style.display = 'none';
+  document.getElementById('lockScreen').style.display = 'flex';
+  document.getElementById('lockPass').value = '';
+  if(window._unsubDash) window._unsubDash();
+}
+document.addEventListener('keydown', e=>{ if(e.key==='Enter') doUnlock(); });
+</script>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, doc, updateDoc, deleteDoc, query, orderBy, onSnapshot }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-const PASS = 'kpc2025';
 
 const app = initializeApp({
   apiKey:"AIzaSyC8iPr3Ww5K9NLUtOmytto0sKjWu8Zr28o",
@@ -378,44 +407,16 @@ let currentFilter = 'all';
 let unsubscribe = null;
 
 /* ══ LOCK / UNLOCK ══ */
-window.doUnlock = function(){
-  const inp = document.getElementById('lockPass');
-  const err = document.getElementById('lockErr');
-  if(inp.value === PASS){
-    document.getElementById('lockScreen').style.display = 'none';
-    document.getElementById('mainDash').style.display = 'block';
-    startListener();
-    setTimeout(()=>{
-      if(window.loadLbConfig) window.loadLbConfig();
-      if(window.loadThemeConfig) window.loadThemeConfig();
-      if(window.loadAnnounceConfig) window.loadAnnounceConfig();
-    }, 500);
-  } else {
-    inp.classList.add('err');
-    err.classList.add('show');
-    inp.value = '';
-    setTimeout(()=>inp.classList.remove('err'),500);
-  }
-};
 
-window.toggleLockEye = function(){
-  const i = document.getElementById('lockPass');
-  const e = document.getElementById('lockEye');
-  i.type = i.type === 'password' ? 'text' : 'password';
-  e.textContent = i.type === 'password' ? '👁' : '🙈';
-};
 
-window.doLogout = function(){
-  if(unsubscribe) unsubscribe();
-  document.getElementById('mainDash').style.display = 'none';
-  document.getElementById('lockScreen').style.display = 'flex';
-  document.getElementById('lockPass').value = '';
-};
+
+
+
 
 /* ══ LISTENER ══ */
-function startListener(){
+window._startDashboard = function(){
   const q = query(orderCol, orderBy("createdAt","desc"));
-  unsubscribe = onSnapshot(q, snap => {
+  window._unsubDash = onSnapshot(q, snap => {
     allOrders = [];
     snap.forEach(d => allOrders.push({id: d.id, ...d.data()}));
     updateStats();
@@ -734,9 +735,7 @@ function toast(msg,type='ok'){
 window.toast = toast;
 
 /* Enter key on lock */
-document.getElementById('lockPass').addEventListener('keydown', e=>{
-  if(e.key==='Enter') window.doUnlock();
-});
+
 </script>
 
 </body>
