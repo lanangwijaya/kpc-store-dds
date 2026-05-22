@@ -1123,6 +1123,24 @@ body{transition:background .5s;}
       </div>
     </div>
   </div>
+
+  <!-- NOMOR WA PEMBELI -->
+  <div class="usn-box" style="margin-top:10px;">
+    <div class="usn-label" style="--before:'📱'">NOMOR WA KAMU</div>
+    <div class="usn-input-wrap">
+      <input
+        class="usn-input"
+        id="waInput"
+        type="tel"
+        placeholder="Contoh: 08123456789"
+        autocomplete="off"
+        oninput="onWaInput()"
+      />
+      <button class="usn-clear" id="waClear" onclick="clearWa()" style="display:none">×</button>
+    </div>
+    <div class="usn-hint" id="waHint">Nomor WA untuk notifikasi saat order selesai</div>
+    <div class="usn-warning" id="waWarning">⚠️ WAJIB ISI NOMOR WA DULU!</div>
+  </div>
   <!-- SEARCH BAR -->
   <div class="search-wrap">
     <input class="search-inp" id="searchInp" placeholder="🔍 Cari item..." oninput="doSearch()" autocomplete="off"/>
@@ -1374,6 +1392,43 @@ function copyNmid(){
   }).catch(()=>{
     toast('📋 NMID: ID1024314740316','ok');
   });
+}
+
+/* NOMOR WA PEMBELI */
+function onWaInput(){
+  const val=document.getElementById('waInput').value.trim();
+  const clr=document.getElementById('waClear');
+  const hint=document.getElementById('waHint');
+  const warn=document.getElementById('waWarning');
+  clr.style.display=val?'block':'none';
+  warn.classList.remove('show');
+  if(val){
+    hint.textContent='✓ Nomor: '+val;
+    hint.classList.add('filled');
+  } else {
+    hint.textContent='Nomor WA untuk notifikasi saat order selesai';
+    hint.classList.remove('filled');
+  }
+}
+function clearWa(){
+  document.getElementById('waInput').value='';
+  onWaInput();
+}
+function getWa(){
+  let v=document.getElementById('waInput').value.trim();
+  // Normalize: 08xxx -> 628xxx
+  if(v.startsWith('0')) v='62'+v.slice(1);
+  v=v.replace(/[^0-9]/g,'');
+  return v;
+}
+function checkWa(){
+  const v=document.getElementById('waInput').value.trim();
+  if(!v){
+    document.getElementById('waWarning').classList.add('show');
+    document.getElementById('waInput').scrollIntoView({behavior:'smooth',block:'center'});
+    return false;
+  }
+  return true;
 }
 
 /* AUTO KAPITAL USERNAME */
@@ -1725,8 +1780,9 @@ function animateTotal(target){
 function wa(nama,nomor){
   if(sel.size===0){toast('⚠️ Pilih item dulu!','warn');return;}
   if(!checkUsn()){toast('⚠️ Isi username Roblox dulu!','warn');return;}
+  if(!checkWa()){toast('⚠️ Isi nomor WA dulu!','warn');return;}
   if(window.waWithSave){
-    window.waWithSave(nama,nomor,[...sel.values()],getUsn());
+    window.waWithSave(nama,nomor,[...sel.values()],getUsn(),getWa());
   }
 }
 
@@ -1939,7 +1995,7 @@ const col = collection(db, "testimoni");
 const orderCol = collection(db, "orders");
 
 /* ══ SIMPAN ORDER & BUKA WA ══ */
-window.waWithSave = async function(nama, nomor, items, usn){
+window.waWithSave = async function(nama, nomor, items, usn, buyerWa){
   const idx = ['628983923559','6281252425581','6288989378157','628211549460'].indexOf(nomor);
   if(idx>=0 && window.aOn && !window.aOn[idx]){ 
     if(window.toast) window.toast('⚠️ '+nama+' sedang offline!','warn'); 
@@ -1953,14 +2009,36 @@ window.waWithSave = async function(nama, nomor, items, usn){
   let orderId = 'ORD'+Date.now().toString(36).toUpperCase();
 
   try {
-    const ref = await addDoc(orderCol, {
-      orderId, usn, admin: nama, adminNomor: nomor,
-      items: items.map(v=>({nama:v.nama,panel:v.panel,harga:v.harga,qty:v.qty})),
-      totalRb, tStr, status:'pending', createdAt: serverTimestamp()
+    // Cek apakah sudah ada order pending dari username + item yang sama
+    const {getDocs, query:q2, where} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+    const existing = await getDocs(q2(orderCol,
+      where('usn','==',usn),
+      where('status','==','pending'),
+      where('adminNomor','==',nomor)
+    ));
+
+    // Kalau ada order pending yang sama persis (item & total sama), pakai yang lama
+    let dupFound = false;
+    existing.forEach(d=>{
+      const o=d.data();
+      if(o.totalRb===totalRb && JSON.stringify(o.items?.map(i=>i.nama+i.qty).sort()) === JSON.stringify(items.map(i=>i.nama+i.qty).sort())){
+        orderId = o.orderId || d.id.slice(-6).toUpperCase();
+        dupFound = true;
+      }
     });
-    // Pakai 6 karakter dari doc ID sebagai short order ID
-    const shortId = ref.id.slice(-6).toUpperCase();
-    orderId = shortId;
+
+    if(!dupFound){
+      const ref = await addDoc(orderCol, {
+        orderId, usn, admin: nama, adminNomor: nomor,
+        buyerWa: buyerWa||'',
+        items: items.map(v=>({nama:v.nama,panel:v.panel,harga:v.harga,qty:v.qty})),
+        totalRb, tStr, status:'pending', createdAt: serverTimestamp()
+      });
+      const shortId = ref.id.slice(-6).toUpperCase();
+      orderId = shortId;
+    } else {
+      if(window.toast) window.toast('ℹ️ Order sudah ada, lanjut chat...','ok');
+    }
   } catch(e) {
     if(window.toast) window.toast('⚠️ Order tetap dikirim (gagal simpan DB)','warn');
   }

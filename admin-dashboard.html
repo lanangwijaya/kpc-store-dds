@@ -378,6 +378,7 @@ window._renderOrders = function(){
         '<div class="order-id">🧾 #'+esc(order.orderId||order.id.slice(-6).toUpperCase())+'</div>'+
         '<div class="order-time">🕐 '+esc(order.tStr||'-')+'</div>'+
         '<div class="order-usn">🎮 '+esc(order.usn||'-')+'</div>'+
+        (order.buyerWa?'<div class="order-time">📱 '+esc(order.buyerWa)+'</div>':'')+
       '</div><span class="sbadge '+(order.status||'pending')+'">'+sLabel+'</span></div>'+
       '<div class="order-items">'+itemsHtml+'</div>'+
       '<div class="order-footer">'+
@@ -469,7 +470,8 @@ window._setStatus=async function(id,status){
       const msg=status==='done'
         ?'✅ *ORDER SELESAI!*\n\nHalo *'+usn+'*, order kamu sudah diproses!\n\n*Order ID:* #'+oid+'\n*Total:* Rp '+total.toLocaleString('id-ID')+'.000\n\nTerima kasih belanja di *KPC Store* 🏍️\nJangan lupa kasih testimoni ya! 🌟'
         :'❌ *ORDER DIBATALKAN*\n\nHalo *'+usn+'*, maaf order kamu dibatalkan.\n\n*Order ID:* #'+oid+'\n\nHubungi admin untuk info lebih lanjut 🙏';
-      setTimeout(()=>window.open('https://wa.me/'+(order.adminNomor||'6281252425581')+'?text='+encodeURIComponent(msg),'_blank'),400);
+      const targetWa = order.buyerWa || order.adminNomor || '6281252425581';
+      setTimeout(()=>window.open('https://wa.me/'+targetWa+'?text='+encodeURIComponent(msg),'_blank'),400);
     }
   }catch(e){toast('❌ Gagal update!','warn');}
 };
