@@ -2346,6 +2346,21 @@ window.waWithSave = async function(nama, nomor, items, usn, buyerWa){
   }
   if(window.toast) window.toast('⏳ Menyimpan order...','ok');
 
+  // Detect lokasi pembeli via IP
+  let buyerLocation = {city:'-',region:'-',country:'-',flag:''};
+  try{
+    const locR = await fetch('https://ipapi.co/json/');
+    const locD = await locR.json();
+    buyerLocation = {
+      city: locD.city||'-',
+      region: locD.region||'-',
+      country: locD.country_name||'-',
+      flag: locD.country_code ? 
+        String.fromCodePoint(...[...locD.country_code].map(c=>0x1F1E0+c.charCodeAt(0)-65)) : '',
+      ip: locD.ip||'-'
+    };
+  }catch(e){}
+
   const totalRb = items.reduce((a,v)=>a+v.harga*v.qty,0);
   const now = new Date();
   const tStr = now.getDate()+'/'+(now.getMonth()+1)+'/'+now.getFullYear()+' '+now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
@@ -2374,6 +2389,7 @@ window.waWithSave = async function(nama, nomor, items, usn, buyerWa){
       const ref = await addDoc(orderCol, {
         orderId, usn, admin: nama, adminNomor: nomor,
         buyerWa: buyerWa||'',
+        buyerLocation,
         items: items.map(v=>({nama:v.nama,panel:v.panel,harga:v.harga,qty:v.qty})),
         totalRb, tStr, status:'pending', createdAt: serverTimestamp()
       });

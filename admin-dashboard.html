@@ -379,6 +379,8 @@ window._renderOrders = function(){
         '<div class="order-time">🕐 '+esc(order.tStr||'-')+'</div>'+
         '<div class="order-usn">🎮 '+esc(order.usn||'-')+'</div>'+
         (order.buyerWa?'<div class="order-time">📱 '+esc(order.buyerWa)+'</div>':'')+
+        (order.buyerLocation&&order.buyerLocation.city!=='-'?
+          '<div class="order-time">📍 '+(order.buyerLocation.flag||'')+' '+esc(order.buyerLocation.city)+', '+esc(order.buyerLocation.region)+', '+esc(order.buyerLocation.country)+'</div>':'')+
       '</div><span class="sbadge '+(order.status||'pending')+'">'+sLabel+'</span></div>'+
       '<div class="order-items">'+itemsHtml+'</div>'+
       '<div class="order-footer">'+
