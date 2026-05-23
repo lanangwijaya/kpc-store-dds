@@ -4,13 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KPC Store</title>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#03070d">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="KPC Store">
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%2303070d'/><text y='.9em' font-size='80' x='10'>🏍️</text></svg>">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏍️</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -301,36 +294,6 @@ onSnapshot(doc(db,'config','leaderboard'), function(snap){
 .lb-crown{position:absolute;right:10px;top:6px;font-size:14px;opacity:.4;}
 .lb-empty{font-family:'Orbitron',monospace;font-size:9px;color:rgba(255,255,255,.18);text-align:center;padding:20px 0;letter-spacing:2px;}
 
-
-/* ══ CHATBOT ══ */
-.chat-fab{position:fixed;bottom:80px;right:16px;z-index:500;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--purple));border:none;cursor:pointer;font-size:24px;box-shadow:0 4px 20px rgba(0,240,255,.4);transition:transform .2s;display:flex;align-items:center;justify-content:center;}
-.chat-fab:hover{transform:scale(1.1);}
-.chat-fab .chat-badge{position:absolute;top:-2px;right:-2px;background:var(--red);color:#fff;font-family:'Orbitron',monospace;font-size:8px;font-weight:900;width:18px;height:18px;border-radius:50%;display:none;align-items:center;justify-content:center;}
-.chat-fab .chat-badge.show{display:flex;}
-.chat-box{position:fixed;bottom:145px;right:16px;z-index:500;width:300px;max-width:calc(100vw - 32px);background:#060d18;border:1px solid rgba(0,240,255,.25);border-radius:20px;box-shadow:0 8px 40px rgba(0,0,0,.6);display:none;flex-direction:column;overflow:hidden;max-height:420px;}
-.chat-box.open{display:flex;}
-.chat-header{background:linear-gradient(135deg,rgba(0,240,255,.15),rgba(191,95,255,.1));padding:12px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(0,240,255,.15);}
-.chat-avatar{font-size:24px;}
-.chat-hinfo{flex:1;}
-.chat-hname{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:var(--cyan);}
-.chat-hstatus{font-family:'Orbitron',monospace;font-size:7px;color:var(--green);letter-spacing:1px;}
-.chat-close{background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:18px;padding:0;}
-.chat-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;scrollbar-width:thin;scrollbar-color:rgba(0,240,255,.2) transparent;}
-.chat-msg{max-width:85%;padding:8px 12px;border-radius:14px;font-family:'Rajdhani',sans-serif;font-size:13px;line-height:1.4;animation:fadeUp .3s ease both;}
-.chat-msg.bot{background:rgba(0,240,255,.1);border:1px solid rgba(0,240,255,.15);color:#fff;align-self:flex-start;border-radius:4px 14px 14px 14px;}
-.chat-msg.user{background:linear-gradient(135deg,rgba(0,240,255,.2),rgba(191,95,255,.2));border:1px solid rgba(0,240,255,.2);color:#fff;align-self:flex-end;border-radius:14px 4px 14px 14px;}
-.chat-typing{display:flex;gap:4px;align-items:center;padding:8px 12px;background:rgba(0,240,255,.06);border:1px solid rgba(0,240,255,.1);border-radius:4px 14px 14px 14px;align-self:flex-start;display:none;}
-.chat-typing span{width:6px;height:6px;background:var(--cyan);border-radius:50%;animation:typingDot 1s ease-in-out infinite;}
-.chat-typing span:nth-child(2){animation-delay:.2s;}
-.chat-typing span:nth-child(3){animation-delay:.4s;}
-@keyframes typingDot{0%,100%{opacity:.3;transform:scale(.8);}50%{opacity:1;transform:scale(1.2);}}
-.chat-qs{padding:8px 10px;display:flex;flex-wrap:wrap;gap:5px;border-top:1px solid rgba(255,255,255,.07);}
-.chat-q{font-family:'Orbitron',monospace;font-size:7px;font-weight:700;padding:4px 8px;border-radius:20px;border:1px solid rgba(0,240,255,.25);background:rgba(0,240,255,.07);color:rgba(0,240,255,.7);cursor:pointer;letter-spacing:.5px;transition:background .15s;}
-.chat-q:hover{background:rgba(0,240,255,.15);color:var(--cyan);}
-.chat-inp-row{display:flex;gap:6px;padding:10px;border-top:1px solid rgba(255,255,255,.07);}
-.chat-inp{flex:1;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:8px 14px;font-family:'Rajdhani',sans-serif;font-size:13px;color:#fff;outline:none;}
-.chat-inp::placeholder{color:rgba(255,255,255,.2);}
-.chat-send{background:linear-gradient(135deg,var(--cyan),var(--purple));border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:14px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
 /* ══ HISTORI PEMBELIAN ══ */
 .histori-section{margin-top:16px;margin-bottom:14px;}
 .histori-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
@@ -1225,16 +1188,6 @@ body.theme-street .promo-bar{background:rgba(255,214,0,.08);border-color:rgba(25
   </div>
 
   <!-- PROMO -->
-  <!-- PWA INSTALL BUTTON -->
-  <div id="pwaInstallBtn" style="display:none;align-items:center;gap:10px;background:rgba(0,240,255,.07);border:1px solid rgba(0,240,255,.25);border-radius:14px;padding:10px 14px;margin-bottom:12px;cursor:pointer;" onclick="installPWA()">
-    <span style="font-size:24px;">📱</span>
-    <div style="flex:1;">
-      <div style="font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:var(--cyan);letter-spacing:1px;">INSTALL KPC STORE</div>
-      <div style="font-family:'Rajdhani',sans-serif;font-size:12px;color:rgba(255,255,255,.4);">Simpan di HP kamu — akses lebih cepat!</div>
-    </div>
-    <span style="font-family:'Orbitron',monospace;font-size:8px;color:var(--cyan);border:1px solid rgba(0,240,255,.3);padding:5px 10px;border-radius:20px;">INSTALL</span>
-  </div>
-
   <!-- TEMA PICKER -->
   <div class="theme-picker-wrap">
     <span class="theme-picker-lbl">✨ PILIH TEMA TAMPILAN</span>
@@ -1986,176 +1939,6 @@ window.addEventListener('DOMContentLoaded', ()=>{
   setTheme(curTheme, null);
 });
 
-
-/* ══ PWA ══ */
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('sw.js').catch(()=>{});
-}
-let deferredPrompt=null;
-window.addEventListener('beforeinstallprompt',e=>{
-  e.preventDefault();
-  deferredPrompt=e;
-  document.getElementById('pwaInstallBtn').style.display='flex';
-});
-window.addEventListener('appinstalled',()=>{
-  document.getElementById('pwaInstallBtn').style.display='none';
-  if(window.toast) window.toast('✅ KPC Store berhasil diinstall!','ok');
-});
-function installPWA(){
-  if(!deferredPrompt) return;
-  deferredPrompt.prompt();
-  deferredPrompt.userChoice.then(()=>{ deferredPrompt=null; });
-}
-
-/* ══ CHATBOT ══ */
-const BOT_QS = [
-  {q:'💰 Cara bayar?', a:'Pembayaran via QRIS (scan QR) atau transfer bank. Setelah pilih item dan chat admin, scan QRIS yang muncul lalu kirim bukti ke admin ya! 💳'},
-  {q:'⚡ Berapa lama proses?', a:'Proses sangat cepat! Rata-rata 1-5 menit setelah konfirmasi pembayaran. Admin langsung proses saat terima bukti transfer ✅'},
-  {q:'🎮 Cara order?', a:'Gampang banget! 1) Isi username Roblox + nomor WA kamu. 2) Pilih item yang mau dibeli. 3) Klik tombol Chat Admin. 4) Bayar via QRIS. 5) Tunggu proses! 🚀'},
-  {q:'🔒 Aman gak?', a:'100% AMAN! KPC Store sudah melayani ribuan pembeli. Semua order tercatat di sistem, ada Order ID sebagai bukti. No tipu-tipu! 🛡️'},
-  {q:'❌ Bisa refund?', a:'Kalau terjadi masalah dari pihak kami, refund bisa diproses. Hubungi admin dengan Order ID kamu. Tapi kalau username salah dari pembeli, tidak bisa di-refund ya 🙏'},
-  {q:'📋 Cek harga GP?', a:'Harga Gamepass:
-📻 Radio: 4rb
-🔧 Suspensi: 4rb
-🎨 Cat: 7rb
-⚙️ Aksesoris: 7rb
-🛞 Velg: 8rb
-🪪 Plat: 8rb
-➕ Slot: 9rb
-🏁 Drag: 12rb
-💎 Mewah: 13rb
-🚔 Polisi: 16rb
-💵 2x Gaji: 45rb'},
-  {q:'💵 Cek harga Cash?', a:'Harga Cash Drag Drive:
-💸 1jt = 2rb
-💸 5jt = 3rb
-💰 10jt = 5rb
-💰 50jt = 7rb
-🤑 100jt = 10rb
-🤑 500jt = 37rb
-👑 1M = 70rb'},
-  {q:'📞 Hub admin?', a:'Klik tombol Chat di bawah untuk langsung chat ke admin kami! Admin online setiap hari. Kamu juga bisa lihat status online/offline admin di halaman toko 💬'},
-];
-
-let chatOpen = false;
-let chatGreeted = false;
-
-function toggleChat(){
-  chatOpen = !chatOpen;
-  const box = document.getElementById('chatBox');
-  const fab = document.getElementById('chatFab');
-  const badge = document.getElementById('chatBadge');
-  box.classList.toggle('open', chatOpen);
-  fab.textContent = chatOpen ? '✕' : '🤖';
-  if(chatOpen){
-    badge.classList.remove('show');
-    if(!chatGreeted) initChat();
-  }
-}
-
-function initChat(){
-  chatGreeted = true;
-  showTyping(true);
-  setTimeout(()=>{
-    showTyping(false);
-    addBotMsg('Halo! Saya KPC Bot 🤖
-Ada yang bisa saya bantu? Pilih pertanyaan di bawah atau ketik sendiri!');
-    renderQuickQuestions();
-  }, 1000);
-}
-
-function addBotMsg(text){
-  const msgs = document.getElementById('chatMsgs');
-  const div = document.createElement('div');
-  div.className = 'chat-msg bot';
-  div.textContent = text;
-  msgs.insertBefore(div, document.getElementById('chatTyping'));
-  msgs.scrollTop = msgs.scrollHeight;
-}
-
-function addUserMsg(text){
-  const msgs = document.getElementById('chatMsgs');
-  const div = document.createElement('div');
-  div.className = 'chat-msg user';
-  div.textContent = text;
-  msgs.insertBefore(div, document.getElementById('chatTyping'));
-  msgs.scrollTop = msgs.scrollHeight;
-}
-
-function showTyping(show){
-  document.getElementById('chatTyping').style.display = show ? 'flex' : 'none';
-}
-
-function renderQuickQuestions(){
-  const qs = document.getElementById('chatQs');
-  qs.innerHTML = '';
-  BOT_QS.forEach(item=>{
-    const btn = document.createElement('button');
-    btn.className = 'chat-q';
-    btn.textContent = item.q;
-    btn.onclick = ()=>answerQ(item.q, item.a);
-    qs.appendChild(btn);
-  });
-}
-
-function answerQ(q, a){
-  addUserMsg(q);
-  showTyping(true);
-  document.getElementById('chatQs').innerHTML = '';
-  setTimeout(()=>{
-    showTyping(false);
-    addBotMsg(a);
-    // Tawarkan pertanyaan lain
-    setTimeout(()=>{
-      addBotMsg('Ada yang lain yang mau ditanyakan? 😊');
-      renderQuickQuestions();
-    }, 800);
-  }, 800);
-}
-
-function sendChat(){
-  const inp = document.getElementById('chatInp');
-  const text = inp.value.trim();
-  if(!text) return;
-  inp.value = '';
-  addUserMsg(text);
-  showTyping(true);
-  document.getElementById('chatQs').innerHTML = '';
-
-  setTimeout(()=>{
-    showTyping(false);
-    const tLow = text.toLowerCase();
-    // Simple keyword matching
-    let reply = '';
-    if(tLow.includes('harga')||tLow.includes('price')||tLow.includes('berapa'))
-      reply = 'Untuk cek harga lengkap, lihat list item di toko ya! GP mulai 4rb, Cash mulai 2rb. Atau pilih pertanyaan di bawah untuk detail harga 😊';
-    else if(tLow.includes('bayar')||tLow.includes('transfer')||tLow.includes('qris'))
-      reply = 'Pembayaran via QRIS atau transfer bank. Setelah chat admin, scan QRIS yang muncul lalu kirim bukti ke admin! 💳';
-    else if(tLow.includes('lama')||tLow.includes('proses')||tLow.includes('cepat'))
-      reply = 'Proses 1-5 menit setelah konfirmasi pembayaran. Admin langsung gerak! ⚡';
-    else if(tLow.includes('aman')||tLow.includes('tipu')||tLow.includes('scam'))
-      reply = '100% AMAN! Sudah ribuan order berhasil. Ada Order ID sebagai bukti tiap transaksi 🛡️';
-    else if(tLow.includes('refund')||tLow.includes('balik'))
-      reply = 'Refund bisa diproses kalau ada masalah dari pihak kami. Hubungi admin dengan Order ID kamu 🙏';
-    else if(tLow.includes('admin')||tLow.includes('contact')||tLow.includes('hubungi'))
-      reply = 'Scroll ke bawah dan klik tombol Chat Admin ya! Admin online setiap hari 💬';
-    else if(tLow.includes('usn')||tLow.includes('username')||tLow.includes('roblox'))
-      reply = 'Isi username Roblox kamu di kotak yang tersedia. Sistem akan otomatis cek dan tampilkan foto profil kamu! 🎮';
-    else
-      reply = 'Maaf, saya kurang paham pertanyaannya 😅 Coba pilih pertanyaan di bawah atau langsung chat admin ya!';
-
-    addBotMsg(reply);
-    setTimeout(()=>renderQuickQuestions(), 600);
-  }, 800);
-}
-
-// Show badge after 3 detik
-setTimeout(()=>{
-  if(!chatOpen){
-    document.getElementById('chatBadge').classList.add('show');
-    document.getElementById('chatFab').textContent = '🤖';
-  }
-}, 3000);
 /* ══ SEARCH ══ */
 function doSearch(){
   const q=document.getElementById('searchInp').value.trim().toLowerCase();
@@ -2917,34 +2700,6 @@ import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js").then(
     <button class="qris-copy-btn" onclick="copyNmid()" id="qrisCopyBtn">📋 COPY NMID</button>
     <div class="qris-note">⚠️ Pastikan nama tujuan <b>WARUNG SUPARTI</b> sebelum bayar</div>
     <button class="qris-wa-btn" onclick="lanjutWa()">💬 SUDAH BAYAR — LANJUT CHAT WA</button>
-  </div>
-
-  <!-- CHATBOT FAB -->
-  <button class="chat-fab" onclick="toggleChat()" id="chatFab">
-    🤖
-    <div class="chat-badge" id="chatBadge">1</div>
-  </button>
-
-  <!-- CHATBOT BOX -->
-  <div class="chat-box" id="chatBox">
-    <div class="chat-header">
-      <span class="chat-avatar">🤖</span>
-      <div class="chat-hinfo">
-        <div class="chat-hname">KPC BOT</div>
-        <div class="chat-hstatus">● ONLINE — Siap membantu!</div>
-      </div>
-      <button class="chat-close" onclick="toggleChat()">✕</button>
-    </div>
-    <div class="chat-msgs" id="chatMsgs">
-      <div class="chat-typing" id="chatTyping">
-        <span></span><span></span><span></span>
-      </div>
-    </div>
-    <div class="chat-qs" id="chatQs"></div>
-    <div class="chat-inp-row">
-      <input class="chat-inp" id="chatInp" placeholder="Ketik pertanyaan..." onkeydown="if(event.key==='Enter')sendChat()"/>
-      <button class="chat-send" onclick="sendChat()">➤</button>
-    </div>
   </div>
 
 </body>
