@@ -1086,13 +1086,185 @@ body.theme-street .usn-box{border-color:rgba(255,34,68,.4);}
 body.theme-street .btn{border-radius:6px !important;text-transform:uppercase;letter-spacing:1px;}
 body.theme-street .nonego-banner{border-color:rgba(255,34,68,.6);background:rgba(255,34,68,.1);}
 body.theme-street .promo-bar{background:rgba(255,214,0,.08);border-color:rgba(255,214,0,.3);}
+
+/* ══ SPLASH SCREEN ══ */
+#splashScreen{
+  position:fixed;inset:0;z-index:99999;
+  background:#03070d;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  overflow:hidden;
+  transition:opacity .5s ease, transform .5s ease;
+}
+#splashScreen.hide{
+  opacity:0;transform:scale(1.05);pointer-events:none;
+}
+.splash-bg{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 40%,rgba(255,34,68,.18),transparent 60%),
+    radial-gradient(ellipse 60% 50% at 20% 80%,rgba(0,240,255,.12),transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 20%,rgba(191,95,255,.12),transparent 60%);
+  animation:splashBg 3s ease-in-out infinite alternate;
+}
+@keyframes splashBg{
+  from{filter:hue-rotate(0deg) brightness(1);}
+  to{filter:hue-rotate(20deg) brightness(1.15);}
+}
+/* Splash particles */
+.splash-pts{position:absolute;inset:0;pointer-events:none;}
+.sp{
+  position:absolute;border-radius:50%;
+  background:white;
+  animation:spFloat var(--sd) ease-in-out infinite alternate;
+}
+@keyframes spFloat{
+  from{transform:translateY(0) scale(1);opacity:.6;}
+  to{transform:translateY(-30px) scale(.6);opacity:.1;}
+}
+/* Speed lines */
+.splash-lines{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.spl{
+  position:absolute;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(0,240,255,.6),transparent);
+  animation:splLine var(--sl) linear infinite;
+  top:var(--st);left:-200px;width:200px;
+  opacity:0;
+}
+@keyframes splLine{
+  0%{left:-200px;opacity:0;}
+  10%{opacity:1;}
+  80%{opacity:.5;}
+  100%{left:120%;opacity:0;}
+}
+/* Splash ring */
+.splash-ring{
+  position:absolute;
+  border-radius:50%;
+  border:2px solid rgba(255,34,68,.4);
+  animation:splRing 2.5s ease-out infinite;
+}
+@keyframes splRing{
+  0%{width:60px;height:60px;opacity:.9;}
+  100%{width:350px;height:350px;opacity:0;}
+}
+.splash-ring2{animation-delay:.8s;}
+.splash-ring3{animation-delay:1.6s;}
+
+/* Logo area */
+.splash-logo-wrap{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  animation:splashLogoIn 1s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes splashLogoIn{
+  from{opacity:0;transform:scale(.4) translateY(30px);}
+  to{opacity:1;transform:scale(1) translateY(0);}
+}
+.splash-kpc{
+  font-family:'Orbitron',monospace;font-size:72px;font-weight:900;
+  letter-spacing:8px;
+  background:linear-gradient(90deg,#ff2244,#ff6b00,#ffd600,#00e676,#00f0ff,#bf5fff,#ff2244);
+  background-size:300% 100%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:gshift 3s linear infinite, splashGlow 2s ease-in-out infinite alternate;
+  filter:drop-shadow(0 0 30px rgba(255,34,68,.8));
+}
+@keyframes splashGlow{
+  from{filter:drop-shadow(0 0 20px rgba(255,34,68,.6));}
+  to{filter:drop-shadow(0 0 50px rgba(0,240,255,.9));}
+}
+.splash-family{
+  font-family:'Orbitron',monospace;font-size:20px;font-weight:700;
+  letter-spacing:12px;color:rgba(255,255,255,.85);
+  animation:splashFamilyIn 1s .3s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes splashFamilyIn{
+  from{opacity:0;transform:translateY(20px);letter-spacing:4px;}
+  to{opacity:1;transform:translateY(0);letter-spacing:12px;}
+}
+.splash-tag{
+  font-family:'Orbitron',monospace;font-size:9px;letter-spacing:5px;
+  color:rgba(255,255,255,.3);
+  animation:fadeIn 1s .6s both;
+}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+
+/* Bike anim */
+.splash-bike{
+  font-size:52px;
+  animation:splashBike 1s .5s cubic-bezier(.34,1.56,.64,1) both, bikeSway 2s 1.5s ease-in-out infinite alternate;
+}
+@keyframes splashBike{
+  from{opacity:0;transform:translateX(-80px) scale(.6);}
+  to{opacity:1;transform:translateX(0) scale(1);}
+}
+@keyframes bikeSway{
+  from{transform:translateY(0) rotate(-1deg);}
+  to{transform:translateY(-10px) rotate(1deg);}
+}
+
+/* Loading bar */
+.splash-bar-wrap{
+  width:200px;height:4px;border-radius:2px;
+  background:rgba(255,255,255,.1);
+  overflow:hidden;margin-top:24px;
+  position:relative;z-index:2;
+  animation:fadeIn 1s .8s both;
+}
+.splash-bar{
+  height:100%;border-radius:2px;
+  background:linear-gradient(90deg,#ff2244,#ffd600,#00f0ff,#bf5fff);
+  background-size:200% 100%;
+  animation:splBarFill 2.2s .9s cubic-bezier(.4,0,.2,1) forwards, gshift 1.5s linear infinite;
+  width:0%;
+}
+@keyframes splBarFill{
+  0%{width:0%;}
+  60%{width:85%;}
+  90%{width:95%;}
+  100%{width:100%;}
+}
+.splash-loading-txt{
+  font-family:'Orbitron',monospace;font-size:8px;letter-spacing:3px;
+  color:rgba(255,255,255,.3);margin-top:8px;
+  position:relative;z-index:2;
+  animation:fadeIn 1s .9s both;
+}
 </style>
 </head>
 <body>
 
-
-
-
+<!-- ══ SPLASH SCREEN ══ -->
+<div id="splashScreen">
+  <div class="splash-bg"></div>
+  <!-- Speed lines -->
+  <div class="splash-lines">
+    <div class="spl" style="--sl:1.2s;--st:20%;animation-delay:0s;width:180px"></div>
+    <div class="spl" style="--sl:1.8s;--st:35%;animation-delay:.3s;width:250px"></div>
+    <div class="spl" style="--sl:1.4s;--st:50%;animation-delay:.6s;width:200px"></div>
+    <div class="spl" style="--sl:2s;--st:65%;animation-delay:.1s;width:160px"></div>
+    <div class="spl" style="--sl:1.6s;--st:80%;animation-delay:.4s;width:220px"></div>
+    <div class="spl" style="--sl:1.3s;--st:12%;animation-delay:.7s;width:140px"></div>
+    <div class="spl" style="--sl:1.9s;--st:90%;animation-delay:.2s;width:190px"></div>
+  </div>
+  <!-- Rings -->
+  <div class="splash-ring"></div>
+  <div class="splash-ring splash-ring2"></div>
+  <div class="splash-ring splash-ring3"></div>
+  <!-- Particles -->
+  <div class="splash-pts" id="splPts"></div>
+  <!-- Content -->
+  <div class="splash-logo-wrap">
+    <div class="splash-bike">🏍️</div>
+    <div class="splash-kpc">KPC</div>
+    <div class="splash-family">FAMILY</div>
+    <div class="splash-tag">— DRAG DRIVE COMMUNITY —</div>
+  </div>
+  <div class="splash-bar-wrap">
+    <div class="splash-bar"></div>
+  </div>
+  <div class="splash-loading-txt">LOADING...</div>
+</div>
 
 <!-- MUSIC PLAYER -->
 <div class="mplayer" id="mplayer" onclick="mpToggle()">
@@ -1438,7 +1610,7 @@ body.theme-street .promo-bar{background:rgba(255,214,0,.08);border-color:rgba(25
   <div class="comm-section">
     <div class="comm-lbl">— KOMUNITAS KPC —</div>
     <div class="comm-grid">
-      <a class="comm-card comm-wa" href="https://chat.whatsapp.com/CrGVyvmQtD5Bb9aptVDN3t" target="_blank">
+      <a class="comm-card comm-wa" href="https://chat.whatsapp.com/BTTJlPHz8FgGLL0w4AKi2i" target="_blank">
         <div class="comm-icon">💬</div>
         <div class="comm-name">GRUP WA</div>
         <div class="comm-desc">KPC FAMILY</div>
@@ -1527,6 +1699,30 @@ body.theme-street .promo-bar{background:rgba(255,214,0,.08);border-color:rgba(25
 <div class="toast" id="toast"></div>
 
 <script>
+/* ══ SPLASH SCREEN ══ */
+(function(){
+  // Buat partikel splash
+  const pts = document.getElementById('splPts');
+  for(let i=0;i<40;i++){
+    const s=document.createElement('div');
+    s.className='sp';
+    const sz=Math.random()<0.25?3:1.5;
+    s.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;width:${sz}px;height:${sz}px;opacity:${Math.random()*.5+.1};--sd:${(Math.random()*5+3).toFixed(1)}s;animation-delay:${(Math.random()*5).toFixed(1)}s;`;
+    pts.appendChild(s);
+  }
+  // Hide splash setelah 3.2 detik
+  function hideSplash(){
+    const sp=document.getElementById('splashScreen');
+    sp.classList.add('hide');
+    setTimeout(()=>{ sp.style.display='none'; },500);
+  }
+  if(document.readyState==='complete'){
+    setTimeout(hideSplash, 3000);
+  } else {
+    window.addEventListener('load',()=>setTimeout(hideSplash, 3000));
+  }
+})();
+
 /* GALAXY STARS — dikurangi biar tidak lag */
 const ptsEl=document.getElementById('pts');
 for(let i=0;i<30;i++){
@@ -1800,7 +1996,7 @@ const THEMES = {
       'GP Radio':'📻','GP Suspensi':'🔧','GP Cat':'🎨','GP Aksesoris':'⚙️',
       'GP Velg':'🛞','GP Plat':'🪪','GP Slot':'➕','GP Drag':'🏁',
       'GP Mewah':'🏆','GP Polisi':'🚔','GP 2x Gaji':'💰',
-      '1jt':'💸','5jt':'💸','10jt':'💰','50jt':'💰','100jt':'🤑','500jt':'🤑'
+      '1jt':'💸','5jt':'💸','10jt':'💰','50jt':'💰','100jt':'🤑','500jt':'🤑','1M':'👑'
     },
     bg: 'radial-gradient(ellipse 90% 70% at 20% 10%,rgba(255,80,0,.2),transparent 60%),radial-gradient(ellipse 70% 50% at 80% 20%,rgba(255,150,0,.15),transparent 60%),linear-gradient(135deg,#0d0400 0%,#150800 50%,#0d0500 100%)'
   },
@@ -1812,7 +2008,7 @@ const THEMES = {
       'GP Radio':'🎵','GP Suspensi':'🌸','GP Cat':'🎨','GP Aksesoris':'💄',
       'GP Velg':'🌺','GP Plat':'🏷️','GP Slot':'💝','GP Drag':'🦋',
       'GP Mewah':'💎','GP Polisi':'👮','GP 2x Gaji':'💰',
-      '1jt':'🍬','5jt':'🍭','10jt':'🎀','50jt':'💕','100jt':'💖','500jt':'💗'
+      '1jt':'🍬','5jt':'🍭','10jt':'🎀','50jt':'💕','100jt':'💖','500jt':'💗','1M':'👑'
     },
     bg: 'radial-gradient(ellipse 90% 70% at 20% 10%,rgba(255,105,180,.2),transparent 60%),radial-gradient(ellipse 70% 50% at 80% 20%,rgba(238,130,238,.15),transparent 60%),linear-gradient(135deg,#0d0008 0%,#150010 50%,#0d000a 100%)'
   },
@@ -1824,7 +2020,7 @@ const THEMES = {
       'GP Radio':'🎵','GP Suspensi':'🔩','GP Cat':'🖌️','GP Aksesoris':'🎒',
       'GP Velg':'⚙️','GP Plat':'📋','GP Slot':'🎰','GP Drag':'🏎️',
       'GP Mewah':'💎','GP Polisi':'👮','GP 2x Gaji':'💰',
-      '1jt':'🪙','5jt':'💰','10jt':'💵','50jt':'💎','100jt':'🏅','500jt':'🏆'
+      '1jt':'🪙','5jt':'💰','10jt':'💵','50jt':'💎','100jt':'🏅','500jt':'🏆','1M':'👑'
     },
     bg: 'radial-gradient(ellipse 90% 70% at 20% 10%,rgba(0,255,136,.15),transparent 60%),radial-gradient(ellipse 70% 50% at 80% 20%,rgba(170,0,255,.15),transparent 60%),linear-gradient(135deg,#000d00 0%,#00100a 50%,#050010 100%)'
   },
@@ -1836,7 +2032,7 @@ const THEMES = {
       'GP Radio':'🎵','GP Suspensi':'🌑','GP Cat':'🎨','GP Aksesoris':'🔮',
       'GP Velg':'🌀','GP Plat':'📜','GP Slot':'⚡','GP Drag':'🌌',
       'GP Mewah':'💜','GP Polisi':'🌙','GP 2x Gaji':'🌟',
-      '1jt':'🪙','5jt':'💜','10jt':'🔮','50jt':'🌌','100jt':'🌠','500jt':'🪐'
+      '1jt':'🪙','5jt':'💜','10jt':'🔮','50jt':'🌌','100jt':'🌠','500jt':'🪐','1M':'👑'
     },
     bg: 'radial-gradient(ellipse 90% 70% at 30% 20%,rgba(153,51,255,.2),transparent 60%),radial-gradient(ellipse 70% 50% at 70% 60%,rgba(102,102,255,.15),transparent 60%),linear-gradient(135deg,#050008 0%,#080010 50%,#030005 100%)'
   },
@@ -1848,7 +2044,7 @@ const THEMES = {
       'GP Radio':'📻','GP Suspensi':'🔧','GP Cat':'🎨','GP Aksesoris':'⛓️',
       'GP Velg':'🛞','GP Plat':'🪪','GP Slot':'🎰','GP Drag':'🏁',
       'GP Mewah':'💎','GP Polisi':'🚔','GP 2x Gaji':'💵',
-      '1jt':'💸','5jt':'💰','10jt':'💵','50jt':'💎','100jt':'👑','500jt':'🤑'
+      '1jt':'💸','5jt':'💰','10jt':'💵','50jt':'💎','100jt':'👑','500jt':'🤑','1M':'🏆'
     },
     bg: 'radial-gradient(ellipse 90% 70% at 20% 10%,rgba(255,34,68,.2),transparent 60%),radial-gradient(ellipse 70% 50% at 80% 20%,rgba(255,214,0,.15),transparent 60%),linear-gradient(135deg,#050500 0%,#0d0a00 50%,#050505 100%)'
   }
@@ -2033,7 +2229,8 @@ const ITEM_ICONS={
   '10jt':'💰',
   '50jt':'💰',
   '100jt':'🤑',
-  '500jt':'🤑'
+  '500jt':'🤑',
+  '1M':'👑',
 };
 
 function buildItems(){
