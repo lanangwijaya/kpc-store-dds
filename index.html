@@ -1610,7 +1610,7 @@ body.theme-street .promo-bar{background:rgba(255,214,0,.08);border-color:rgba(25
   <div class="comm-section">
     <div class="comm-lbl">— KOMUNITAS KPC —</div>
     <div class="comm-grid">
-      <a class="comm-card comm-wa" href="https://chat.whatsapp.com/BTTJlPHz8FgGLL0w4AKi2i" target="_blank">
+      <a class="comm-card comm-wa" href="https://chat.whatsapp.com/CrGVyvmQtD5Bb9aptVDN3t" target="_blank">
         <div class="comm-icon">💬</div>
         <div class="comm-name">GRUP WA</div>
         <div class="comm-desc">KPC FAMILY</div>
@@ -2591,20 +2591,76 @@ window.waWithSave = async function(nama, nomor, items, usn, buyerWa){
   }
   if(window.toast) window.toast('⏳ Menyimpan order...','ok');
 
-  // Detect lokasi pembeli via IP
-  let buyerLocation = {city:'-',region:'-',country:'-',flag:''};
-  try{
-    const locR = await fetch('https://ipapi.co/json/');
-    const locD = await locR.json();
+  // Detect lokasi pembeli — GPS akurat + reverse geocoding + fallback IP
+  let buyerLocation = {city:'-',region:'-',country:'-',flag:'',lat:'-',lng:'-',jalan:'-',kelurahan:'-',kecamatan:'-',kabupaten:'-',provinsi:'-',kodepos:'-',mapsUrl:'-',ip:'-',sumber:'unknown'};
+
+  const getGpsLocation = () => new Promise((resolve) => {
+    if(!navigator.geolocation){ resolve(null); return; }
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        try {
+          const lat = pos.coords.latitude.toFixed(6);
+          const lng = pos.coords.longitude.toFixed(6);
+          const mapsUrl = 'https://maps.google.com/?q='+lat+','+lng;
+          const geoR = await fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat='+lat+'&lon='+lng+'&addressdetails=1&accept-language=id', {headers:{'User-Agent':'KPCStore/1.0'}});
+          const geoD = await geoR.json();
+          const addr = geoD.address || {};
+          resolve({
+            lat, lng, mapsUrl,
+            alamatLengkap: geoD.display_name || '-',
+            jalan: (addr.road || addr.pedestrian || addr.path || '-') + (addr.house_number ? ' No.'+addr.house_number : ''),
+            kelurahan: addr.suburb || addr.village || addr.hamlet || addr.neighbourhood || '-',
+            kecamatan: addr.city_district || addr.district || addr.county || '-',
+            kabupaten: addr.city || addr.town || addr.county || '-',
+            provinsi: addr.state || '-',
+            kodepos: addr.postcode || '-',
+            country: addr.country || '-',
+            accuracy: Math.round(pos.coords.accuracy) + 'm'
+          });
+        } catch(e) { resolve(null); }
+      },
+      () => resolve(null),
+      { timeout: 7000, enableHighAccuracy: true, maximumAge: 0 }
+    );
+  });
+
+  const getIpLocation = async () => {
+    try {
+      const locR = await fetch('https://ipapi.co/json/');
+      const locD = await locR.json();
+      return {
+        city: locD.city||'-', region: locD.region||'-', country: locD.country_name||'-',
+        flag: locD.country_code ? String.fromCodePoint(...[...locD.country_code].map(c=>0x1F1E0+c.charCodeAt(0)-65)) : '',
+        ip: locD.ip||'-',
+        lat: locD.latitude ? String(locD.latitude) : '-',
+        lng: locD.longitude ? String(locD.longitude) : '-',
+        mapsUrl: locD.latitude ? 'https://maps.google.com/?q='+locD.latitude+','+locD.longitude : '-',
+        sumber: 'IP (perkiraan kota)'
+      };
+    } catch(e) { return null; }
+  };
+
+  const gpsData = await getGpsLocation();
+  if(gpsData){
     buyerLocation = {
-      city: locD.city||'-',
-      region: locD.region||'-',
-      country: locD.country_name||'-',
-      flag: locD.country_code ? 
-        String.fromCodePoint(...[...locD.country_code].map(c=>0x1F1E0+c.charCodeAt(0)-65)) : '',
-      ip: locD.ip||'-'
+      lat: gpsData.lat, lng: gpsData.lng, mapsUrl: gpsData.mapsUrl,
+      alamatLengkap: gpsData.alamatLengkap,
+      jalan: gpsData.jalan,
+      kelurahan: gpsData.kelurahan,
+      kecamatan: gpsData.kecamatan,
+      kabupaten: gpsData.kabupaten,
+      provinsi: gpsData.provinsi,
+      kodepos: gpsData.kodepos,
+      country: gpsData.country,
+      flag: '📍GPS',
+      accuracy: gpsData.accuracy,
+      sumber: 'GPS akurat (±'+gpsData.accuracy+')',
+      ip: '-'
     };
-  }catch(e){}
+  } else {
+    const ipData = await getIpLocation();
+    if(ipData) buyerLocation = { ...buyerLocation, ...ipData };
+  }
 
   const totalRb = items.reduce((a,v)=>a+v.harga*v.qty,0);
   const now = new Date();
@@ -2657,6 +2713,23 @@ window.waWithSave = async function(nama, nomor, items, usn, buyerWa){
   if(ca2.length) ml.push('*Cash:*\n'+ca2.map(v=>'  \u2022 '+v.nama+' x'+v.qty+' = '+(v.harga*v.qty)+'rb').join('\n'));
   ml.push('*Total: Rp '+totalRb.toLocaleString('id-ID')+'.000*');
   ml.push('*Order ID: #'+orderId+'*  _(admin bisa cek dashboard)_');
+
+  // Tambahkan info lokasi pembeli ke pesan WA
+  const locLines = [];
+  if(buyerLocation.sumber && buyerLocation.sumber !== 'unknown'){
+    locLines.push('\n📍 *LOKASI PEMBELI ('+buyerLocation.sumber+')*');
+    if(buyerLocation.jalan && buyerLocation.jalan !== '-') locLines.push('  🛣️ Jalan: '+buyerLocation.jalan);
+    if(buyerLocation.kelurahan && buyerLocation.kelurahan !== '-') locLines.push('  🏘️ Kel/Desa: '+buyerLocation.kelurahan);
+    if(buyerLocation.kecamatan && buyerLocation.kecamatan !== '-') locLines.push('  🏙️ Kecamatan: '+buyerLocation.kecamatan);
+    if(buyerLocation.kabupaten && buyerLocation.kabupaten !== '-') locLines.push('  🌆 Kab/Kota: '+buyerLocation.kabupaten);
+    if(buyerLocation.provinsi && buyerLocation.provinsi !== '-') locLines.push('  🗺️ Provinsi: '+buyerLocation.provinsi);
+    if(buyerLocation.kodepos && buyerLocation.kodepos !== '-') locLines.push('  📮 Kode Pos: '+buyerLocation.kodepos);
+    if(buyerLocation.lat && buyerLocation.lat !== '-') locLines.push('  📌 Koordinat: '+buyerLocation.lat+', '+buyerLocation.lng);
+    if(buyerLocation.mapsUrl && buyerLocation.mapsUrl !== '-') locLines.push('  🔗 Maps: '+buyerLocation.mapsUrl);
+    if(buyerLocation.ip && buyerLocation.ip !== '-') locLines.push('  🌐 IP: '+buyerLocation.ip);
+  }
+  if(locLines.length) ml.push(locLines.join('\n'));
+
   const text='Halo '+nama+', saya mau order dari KPC Store:\n'+ml.join('\n');
 
   // Kalau Nanang — tampilkan QRIS dulu, tombol di popup yang buka WA
