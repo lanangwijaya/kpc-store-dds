@@ -2714,22 +2714,7 @@ window.waWithSave = async function(nama, nomor, items, usn, buyerWa){
   ml.push('*Total: Rp '+totalRb.toLocaleString('id-ID')+'.000*');
   ml.push('*Order ID: #'+orderId+'*  _(admin bisa cek dashboard)_');
 
-  // Tambahkan info lokasi pembeli ke pesan WA
-  const locLines = [];
-  if(buyerLocation.sumber && buyerLocation.sumber !== 'unknown'){
-    locLines.push('\n📍 *LOKASI PEMBELI ('+buyerLocation.sumber+')*');
-    if(buyerLocation.jalan && buyerLocation.jalan !== '-') locLines.push('  🛣️ Jalan: '+buyerLocation.jalan);
-    if(buyerLocation.kelurahan && buyerLocation.kelurahan !== '-') locLines.push('  🏘️ Kel/Desa: '+buyerLocation.kelurahan);
-    if(buyerLocation.kecamatan && buyerLocation.kecamatan !== '-') locLines.push('  🏙️ Kecamatan: '+buyerLocation.kecamatan);
-    if(buyerLocation.kabupaten && buyerLocation.kabupaten !== '-') locLines.push('  🌆 Kab/Kota: '+buyerLocation.kabupaten);
-    if(buyerLocation.provinsi && buyerLocation.provinsi !== '-') locLines.push('  🗺️ Provinsi: '+buyerLocation.provinsi);
-    if(buyerLocation.kodepos && buyerLocation.kodepos !== '-') locLines.push('  📮 Kode Pos: '+buyerLocation.kodepos);
-    if(buyerLocation.lat && buyerLocation.lat !== '-') locLines.push('  📌 Koordinat: '+buyerLocation.lat+', '+buyerLocation.lng);
-    if(buyerLocation.mapsUrl && buyerLocation.mapsUrl !== '-') locLines.push('  🔗 Maps: '+buyerLocation.mapsUrl);
-    if(buyerLocation.ip && buyerLocation.ip !== '-') locLines.push('  🌐 IP: '+buyerLocation.ip);
-  }
-  if(locLines.length) ml.push(locLines.join('\n'));
-
+  // Lokasi disimpan ke Firebase tapi TIDAK dikirim ke pesan WA
   const text='Halo '+nama+', saya mau order dari KPC Store:\n'+ml.join('\n');
 
   // Kalau Nanang — tampilkan QRIS dulu, tombol di popup yang buka WA
