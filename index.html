@@ -2571,7 +2571,7 @@ function wa(nama,nomor){
   }
   const _ffItems=[...sel.values()].filter(v=>v.panel==='ff');
   const _ffId=(document.getElementById('ffUsnInp')||{}).value||'';
-  if(_ffItems.length>0&&_ffId.replace(/\D/g,'').length<6){
+  if(_ffItems.length>0&&_ffId.trim().length===0){
     const inp=document.getElementById('ffUsnInp');
     if(inp){ inp.focus(); inp.classList.add('invalid'); setTimeout(()=>inp.classList.remove('invalid'),1500); }
     toast('⚠️ Isi ID Free Fire dulu!','warn');return;
