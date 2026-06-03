@@ -2920,14 +2920,28 @@ const AUTO_DELETE_MS = 60 * 60 * 1000; // 1 jam
 
 async function sweepExpiredOrders(){
   try {
-    const cutoff = Timestamp.fromMillis(Date.now() - AUTO_DELETE_MS);
-    const q = query(orderCol, where('status','==','pending'), where('createdAt','<', cutoff));
+    // Ambil semua order pending — filter di client (tidak butuh composite index)
+    const q    = query(orderCol, where('status','==','pending'));
     const snap = await getDocs(q);
-    snap.forEach(async (d) => {
-      await deleteDoc(doc(db,'orders', d.id));
+    const now  = Date.now();
+    let   count = 0;
+    const deletes = [];
+    snap.forEach(d => {
+      const o = d.data();
+      let createdMs = 0;
+      if(o.createdAt){
+        createdMs = o.createdAt.toMillis ? o.createdAt.toMillis() : Number(o.createdAt);
+      }
+      // Skip kalau timestamp tidak ada (order lama tanpa createdAt)
+      if(!createdMs) return;
+      if(now - createdMs >= AUTO_DELETE_MS){
+        deletes.push(deleteDoc(doc(db,'orders', d.id)));
+        count++;
+      }
     });
-    if(!snap.empty) console.log('Auto-deleted', snap.size, 'expired order(s)');
-  } catch(e){ console.warn('sweepExpiredOrders:', e); }
+    await Promise.all(deletes);
+    if(count > 0) console.log('[KPC] Auto-deleted', count, 'expired order(s)');
+  } catch(e){ console.warn('[KPC] sweepExpiredOrders error:', e); }
 }
 
 // Jalankan sekali saat load, lalu tiap 5 menit
@@ -3447,7 +3461,77 @@ async function sendLcMsg(){
   const text=inp.value.trim();
   if(!text) return;
   inp.value='';
+
+  // Simpan pesan user
   await addDoc(chatCol,{sessionId:lcSessionId,name:lcName,text,type:'user',ts:serverTimestamp()});
+
+  // Auto-reply AI
+  autoReplyAI(text);
+}
+
+// ── AUTO REPLY AI via Anthropic ──
+let _lcReplying = false;
+async function autoReplyAI(userText){
+  if(_lcReplying) return;
+  _lcReplying = true;
+
+  // Tampilkan typing indicator
+  const typing = document.getElementById('lcTyping');
+  if(typing) typing.classList.add('show');
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:300,
+        system:`Kamu adalah admin toko KPC Store yang jual top up Roblox (Gamepass & Cash) dan Diamond Free Fire via ID.
+Seller Diamond FF adalah Vinzz.
+Harga GP Roblox: Radio 4rb, Suspensi 4rb, Cat 7rb, Aksesoris 7rb, Velg 8rb, Plat 8rb, Slot 9rb, Drag 12rb, Mewah 13rb, Polisi 16rb, 2x Gaji 45rb.
+Harga Cash Roblox: 1jt=2rb, 5jt=3rb, 10jt=5rb, 50jt=7rb, 100jt=10rb, 500jt=40rb.
+Harga Diamond FF: 5dm=1rb, 20dm=5rb, 50dm=7rb, 70dm=9rb, 140dm=20rb, 210dm=30rb, 355dm=45rb, 500dm=66rb, 720dm=95rb, 1000dm=130rb.
+Proses order: pilih item → isi username Roblox / ID FF → chat admin.
+Balas singkat, santai, pakai bahasa gaul Indonesia. Maksimal 2 kalimat. Jangan pakai emoji berlebihan.`,
+        messages:[{role:'user',content:userText}]
+      })
+    });
+    const data = await res.json();
+    const reply = data?.content?.[0]?.text || 'Halo! Ada yang bisa dibantu?';
+
+    if(typing) typing.classList.remove('show');
+    await addDoc(chatCol,{
+      sessionId: lcSessionId,
+      name: 'Admin KPC',
+      text: reply,
+      type: 'admin',
+      ts: serverTimestamp()
+    });
+  } catch(e){
+    if(typing) typing.classList.remove('show');
+    // Fallback keyword reply
+    const t = userText.toLowerCase();
+    let reply = 'Ada yang bisa dibantu? 😊';
+    if(t.includes('harga')||t.includes('price')||t.includes('berapa'))
+      reply='Cek langsung di katalog ya, tinggal pilih item terus order! 🔥';
+    else if(t.includes('lama')||t.includes('proses')||t.includes('cepat'))
+      reply='Proses 5-10 menit setelah pembayaran dikonfirmasi 👍';
+    else if(t.includes('ff')||t.includes('diamond')||t.includes('dm'))
+      reply='Diamond FF bisa order via tab FF, seller Vinzz. Masukkan ID FF kamu 💎';
+    else if(t.includes('roblox')||t.includes('gp')||t.includes('cash'))
+      reply='Roblox GP & Cash ada di tab Roblox, tinggal pilih & order! 🎮';
+    else if(t.includes('bayar')||t.includes('qris')||t.includes('transfer'))
+      reply='Bayar via QRIS, langsung scan setelah order 💳';
+    else if(t.includes('gagal')||t.includes('error')||t.includes('belum masuk'))
+      reply='Kirim SS bukti bayar ke admin ya biar bisa dicek 🙏';
+
+    await addDoc(chatCol,{
+      sessionId:lcSessionId, name:'Admin KPC',
+      text:reply, type:'admin', ts:serverTimestamp()
+    });
+  } finally {
+    _lcReplying = false;
+  }
 }
 
 function startLcListener(){
