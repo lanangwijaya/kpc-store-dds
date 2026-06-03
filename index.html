@@ -365,6 +365,19 @@ onSnapshot(doc(db,'config','leaderboard'), function(snap){
 .histori-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:6px;}
 .histori-id{font-family:'Orbitron',monospace;font-size:9px;font-weight:700;color:var(--cyan);}
 .histori-time{font-family:'Orbitron',monospace;font-size:7px;color:rgba(255,255,255,.25);}
+.histori-countdown{
+  font-family:'Orbitron',monospace;font-size:9px;font-weight:700;
+  color:#ff6b00;margin-top:4px;letter-spacing:.5px;
+  background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.3);
+  border-radius:6px;padding:3px 8px;display:inline-block;
+  animation:cdBlink 1s ease-in-out infinite alternate;
+}
+.histori-countdown.urgent{
+  color:#ff2244;background:rgba(255,34,68,.12);
+  border-color:rgba(255,34,68,.4);
+  animation:cdBlink .4s ease-in-out infinite alternate;
+}
+@keyframes cdBlink{from{opacity:.55;}to{opacity:1;}}
 .histori-usn{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:var(--purple);margin-bottom:6px;}
 .histori-badge{font-family:'Orbitron',monospace;font-size:7px;font-weight:700;padding:2px 7px;border-radius:20px;flex-shrink:0;}
 .histori-badge.pending{background:rgba(255,214,0,.15);color:var(--gold);border:1px solid rgba(255,214,0,.35);}
@@ -1230,6 +1243,147 @@ body.theme-street .promo-bar{background:rgba(255,214,0,.08);border-color:rgba(25
   position:relative;z-index:2;
   animation:fadeIn 1s .9s both;
 }
+
+
+/* ══ SECTION DIVIDER ══ */
+.section-divider{
+  display:flex;align-items:center;gap:10px;
+  margin:20px 14px 6px;
+}
+.section-divider-line{
+  flex:1;height:1px;
+}
+.section-divider-label{
+  font-family:'Orbitron',monospace;font-size:9px;font-weight:900;
+  letter-spacing:3px;white-space:nowrap;padding:5px 14px;
+  border-radius:20px;
+}
+/* Roblox divider — merah */
+.sec-roblox .section-divider-line{ background:linear-gradient(90deg,transparent,rgba(255,34,68,.5),transparent); }
+.sec-roblox .section-divider-label{
+  color:#ff2244;border:1px solid rgba(255,34,68,.4);
+  background:rgba(255,34,68,.08);
+  text-shadow:0 0 10px rgba(255,34,68,.5);
+}
+/* FF divider — oranye */
+.sec-ff .section-divider-line{ background:linear-gradient(90deg,transparent,rgba(255,140,0,.5),transparent); }
+.sec-ff .section-divider-label{
+  color:#ff8c00;border:1px solid rgba(255,140,0,.4);
+  background:rgba(255,140,0,.08);
+  text-shadow:0 0 10px rgba(255,140,0,.5);
+}
+
+/* ══ SECTION DIVIDER ══ */
+.section-divider{
+  display:flex;align-items:center;gap:10px;
+  margin:20px 14px 8px;
+}
+.section-divider-line{flex:1;height:1px;}
+.section-divider-label{
+  font-family:'Orbitron',monospace;font-size:9px;font-weight:900;
+  letter-spacing:3px;white-space:nowrap;padding:5px 14px;border-radius:20px;
+}
+.sec-roblox .section-divider-line{background:linear-gradient(90deg,transparent,rgba(255,34,68,.5),transparent);}
+.sec-roblox .section-divider-label{
+  color:#ff2244;border:1px solid rgba(255,34,68,.4);
+  background:rgba(255,34,68,.08);text-shadow:0 0 10px rgba(255,34,68,.5);
+}
+.sec-ff .section-divider-line{background:linear-gradient(90deg,transparent,rgba(255,140,0,.5),transparent);}
+.sec-ff .section-divider-label{
+  color:#ff8c00;border:1px solid rgba(255,140,0,.4);
+  background:rgba(255,140,0,.08);text-shadow:0 0 10px rgba(255,140,0,.5);
+}
+
+/* ══ FF DIAMOND PANEL ══ */
+.ff-usn-wrap{
+  margin:8px 14px 4px;
+  background:rgba(255,140,0,.07);
+  border:1px solid rgba(255,140,0,.35);
+  border-radius:12px;
+  padding:10px 14px;
+}
+.ff-usn-row{display:flex;align-items:center;gap:8px;}
+.ff-usn-icon{font-size:18px;}
+.ff-usn-inp{
+  flex:1;background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,140,0,.4);
+  border-radius:8px;padding:9px 12px;
+  color:#fff;font-size:13px;font-family:'Rajdhani',sans-serif;
+  outline:none;transition:border-color .2s;
+}
+.ff-usn-inp:focus{border-color:#ff8c00;box-shadow:0 0 10px rgba(255,140,0,.3);}
+.ff-usn-inp.valid{border-color:#00e676;box-shadow:0 0 8px rgba(0,230,118,.25);}
+.ff-usn-inp.invalid{border-color:#ff2244;}
+.ff-usn-hint{font-size:10px;color:rgba(255,255,255,.4);margin-top:5px;letter-spacing:.3px;}
+.ff-id-name{
+  display:none;margin-top:8px;padding:8px 12px;
+  background:rgba(0,230,118,.1);border:1px solid rgba(0,230,118,.35);
+  border-radius:8px;font-size:13px;font-weight:700;color:#00e676;
+  letter-spacing:.5px;text-align:center;
+  animation:namePop .3s cubic-bezier(.34,1.56,.64,1);
+}
+.ff-id-name.show{display:block;}
+.ff-id-name.error{background:rgba(255,34,68,.1);border-color:rgba(255,34,68,.35);color:#ff6688;}
+@keyframes namePop{from{opacity:0;transform:scale(.9);}to{opacity:1;transform:scale(1);}}
+.ff-vinz-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:linear-gradient(90deg,rgba(255,140,0,.15),rgba(255,214,0,.1));
+  border:1px solid rgba(255,140,0,.4);border-radius:20px;
+  padding:4px 10px;font-size:10px;font-weight:700;letter-spacing:1px;color:#ffd600;
+  margin-left:8px;
+}
+.panel-ff{
+  border-color:rgba(255,140,0,.45)!important;
+  background:linear-gradient(135deg,rgba(255,90,0,.05),rgba(255,200,0,.04))!important;
+}
+.gtext-ff{
+  background:linear-gradient(90deg,#ff8c00,#ffd600,#ff4400);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  font-weight:900;
+}
+.item-card.ff .item-dm{
+  font-size:9px;color:#ffd600;letter-spacing:.5px;
+  display:block;margin-top:1px;opacity:.8;
+}
+.item-card.ff{border-color:rgba(255,140,0,.3);}
+.item-card.ff.selected{border-color:#ff8c00;background:rgba(255,140,0,.12);}
+
+/* ══ TAB SWITCHER ══ */
+.mode-tabs{
+  display:flex;gap:0;margin:12px 14px 0;
+  border-radius:12px;overflow:hidden;
+  border:1px solid rgba(255,255,255,.1);
+}
+.mode-tab{
+  flex:1;padding:11px 8px;border:none;cursor:pointer;
+  font-family:'Orbitron',monospace;font-size:10px;font-weight:900;letter-spacing:2px;
+  background:rgba(255,255,255,.04);color:rgba(255,255,255,.4);
+  transition:all .25s;position:relative;
+}
+.mode-tab.active-roblox{
+  background:linear-gradient(135deg,rgba(255,34,68,.25),rgba(255,34,68,.1));
+  color:#ff2244;
+  box-shadow:inset 0 -3px 0 #ff2244;
+}
+.mode-tab.active-ff{
+  background:linear-gradient(135deg,rgba(255,140,0,.25),rgba(255,200,0,.1));
+  color:#ff8c00;
+  box-shadow:inset 0 -3px 0 #ff8c00;
+}
+.mode-tab .tab-icon{font-size:16px;display:block;margin-bottom:3px;}
+.tab-badge{
+  position:absolute;top:5px;right:10px;
+  background:#ff2244;color:#fff;
+  font-size:8px;font-weight:900;
+  width:16px;height:16px;border-radius:50%;
+  display:none;align-items:center;justify-content:center;
+}
+.tab-badge.show{display:flex;}
+.tab-badge.ff{background:#ff8c00;}
+
+/* Section yang disembunyikan */
+.section-roblox, .section-ff{ display:none; }
+.section-roblox.active, .section-ff.active{ display:block; }
 </style>
 </head>
 <body>
@@ -1508,58 +1662,109 @@ body.theme-street .promo-bar{background:rgba(255,214,0,.08);border-color:rgba(25
     <div class="usn-hint" id="waHint">Nomor WA untuk notifikasi saat order selesai</div>
     <div class="usn-warning" id="waWarning">⚠️ WAJIB ISI NOMOR WA DULU!</div>
   </div>
-  <!-- SEARCH BAR -->
-  <div class="search-wrap">
-    <input class="search-inp" id="searchInp" placeholder="🔍 Cari item..." oninput="doSearch()" autocomplete="off"/>
-    <span class="search-icon">🔍</span>
+  <!-- ══ TAB SWITCHER ══ -->
+  <div class="mode-tabs">
+    <button class="mode-tab active-roblox" id="tabRoblox" onclick="switchTab('roblox')">
+      <span class="tab-icon">🎮</span>ROBLOX
+      <span class="tab-badge" id="tbRoblox"></span>
+    </button>
+    <button class="mode-tab" id="tabFF" onclick="switchTab('ff')">
+      <span class="tab-icon">🔥</span>FF DIAMOND
+      <span class="tab-badge ff" id="tbFF"></span>
+    </button>
   </div>
-  <div class="search-result-count" id="searchCount"></div>
 
-  <div class="grid">
-    <div class="panel panel-red" style="animation-delay:.1s" id="pgp">
-      <div class="panel-title">
-        <span class="gtext-red">🚗 GP <span class="count-badge" id="bgp">0</span></span>
-        <button class="sel-all-btn" onclick="toggleAll('gp')">SEMUA</button>
-      </div>
-      <div class="clear-panel" id="clgp" onclick="clearPanel('gp')">✕ hapus semua</div>
+  <!-- ══ SECTION ROBLOX ══ -->
+  <div class="section-roblox active" id="sectionRoblox">
+    <div class="search-wrap" style="margin-top:10px">
+      <input class="search-inp" id="searchInp" placeholder="🔍 Cari GP / Cash..." oninput="doSearch()" autocomplete="off"/>
+      <span class="search-icon">🔍</span>
     </div>
-    <div class="panel panel-blue" style="animation-delay:.2s" id="pcash">
-      <div class="panel-title">
-        <span class="gtext-blue">💰 CASH <span class="count-badge" id="bcash">0</span></span>
-        <button class="sel-all-btn" onclick="toggleAll('cash')">SEMUA</button>
+    <div class="search-result-count" id="searchCount"></div>
+    <div class="grid">
+      <div class="panel panel-red" style="animation-delay:.1s" id="pgp">
+        <div class="panel-title">
+          <span class="gtext-red">🚗 GAMEPASS <span class="count-badge" id="bgp">0</span></span>
+          <button class="sel-all-btn" onclick="toggleAll('gp')">SEMUA</button>
+        </div>
+        <div class="clear-panel" id="clgp" onclick="clearPanel('gp')">✕ hapus semua</div>
       </div>
-      <div class="clear-panel" id="clcash" onclick="clearPanel('cash')">✕ hapus semua</div>
+      <div class="panel panel-blue" style="animation-delay:.2s" id="pcash">
+        <div class="panel-title">
+          <span class="gtext-blue">💰 CASH <span class="count-badge" id="bcash">0</span></span>
+          <button class="sel-all-btn" onclick="toggleAll('cash')">SEMUA</button>
+        </div>
+        <div class="clear-panel" id="clcash" onclick="clearPanel('cash')">✕ hapus semua</div>
+      </div>
     </div>
   </div>
+
+  <!-- ══ SECTION FF DIAMOND ══ -->
+  <div class="section-ff" id="sectionFF">
+    <div class="section-divider sec-ff" style="margin-top:14px">
+      <div class="section-divider-line"></div>
+      <div class="section-divider-label">🔥 SELLER: VINZ</div>
+      <div class="section-divider-line"></div>
+    </div>
+  <div class="ff-usn-wrap" id="ffUsnWrap">
+    <div class="ff-usn-row">
+      <span class="ff-usn-icon">🆔</span>
+      <input class="ff-usn-inp" id="ffUsnInp" placeholder="Masukkan ID Free Fire kamu..." autocomplete="off" inputmode="numeric" pattern="[0-9]*" oninput="lookupFfId(this.value)"/>
+    </div>
+    <div class="ff-usn-hint" id="ffUsnHint">💡 ID FF bisa dilihat di profil game (contoh: 123456789)</div>
+    <div class="ff-id-name" id="ffIdName"></div>
+  </div>
+  <div class="grid" style="margin-top:6px">
+    <div class="panel panel-ff" style="animation-delay:.3s" id="pff">
+      <div class="panel-title">
+        <span class="gtext-ff">💎 DIAMOND FF <span class="count-badge" id="bff">0</span></span>
+        <button class="sel-all-btn" onclick="toggleAll('ff')">SEMUA</button>
+      </div>
+      <div class="clear-panel" id="clff" onclick="clearPanel('ff')">✕ hapus semua</div>
+    </div>
+  </div>
+  </div><!-- /sectionFF -->
 
   <!-- ADMIN -->
-  <div class="section-label">— PILIH ADMIN —</div>
-  <div class="hint-msg" id="hint">👆 Tap item pilih — tap +/− untuk atur jumlah</div>
+  <!-- Admin Roblox (tampil saat tab Roblox) -->
+  <div id="adminRoblox">
+    <div class="section-label">— PILIH ADMIN —</div>
+    <div class="hint-msg" id="hint">👆 Tap item pilih — tap +/− untuk atur jumlah</div>
+    <button class="admin-toggle-btn" id="adminToggleBtn" onclick="toggleAdmin()">
+      <span>👥 LIHAT ADMIN PILIH UNTUK MELAKUKAN PEMBAYARAN</span>
+      <span class="toggle-arrow" id="toggleArrow">▼</span>
+    </button>
+    <div class="admin-panel-wrap" id="adminPanelWrap">
+      <div class="admin-grid">
+        <div class="admin-card" id="ac0">
+          <div class="admin-name"><div class="admin-name-l"><span>Alfian Bahlil</span></div><span class="admin-badge" onclick="tapBadge(0,event)">ONLINE</span></div>
+          <button class="btn" id="ab0" onclick="wa('Alfian','628983923559')">💬 Chat</button>
+        </div>
+        <div class="admin-card" id="ac1">
+          <div class="admin-name"><div class="admin-name-l"><span>Nanang Dlogok</span></div><span class="admin-badge" onclick="tapBadge(1,event)">ONLINE</span></div>
+          <button class="btn" id="ab1" onclick="wa('nanang','6281252425581')">💬 Chat</button>
+        </div>
+        <div class="admin-card" id="ac2">
+          <div class="admin-name"><div class="admin-name-l"><span>Boss Tuyul</span></div><span class="admin-badge" onclick="tapBadge(2,event)">ONLINE</span></div>
+          <button class="btn" id="ab2" onclick="wa('bos tuyul','6288989378157')">💬 Chat</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <!-- ADMIN TOGGLE BUTTON -->
-  <button class="admin-toggle-btn" id="adminToggleBtn" onclick="toggleAdmin()">
-    <span>👥 LIHAT ADMIN PILIH UNTUK MELAKUKAN PEMBAYARA </span>
-    <span class="toggle-arrow" id="toggleArrow">▼</span>
-  </button>
-
-  <!-- ADMIN PANEL (hidden by default) -->
-  <div class="admin-panel-wrap" id="adminPanelWrap">
-    <div class="admin-grid">
-      <div class="admin-card" id="ac0">
-        <div class="admin-name"><div class="admin-name-l"><span>Alfian Bahlil</span></div><span class="admin-badge" onclick="tapBadge(0,event)">ONLINE</span></div>
-        <button class="btn" id="ab0" onclick="wa('Alfian','628983923559')">💬 Chat</button>
-      </div>
-      <div class="admin-card" id="ac1">
-        <div class="admin-name"><div class="admin-name-l"><span>Nanang Dlogok</span></div><span class="admin-badge" onclick="tapBadge(1,event)">ONLINE</span></div>
-        <button class="btn" id="ab1" onclick="wa('nanang','6281252425581')">💬 Chat</button>
-      </div>
-      <div class="admin-card" id="ac2">
-        <div class="admin-name"><div class="admin-name-l"><span>Boss Tuyul</span></div><span class="admin-badge" onclick="tapBadge(2,event)">ONLINE</span></div>
-        <button class="btn" id="ab2" onclick="wa('bos tuyul','6288989378157')">💬 Chat</button>
-      </div>
-      <div class="admin-card" id="ac3">
-        <div class="admin-name"><div class="admin-name-l"><span>Vinzzz Plenger</span></div><span class="admin-badge" onclick="tapBadge(3,event)">ONLINE</span></div>
-        <button class="btn" id="ab3" onclick="wa('vinzzz','628211549460')">💬 Chat</button>
+  <!-- Admin FF — hanya Vinzz -->
+  <div id="adminFF" style="display:none">
+    <div class="section-label">— 💎 SELLER DIAMOND FF —</div>
+    <div class="hint-msg">Diamond FF hanya diproses oleh <b style="color:#ff8c00">Vinzz</b></div>
+    <div class="admin-panel-wrap" style="display:block!important;max-height:none!important">
+      <div class="admin-grid" style="grid-template-columns:1fr">
+        <div class="admin-card" id="ac3" style="border-color:rgba(255,140,0,.5);background:linear-gradient(135deg,rgba(255,140,0,.08),rgba(255,200,0,.04))">
+          <div class="admin-name" style="color:#ff8c00">
+            <div class="admin-name-l"><span>Vinzz</span></div>
+            <span class="admin-badge" onclick="tapBadge(3,event)" style="color:#ff8c00;border-color:rgba(255,140,0,.5);background:rgba(255,140,0,.15)">ONLINE</span>
+          </div>
+          <button class="btn" id="ab3" onclick="wa('Vinzz','628211549460')" style="background:linear-gradient(135deg,#ff8c00,#ffd600);color:#000;font-weight:900">💬 Chat Vinzz</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1672,10 +1877,14 @@ body.theme-street .promo-bar{background:rgba(255,214,0,.08);border-color:rgba(25
   </div>
   <div class="chips" id="chips"></div>
   <div class="admin-row">
-    <button class="wa-btn" onclick="wa('Alfian','628983923559')">Alfian</button>
-    <button class="wa-btn" onclick="wa('nanang','6281252425581')">nanang</button>
-    <button class="wa-btn" onclick="wa('bos tuyul','6288989378157')">boss tuyul</button>
-    <button class="wa-btn" onclick="wa('vinzzz','628211549460')">Vinzzz</button>
+    <!-- Tab Roblox: semua admin -->
+    <span id="waRoblox" style="display:contents">
+      <button class="wa-btn" onclick="wa('Alfian','628983923559')">Alfian</button>
+      <button class="wa-btn" onclick="wa('nanang','6281252425581')">nanang</button>
+      <button class="wa-btn" onclick="wa('bos tuyul','6288989378157')">boss tuyul</button>
+    </span>
+    <!-- Tab FF: hanya Vinzz -->
+    <button class="wa-btn" id="waVinzz" onclick="wa('Vinzz','628211549460')" style="background:linear-gradient(135deg,#ff8c00,#ffd600);color:#000;font-weight:900;display:none">🔥 Vinzz</button>
   </div>
 </div>
 
@@ -1755,10 +1964,107 @@ const CATALOG={
     {nama:'50jt',harga:7},
     {nama:'100jt',harga:10},
     {nama:'500jt',harga:40}
+  ],
+  ff:[
+    {nama:'5 DM',harga:1,dm:5},
+    {nama:'20 DM',harga:5,dm:20},
+    {nama:'50 DM',harga:7,dm:50},
+    {nama:'70 DM',harga:9,dm:70},
+    {nama:'140 DM',harga:20,dm:140},
+    {nama:'210 DM',harga:30,dm:210},
+    {nama:'355 DM',harga:45,dm:355},
+    {nama:'500 DM',harga:66,dm:500},
+    {nama:'720 DM',harga:95,dm:720},
+    {nama:'1000 DM',harga:130,dm:1000}
   ]
 };
 
+let activeTab = 'roblox';
+
+function switchTab(tab){
+  activeTab = tab;
+  // Tab styling
+  document.getElementById('tabRoblox').className = 'mode-tab' + (tab==='roblox'?' active-roblox':'');
+  document.getElementById('tabFF').className      = 'mode-tab' + (tab==='ff'?' active-ff':'');
+  // Sections
+  document.getElementById('sectionRoblox').className = 'section-roblox' + (tab==='roblox'?' active':'');
+  document.getElementById('sectionFF').className      = 'section-ff'      + (tab==='ff'?' active':'');
+  // Username Roblox box — sembunyikan kalau di tab FF
+  const allUsnBoxes = document.querySelectorAll('.usn-box');
+  if(allUsnBoxes[0]) allUsnBoxes[0].style.display = tab==='ff' ? 'none' : ''; // Roblox USN
+  // allUsnBoxes[1] = nomor WA, selalu tampil
+  // Tampil/sembunyikan panel admin sesuai tab
+  const adminRoblox = document.getElementById('adminRoblox');
+  const adminFF     = document.getElementById('adminFF');
+  if(adminRoblox) adminRoblox.style.display = tab==='ff' ? 'none' : '';
+  if(adminFF)     adminFF.style.display     = tab==='ff' ? '' : 'none';
+  // Tombol WA cepat di sticky bar
+  const waRoblox = document.getElementById('waRoblox');
+  const waVinzz  = document.getElementById('waVinzz');
+  if(waRoblox) waRoblox.style.display = tab==='ff' ? 'none' : 'contents';
+  if(waVinzz)  waVinzz.style.display  = tab==='ff' ? '' : 'none';
+}
+
 const sel=new Map();
+
+let _ffLookupTimer=null;
+let _ffVerifiedId='';
+let _ffVerifiedName='';
+
+async function lookupFfId(val){
+  const inp=document.getElementById('ffUsnInp');
+  const hint=document.getElementById('ffUsnHint');
+  const nameBox=document.getElementById('ffIdName');
+  if(!inp||!nameBox) return;
+
+  const id=val.replace(/\D/g,'');
+  inp.value=id;
+  _ffVerifiedId=''; _ffVerifiedName='';
+
+  if(id.length===0){
+    inp.className='ff-usn-inp';
+    nameBox.className='ff-id-name';
+    hint.textContent='💡 ID FF bisa dilihat di profil game (contoh: 123456789)';
+    return;
+  }
+  if(id.length<6){
+    inp.className='ff-usn-inp invalid';
+    nameBox.className='ff-id-name';
+    hint.textContent='⚠️ ID FF minimal 6 angka';
+    return;
+  }
+
+  inp.className='ff-usn-inp';
+  nameBox.className='ff-id-name show';
+  nameBox.textContent='⏳ Mencari akun...';
+  nameBox.classList.remove('error');
+
+  clearTimeout(_ffLookupTimer);
+  _ffLookupTimer=setTimeout(async ()=>{
+    try{
+      // API lookup nama FF via ID
+      const res=await fetch('https://ff-info.vercel.app/api?uid='+id);
+      const data=await res.json();
+      const name=data?.basicInfo?.nickname||data?.name||data?.playerName||null;
+      if(name){
+        _ffVerifiedId=id; _ffVerifiedName=name;
+        inp.className='ff-usn-inp valid';
+        nameBox.className='ff-id-name show';
+        nameBox.innerHTML='✅ <b>'+name+'</b> — ID: '+id;
+        hint.textContent='✅ Akun ditemukan!';
+      } else {
+        throw new Error('not found');
+      }
+    }catch(e){
+      // Fallback: tandai ID manual, minta konfirmasi sendiri
+      _ffVerifiedId=id; _ffVerifiedName='';
+      inp.className='ff-usn-inp valid';
+      nameBox.className='ff-id-name show error';
+      nameBox.innerHTML='⚠️ Nama tidak terdeteksi — ID: '+id+'<br><small>Pastikan ID benar sebelum order</small>';
+      hint.textContent='📋 ID akan dikirim ke admin untuk verifikasi';
+    }
+  },600);
+}
 
 /* USERNAME */
 /* QRIS POPUP */
@@ -2234,18 +2540,21 @@ const ITEM_ICONS={
 };
 
 function buildItems(){
-  ['gp','cash'].forEach(panel=>{
+  ['gp','cash','ff'].forEach(panel=>{
     const panelEl=document.getElementById('p'+panel);
     const clearEl=document.getElementById('cl'+panel);
-    CATALOG[panel].forEach(({nama,harga})=>{
+    CATALOG[panel].forEach((item)=>{ const {nama,harga}=item; const dm=item.dm||0;
       const id=panel+':'+nama;
       const row=document.createElement('div');
       row.className='item';row.id='item-'+id;
-      const icon = ITEM_ICONS[nama] || (panel==='gp'?'🎮':'💵');
+      const icon = ITEM_ICONS[nama] || (panel==='gp'?'🎮':panel==='ff'?'💎':'💵');
+      const dmTag = panel==='ff'&&dm>0 ? `<span class='item-dm'>${dm.toLocaleString('id-ID')} DM</span>` : '';
       row.innerHTML=`
         <div class="cb-wrap" onclick="toggleItem('${id}','${panel}','${nama}',${harga})"><div class="cb"></div></div>
         <span class="item-icon">${icon}</span>
-        <span class="item-name" onclick="toggleItem('${id}','${panel}','${nama}',${harga})">${nama}</span>
+        <div style="display:flex;flex-direction:column;flex:1;min-width:0" onclick="toggleItem('${id}','${panel}','${nama}',${harga})">
+          <span class="item-name">${nama}</span>${dmTag}
+        </div>
         <span class="price">${harga}rb</span>
         <div class="qty-wrap" id="qty-${id}">
           <button class="qty-btn" onclick="changeQty('${id}',-1)">−</button>
@@ -2318,11 +2627,20 @@ function render(){
   const totalRb=[...sel.values()].reduce((a,v)=>a+v.harga*v.qty,0);
 
   // badges
-  const bg=document.getElementById('bgp'),bc=document.getElementById('bcash');
+  const bg=document.getElementById('bgp'),bc=document.getElementById('bcash'),bff=document.getElementById('bff');
   bg.textContent=gpArr.length;bg.classList.toggle('on',gpArr.length>0);
   bc.textContent=cashArr.length;bc.classList.toggle('on',cashArr.length>0);
+  const ffArr=[...sel.values()].filter(v=>v.panel==='ff');
+  if(bff){ bff.textContent=ffArr.length; bff.classList.toggle('on',ffArr.length>0); }
   document.getElementById('clgp').classList.toggle('on',gpArr.length>0);
   document.getElementById('clcash').classList.toggle('on',cashArr.length>0);
+  const clff=document.getElementById('clff');
+  if(clff) clff.classList.toggle('on',ffArr.length>0);
+  // Update tab badge
+  const tbR=document.getElementById('tbRoblox'), tbF=document.getElementById('tbFF');
+  const robloxCount=gpArr.length+cashArr.length;
+  if(tbR){ tbR.textContent=robloxCount||''; tbR.classList.toggle('show',robloxCount>0); }
+  if(tbF){ tbF.textContent=ffArr.length||''; tbF.classList.toggle('show',ffArr.length>0); }
 
   // hint
   const hint=document.getElementById('hint');
@@ -2364,8 +2682,22 @@ function animateTotal(target){
 
 /* WA — simpan order ke Firebase dulu sebelum buka WA */
 function wa(nama,nomor){
-  if(sel.size===0){toast('⚠️ Pilih item dulu!','warn');return;}
-  if(!checkUsn()){toast('⚠️ Isi username Roblox dulu!','warn');return;}
+  // Kalau belum pilih item, langsung buka chat WA biasa
+  if(sel.size===0){
+    window.open('https://wa.me/'+nomor+'?text=Halo+'+encodeURIComponent(nama)+',+saya+mau+order','_blank');
+    return;
+  }
+  const _ffItems=[...sel.values()].filter(v=>v.panel==='ff');
+  const _ffId=(document.getElementById('ffUsnInp')||{}).value||'';
+  if(_ffItems.length>0&&_ffId.replace(/\D/g,'').length<6){
+    const inp=document.getElementById('ffUsnInp');
+    if(inp){ inp.focus(); inp.classList.add('invalid'); setTimeout(()=>inp.classList.remove('invalid'),1500); }
+    toast('⚠️ Isi ID Free Fire dulu!','warn');return;
+  }
+  // Kalau tab FF: skip cek username Roblox
+  if(activeTab!=='ff' && [...sel.values()].some(v=>v.panel!=='ff')){
+    if(!checkUsn()){toast('⚠️ Isi username Roblox dulu!','warn');return;}
+  }
   if(!checkWa()){toast('⚠️ Isi nomor WA dulu!','warn');return;}
   if(window.waWithSave){
     window.waWithSave(nama,nomor,[...sel.values()],getUsn(),getWa());
@@ -2567,7 +2899,7 @@ document.addEventListener('click',function(ev){spawnRipple(ev.clientX,ev.clientY
 <!-- Firebase Firestore Realtime -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc, deleteDoc, doc, getDoc, setDoc, query, orderBy, onSnapshot, serverTimestamp }
+import { getFirestore, collection, addDoc, deleteDoc, getDocs, doc, getDoc, setDoc, query, orderBy, where, onSnapshot, serverTimestamp, Timestamp }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const app = initializeApp({
@@ -2581,6 +2913,68 @@ const app = initializeApp({
 const db = getFirestore(app);
 const col = collection(db, "testimoni");
 const orderCol = collection(db, "orders");
+
+
+/* ══ AUTO-DELETE PENDING ORDER > 1 JAM ══ */
+const AUTO_DELETE_MS = 60 * 60 * 1000; // 1 jam
+
+async function sweepExpiredOrders(){
+  try {
+    const cutoff = Timestamp.fromMillis(Date.now() - AUTO_DELETE_MS);
+    const q = query(orderCol, where('status','==','pending'), where('createdAt','<', cutoff));
+    const snap = await getDocs(q);
+    snap.forEach(async (d) => {
+      await deleteDoc(doc(db,'orders', d.id));
+    });
+    if(!snap.empty) console.log('Auto-deleted', snap.size, 'expired order(s)');
+  } catch(e){ console.warn('sweepExpiredOrders:', e); }
+}
+
+// Jalankan sekali saat load, lalu tiap 5 menit
+sweepExpiredOrders();
+setInterval(sweepExpiredOrders, 5 * 60 * 1000);
+
+// ── COUNTDOWN TICKER — update tiap detik ──
+setInterval(() => {
+  document.querySelectorAll('.histori-card.pending').forEach(card => {
+    const createdMs = parseInt(card.dataset.createdAt || 0);
+    const cdId      = card.dataset.cdId;
+    if(!createdMs || !cdId) return;
+
+    const expireMs  = createdMs + AUTO_DELETE_MS;
+    const remaining = expireMs - Date.now();
+    const el        = document.getElementById(cdId);
+    if(!el) return;
+
+    if(remaining <= 0){
+      el.textContent = '🗑️ Kadaluarsa — akan dihapus...';
+      el.classList.add('urgent');
+      card.style.opacity = '0.5';
+    } else {
+      const h = Math.floor(remaining / 3600000);
+      const m = Math.floor((remaining % 3600000) / 60000);
+      const s = Math.floor((remaining % 60000) / 1000);
+      const timeStr = h > 0
+        ? h+'j '+m+'m '+s+'d'
+        : m+'m '+s+'d';
+      el.textContent = '⏳ Auto-hapus dalam: ' + timeStr;
+      // Merah kalau sisa < 10 menit
+      el.classList.toggle('urgent', remaining < 10 * 60 * 1000);
+    }
+  });
+}, 1000);
+
+/* ══ COUNTDOWN HELPER ══ */
+function getExpireCountdown(createdAtTs){
+  if(!createdAtTs) return null;
+  const createdMs = createdAtTs.toMillis ? createdAtTs.toMillis() : createdAtTs;
+  const expireMs  = createdMs + AUTO_DELETE_MS;
+  const remaining = expireMs - Date.now();
+  if(remaining <= 0) return 'expired';
+  const m = Math.floor(remaining / 60000);
+  const s = Math.floor((remaining % 60000) / 1000);
+  return m + 'm ' + s + 's';
+}
 
 /* ══ SIMPAN ORDER & BUKA WA ══ */
 window.waWithSave = async function(nama, nomor, items, usn, buyerWa){
@@ -2705,10 +3099,20 @@ window.waWithSave = async function(nama, nomor, items, usn, buyerWa){
 
   const gp2=items.filter(v=>v.panel==='gp');
   const ca2=items.filter(v=>v.panel==='cash');
+  const ff2=items.filter(v=>v.panel==='ff');
+  const ffUsn=(document.getElementById('ffUsnInp')||{}).value||''; // ID FF
   const ml=[];
   if(usn) ml.push('*Username Roblox:* '+usn);
   const cv=window.robloxCache&&window.robloxCache[usn.toLowerCase()];
   if(cv&&cv.avatar) ml.push('\uD83D\uDDBC *Avatar:* '+cv.avatar);
+  if(ff2.length){
+    const ffId=(document.getElementById('ffUsnInp')||{}).value||'';
+    const ffNama=window._ffVerifiedName||'';
+    ml.push('\uD83D\uDC8E *TOP UP FREE FIRE (VINZ):*');
+    ml.push('  \uD83C\uDD94 *ID FF:* '+ffId);
+    if(ffNama) ml.push('  \uD83D\uDC64 *Nama Akun:* '+ffNama);
+    ml.push(ff2.map(v=>'  \u2022 '+v.nama+' x'+v.qty+' = Rp '+(v.harga*v.qty).toLocaleString('id-ID')+'.000').join('\n'));
+  }
   if(gp2.length) ml.push('*Gamepass:*\n'+gp2.map(v=>'  \u2022 '+v.nama+' x'+v.qty+' = '+(v.harga*v.qty)+'rb').join('\n'));
   if(ca2.length) ml.push('*Cash:*\n'+ca2.map(v=>'  \u2022 '+v.nama+' x'+v.qty+' = '+(v.harga*v.qty)+'rb').join('\n'));
   ml.push('*Total: Rp '+totalRb.toLocaleString('id-ID')+'.000*');
@@ -2868,6 +3272,7 @@ window.submitTesti = async function(){
       const items = o.items || [];
       const status = o.status || 'pending';
       const statusLabel = status==='done'?'✅ SELESAI': status==='cancel'?'❌ BATAL':'⏳ PENDING';
+      const countdownId  = 'cd_'+d.id;
 
       const itemsHtml = items.map(it=>
         '<div class="histori-item-row">'+
@@ -2879,11 +3284,15 @@ window.submitTesti = async function(){
 
       const card = document.createElement('div');
       card.className = 'histori-card '+status;
+      card.dataset.createdAt = o.createdAt ? o.createdAt.toMillis() : 0;
+      card.dataset.cdId = countdownId;
+      card.dataset.status = status;
       card.innerHTML =
         '<div class="histori-top">'+
           '<div>'+
             '<div class="histori-id">🧾 #'+escH(o.orderId||d.id.slice(-6).toUpperCase())+'</div>'+
             '<div class="histori-time">🕐 '+escH(o.tStr||'-')+'</div>'+
+            (status==='pending'?'<div class="histori-countdown" id="'+countdownId+'">⏳ Auto-hapus dalam: --</div>':'')+
           '</div>'+
           '<span class="histori-badge '+status+'">'+statusLabel+'</span>'+
         '</div>'+
@@ -3121,6 +3530,6 @@ function startLcListener(){
       <button class="lc-send" id="lcSend">➤</button>
     </div>
   </div>
-
 </body>
+
 </html>
