@@ -827,6 +827,7 @@ onSnapshot(doc(db,'config','leaderboard'), function(snap){
 .admin-badge{font-family:'Orbitron',monospace;font-size:7px;font-weight:700;padding:2px 6px;border-radius:20px;cursor:pointer;flex-shrink:0;}
 .admin-card:not(.offline) .admin-badge{background:rgba(0,230,118,.15);color:var(--green);border:1px solid rgba(0,230,118,.4);}
 .admin-card.offline .admin-badge{background:rgba(255,34,68,.12);color:#ff6680;border:1px solid rgba(255,34,68,.3);}
+
 .btn.btn-off{background:rgba(80,80,80,.3)!important;color:rgba(255,255,255,.3)!important;box-shadow:none!important;cursor:not-allowed!important;pointer-events:none;}
 /* ══ MODAL ══ */
 .modal-ov{position:fixed;inset:0;z-index:800;background:rgba(3,7,13,.92);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;}
@@ -1265,6 +1266,16 @@ body.theme-street .promo-bar{background:rgba(255,214,0,.08);border-color:rgba(25
 .ff-usn-inp:focus{border-color:#ff8c00;box-shadow:0 0 10px rgba(255,140,0,.3);}
 .ff-usn-inp.valid{border-color:#00e676;box-shadow:0 0 8px rgba(0,230,118,.25);}
 .ff-usn-inp.invalid{border-color:#ff2244;}
+.ff-id-name{
+  display:none;margin-top:8px;padding:8px 12px;
+  background:rgba(0,230,118,.08);border:1px solid rgba(0,230,118,.3);
+  border-radius:8px;font-size:13px;font-weight:700;color:#00e676;
+  letter-spacing:.3px;text-align:center;
+  animation:namePop .3s cubic-bezier(.34,1.56,.64,1);
+}
+.ff-id-name.show{display:block;}
+.ff-id-name.loading{color:rgba(255,255,255,.5);border-color:rgba(255,255,255,.15);background:rgba(255,255,255,.04);}
+@keyframes namePop{from{opacity:0;transform:scale(.94);}to{opacity:1;transform:scale(1);}}
 .ff-usn-hint{font-size:10px;color:rgba(255,255,255,.4);margin-top:5px;letter-spacing:.3px;}
 
 .ff-vinz-badge{
@@ -1651,9 +1662,10 @@ body.theme-street .promo-bar{background:rgba(255,214,0,.08);border-color:rgba(25
   <div class="ff-usn-wrap" id="ffUsnWrap">
     <div class="ff-usn-row">
       <span class="ff-usn-icon">🆔</span>
-      <input class="ff-usn-inp" id="ffUsnInp" placeholder="Masukkan ID Free Fire kamu..." autocomplete="off" inputmode="numeric" pattern="[0-9]*"/>
+      <input class="ff-usn-inp" id="ffUsnInp" placeholder="Masukkan ID Free Fire kamu..." autocomplete="off" inputmode="numeric" pattern="[0-9]*" oninput="lookupFfId(this.value)"/>
     </div>
-    <div class="ff-usn-hint" id="ffUsnHint">💡 ID FF bisa dilihat di profil game (contoh: 123456789)</div>
+    <div class="ff-usn-hint" id="ffUsnHint">💡 ID FF bisa dilihat di profil in-game</div>
+    <div class="ff-id-name" id="ffIdName"></div>
   </div>
   <div class="grid" style="margin-top:6px">
     <div class="panel panel-ff" style="animation-delay:.3s" id="pff">
@@ -1689,6 +1701,10 @@ body.theme-street .promo-bar{background:rgba(255,214,0,.08);border-color:rgba(25
           <div class="admin-name"><div class="admin-name-l"><span>Boss Tuyul</span></div><span class="admin-badge" onclick="tapBadge(2,event)">ONLINE</span></div>
           <button class="btn" id="ab2" onclick="wa('bos tuyul','6288989378157')">💬 Chat</button>
         </div>
+        <div class="admin-card" id="ac3">
+          <div class="admin-name"><div class="admin-name-l"><span>Vinzz</span></div><span class="admin-badge" onclick="tapBadge(3,event)">ONLINE</span></div>
+          <button class="btn" id="ab3" onclick="wa('Vinzz','628211549460')">💬 Chat</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1696,15 +1712,12 @@ body.theme-street .promo-bar{background:rgba(255,214,0,.08);border-color:rgba(25
   <!-- Admin FF — hanya Vinzz -->
   <div id="adminFF" style="display:none">
     <div class="section-label">— 💎 SELLER DIAMOND FF —</div>
-    <div class="hint-msg">Diamond FF hanya diproses oleh <b style="color:#ff8c00">Vinzz</b></div>
-    <div class="admin-panel-wrap" style="display:block!important;max-height:none!important">
-      <div class="admin-grid" style="grid-template-columns:1fr">
-        <div class="admin-card" id="ac3" style="border-color:rgba(255,140,0,.5);background:linear-gradient(135deg,rgba(255,140,0,.08),rgba(255,200,0,.04))">
-          <div class="admin-name" style="color:#ff8c00">
-            <div class="admin-name-l"><span>Vinzz</span></div>
-            <span class="admin-badge" onclick="tapBadge(3,event)" style="color:#ff8c00;border-color:rgba(255,140,0,.5);background:rgba(255,140,0,.15)">ONLINE</span>
-          </div>
-          <button class="btn" id="ab3" onclick="wa('Vinzz','628211549460')" style="background:linear-gradient(135deg,#ff8c00,#ffd600);color:#000;font-weight:900">💬 Chat Vinzz</button>
+    <div class="hint-msg" id="hintFF">👆 Tap nama untuk ubah status online/offline</div>
+    <div class="admin-panel-wrap" style="display:block;max-height:none">
+      <div class="admin-grid">
+        <div class="admin-card" id="ac3">
+          <div class="admin-name"><div class="admin-name-l"><span>Vinzz</span></div><span class="admin-badge" onclick="tapBadge(3,event)">ONLINE</span></div>
+          <button class="btn" id="ab3" onclick="wa('Vinzz','628211549460')">💬 Chat</button>
         </div>
       </div>
     </div>
@@ -1818,11 +1831,12 @@ body.theme-street .promo-bar{background:rgba(255,214,0,.08);border-color:rgba(25
   </div>
   <div class="chips" id="chips"></div>
   <div class="admin-row">
-    <!-- Tab Roblox: semua admin -->
+    <!-- Tab Roblox: semua admin + Vinzz -->
     <span id="waRoblox" style="display:contents">
       <button class="wa-btn" onclick="wa('Alfian','628983923559')">Alfian</button>
       <button class="wa-btn" onclick="wa('nanang','6281252425581')">nanang</button>
       <button class="wa-btn" onclick="wa('bos tuyul','6288989378157')">boss tuyul</button>
+      <button class="wa-btn" onclick="wa('Vinzz','628211549460')">Vinzz</button>
     </span>
     <!-- Tab FF: hanya Vinzz -->
     <button class="wa-btn" id="waVinzz" onclick="wa('Vinzz','628211549460')" style="background:linear-gradient(135deg,#ff8c00,#ffd600);color:#000;font-weight:900;display:none">🔥 Vinzz</button>
@@ -1886,25 +1900,25 @@ for(let i=0;i<30;i++){
 /* CATALOG */
 const CATALOG={
   gp:[
-    {nama:'GP Radio',harga:4},
-    {nama:'GP Suspensi',harga:4},
+    {nama:'GP Radio',harga:5},
+    {nama:'GP Suspensi',harga:5},
     {nama:'GP Cat',harga:7},
     {nama:'GP Aksesoris',harga:7},
-    {nama:'GP Velg',harga:8},
     {nama:'GP Plat',harga:8},
+    {nama:'GP Velg',harga:8},
     {nama:'GP Slot',harga:9},
     {nama:'GP Drag',harga:12},
-    {nama:'GP Mewah',harga:13},
+    {nama:'GP Luxury',harga:13},
     {nama:'GP Polisi',harga:16},
-    {nama:'GP 2x Gaji',harga:45}
+    {nama:'GP 2x Gaji',harga:52}
   ],
   cash:[
     {nama:'1jt',harga:2},
     {nama:'5jt',harga:3},
     {nama:'10jt',harga:5},
     {nama:'50jt',harga:7},
-    {nama:'100jt',harga:10},
-    {nama:'500jt',harga:40}
+    {nama:'100jt',harga:12},
+    {nama:'500jt',harga:42}
   ],
   ff:[
     {nama:'5 DM',harga:1,dm:5},
@@ -1947,6 +1961,64 @@ function switchTab(tab){
 }
 
 const sel=new Map();
+
+let _ffTimer=null;
+let _ffName='';
+
+async function lookupFfId(val){
+  const inp=document.getElementById('ffUsnInp');
+  const box=document.getElementById('ffIdName');
+  const hint=document.getElementById('ffUsnHint');
+  if(!inp||!box) return;
+
+  const id=val.replace(/\D/g,'');
+  inp.value=id;
+  _ffName='';
+
+  if(!id){ inp.className='ff-usn-inp'; box.className='ff-id-name'; return; }
+  if(id.length<4){ inp.className='ff-usn-inp invalid'; box.className='ff-id-name'; return; }
+
+  inp.className='ff-usn-inp';
+  box.className='ff-id-name show loading';
+  box.textContent='⏳ Mencari akun...';
+
+  clearTimeout(_ffTimer);
+  _ffTimer=setTimeout(async()=>{
+    let name=null;
+
+    // API 1: ff-info
+    try{
+      const r=await fetch('https://ff-info.vercel.app/api?uid='+id);
+      const d=await r.json();
+      name=d?.basicInfo?.nickname||d?.name||d?.playerName||null;
+    }catch(e){}
+
+    // API 2: garena-ff
+    if(!name) try{
+      const r=await fetch('https://garena-ff.vercel.app/api?uid='+id);
+      const d=await r.json();
+      name=d?.basicInfo?.nickname||d?.name||null;
+    }catch(e){}
+
+    // API 3: api-freefire
+    if(!name) try{
+      const r=await fetch('https://api-freefire.vercel.app/?uid='+id);
+      const d=await r.json();
+      name=d?.name||d?.nickname||d?.playerName||null;
+    }catch(e){}
+
+    if(name){
+      _ffName=name;
+      inp.className='ff-usn-inp valid';
+      box.className='ff-id-name show';
+      box.innerHTML='✅ <b>'+name+'</b>';
+    } else {
+      inp.className='ff-usn-inp valid';
+      box.className='ff-id-name show loading';
+      box.innerHTML='⚠️ ID: '+id+' — nama tidak terdeteksi, pastikan ID benar';
+    }
+  },700);
+}
 
 /* USERNAME */
 /* QRIS POPUP */
@@ -2183,7 +2255,7 @@ const THEMES = {
     itemIcons:{
       'GP Radio':'📻','GP Suspensi':'🔧','GP Cat':'🎨','GP Aksesoris':'⚙️',
       'GP Velg':'🛞','GP Plat':'🪪','GP Slot':'➕','GP Drag':'🏁',
-      'GP Mewah':'🏆','GP Polisi':'🚔','GP 2x Gaji':'💰',
+      'GP Luxury':'🏆','GP Polisi':'🚔','GP 2x Gaji':'💰',
       '1jt':'💸','5jt':'💸','10jt':'💰','50jt':'💰','100jt':'🤑','500jt':'🤑','1M':'👑'
     },
     bg: 'radial-gradient(ellipse 90% 70% at 20% 10%,rgba(255,80,0,.2),transparent 60%),radial-gradient(ellipse 70% 50% at 80% 20%,rgba(255,150,0,.15),transparent 60%),linear-gradient(135deg,#0d0400 0%,#150800 50%,#0d0500 100%)'
@@ -2195,7 +2267,7 @@ const THEMES = {
     itemIcons:{
       'GP Radio':'🎵','GP Suspensi':'🌸','GP Cat':'🎨','GP Aksesoris':'💄',
       'GP Velg':'🌺','GP Plat':'🏷️','GP Slot':'💝','GP Drag':'🦋',
-      'GP Mewah':'💎','GP Polisi':'👮','GP 2x Gaji':'💰',
+      'GP Luxury':'💎','GP Polisi':'👮','GP 2x Gaji':'💰',
       '1jt':'🍬','5jt':'🍭','10jt':'🎀','50jt':'💕','100jt':'💖','500jt':'💗','1M':'👑'
     },
     bg: 'radial-gradient(ellipse 90% 70% at 20% 10%,rgba(255,105,180,.2),transparent 60%),radial-gradient(ellipse 70% 50% at 80% 20%,rgba(238,130,238,.15),transparent 60%),linear-gradient(135deg,#0d0008 0%,#150010 50%,#0d000a 100%)'
@@ -2207,7 +2279,7 @@ const THEMES = {
     itemIcons:{
       'GP Radio':'🎵','GP Suspensi':'🔩','GP Cat':'🖌️','GP Aksesoris':'🎒',
       'GP Velg':'⚙️','GP Plat':'📋','GP Slot':'🎰','GP Drag':'🏎️',
-      'GP Mewah':'💎','GP Polisi':'👮','GP 2x Gaji':'💰',
+      'GP Luxury':'💎','GP Polisi':'👮','GP 2x Gaji':'💰',
       '1jt':'🪙','5jt':'💰','10jt':'💵','50jt':'💎','100jt':'🏅','500jt':'🏆','1M':'👑'
     },
     bg: 'radial-gradient(ellipse 90% 70% at 20% 10%,rgba(0,255,136,.15),transparent 60%),radial-gradient(ellipse 70% 50% at 80% 20%,rgba(170,0,255,.15),transparent 60%),linear-gradient(135deg,#000d00 0%,#00100a 50%,#050010 100%)'
@@ -2219,7 +2291,7 @@ const THEMES = {
     itemIcons:{
       'GP Radio':'🎵','GP Suspensi':'🌑','GP Cat':'🎨','GP Aksesoris':'🔮',
       'GP Velg':'🌀','GP Plat':'📜','GP Slot':'⚡','GP Drag':'🌌',
-      'GP Mewah':'💜','GP Polisi':'🌙','GP 2x Gaji':'🌟',
+      'GP Luxury':'💜','GP Polisi':'🌙','GP 2x Gaji':'🌟',
       '1jt':'🪙','5jt':'💜','10jt':'🔮','50jt':'🌌','100jt':'🌠','500jt':'🪐','1M':'👑'
     },
     bg: 'radial-gradient(ellipse 90% 70% at 30% 20%,rgba(153,51,255,.2),transparent 60%),radial-gradient(ellipse 70% 50% at 70% 60%,rgba(102,102,255,.15),transparent 60%),linear-gradient(135deg,#050008 0%,#080010 50%,#030005 100%)'
@@ -2231,7 +2303,7 @@ const THEMES = {
     itemIcons:{
       'GP Radio':'📻','GP Suspensi':'🔧','GP Cat':'🎨','GP Aksesoris':'⛓️',
       'GP Velg':'🛞','GP Plat':'🪪','GP Slot':'🎰','GP Drag':'🏁',
-      'GP Mewah':'💎','GP Polisi':'🚔','GP 2x Gaji':'💵',
+      'GP Luxury':'💎','GP Polisi':'🚔','GP 2x Gaji':'💵',
       '1jt':'💸','5jt':'💰','10jt':'💵','50jt':'💎','100jt':'👑','500jt':'🤑','1M':'🏆'
     },
     bg: 'radial-gradient(ellipse 90% 70% at 20% 10%,rgba(255,34,68,.2),transparent 60%),radial-gradient(ellipse 70% 50% at 80% 20%,rgba(255,214,0,.15),transparent 60%),linear-gradient(135deg,#050500 0%,#0d0a00 50%,#050505 100%)'
@@ -2408,7 +2480,7 @@ const ITEM_ICONS={
   'GP Plat':'🪪',
   'GP Slot':'➕',
   'GP Drag':'🏁',
-  'GP Mewah':'💎',
+  'GP Luxury':'💎',
   'GP Polisi':'🚔',
   'GP 2x Gaji':'💵',
   // Cash icons
@@ -3003,7 +3075,7 @@ window.waWithSave = async function(nama, nomor, items, usn, buyerWa){
   if(cv&&cv.avatar) ml.push('\uD83D\uDDBC *Avatar:* '+cv.avatar);
   if(ff2.length){
     const ffId=(document.getElementById('ffUsnInp')||{}).value||'';
-    const ffNama='';
+    const ffNama=window._ffName||'';
     ml.push('\uD83D\uDC8E *TOP UP FREE FIRE (VINZ):*');
     ml.push('  \uD83C\uDD94 *ID FF:* '+ffId);
     if(ffNama) ml.push('  \uD83D\uDC64 *Nama Akun:* '+ffNama);
